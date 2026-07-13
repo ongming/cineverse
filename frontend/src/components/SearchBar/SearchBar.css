@@ -1,0 +1,46 @@
+/* Khung chứa ngoài cùng (để căn lề nếu cần) */
+.search-bar-container {
+    display: flex;
+    align-items: center;
+}
+
+/* Khung viền bọc ngoài (đóng vai trò làm đường viền bo tròn) */
+.search-box {
+    display: flex;
+    align-items: center;            /* Căn giữa dọc icon và ô input */
+    background-color: #1a1a1a;      /* Nền tối cùng tông màu với website */
+    border: 1px solid #363636;       /* Đường viền xám mỏng */
+    border-radius: 20px;            /* Bo tròn các góc */
+    padding: 6px 14px;              /* Khoảng đệm trên dưới và trái phải */
+    width: 250px;                   /* Chiều rộng của ô tìm kiếm */
+    transition: border-color 0.2s;  /* Hiệu ứng chuyển màu viền mượt mà */
+}
+
+/* Đổi màu viền sáng lên khi di chuột qua */
+.search-box:hover {
+    border-color: #555555;
+}
+
+/* Ảnh icon kính lúp */
+.search-icon {
+    width: 14px;                    /* Chiều rộng icon */
+    height: 14px;                   /* Chiều cao icon */
+    margin-right: 10px;             /* Khoảng cách đẩy chữ sang phải */
+    filter: invert(1);              /* Đảo ngược màu ảnh sang màu trắng (do ảnh gốc là màu đen) */
+    opacity: 0.6;                   /* Độ mờ nhẹ cho icon trông chìm xuống */
+}
+
+/* Ô input thực tế bên trong */
+.search-box input {
+    border: none;                   /* Xóa viền mặc định của input */
+    background: transparent;        /* Nền trong suốt để lộ màu của thẻ bọc */
+    outline: none;                  /* Xóa viền xanh mặc định khi click chuột */
+    color: #ffffff;                 /* Màu chữ trắng khi gõ */
+    font-size: 14px;                /* Kích thước chữ */
+    width: 100%;
+}
+
+/* Placeholder (Chữ gợi ý mờ) */
+.search-box input::placeholder {
+    color: #666666;
+}

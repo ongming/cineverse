@@ -1,0 +1,12 @@
+.App {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto; 
+  min-height: 100vh;
+  background-color: rgb(30 30 30);
+}
+.ListMovie{
+  width: 100%;
+  padding: 0 clamp(5px, 5vw, 100px); 
+  box-sizing: border-box;
+}

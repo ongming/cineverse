@@ -1,0 +1,72 @@
+/* Khung ngoài của từng thẻ phim */
+.movie-card {
+    display: flex;
+    flex-direction: column;      /* Xếp poster và thông tin theo chiều dọc */
+    background-color: #161616;   /* Màu nền tối cho thẻ phim */
+    border-radius: 8px;          /* Bo tròn các góc của thẻ */
+    overflow: hidden;            /* Cắt bỏ các phần thừa của ảnh/nội dung tràn ra ngoài góc bo tròn */
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Tạo hiệu ứng chuyển động mượt mà */
+    border: 1px solid #252525;   /* Viền mỏng xung quanh thẻ */
+}
+
+/* Hiệu ứng phóng to nhẹ và đổ bóng khi di chuột qua thẻ phim */
+.movie-card:hover {
+    transform: translateY(-5px); /* Nhấc thẻ phim lên 5px */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5); /* Tạo bóng đổ sâu hơn bên dưới */
+    border-color: #383838;       /* Sáng viền thẻ lên một chút */
+}
+
+/* Phần bao bọc ảnh poster để làm neo cho điểm đánh giá */
+.movie-poster-wrapper {
+    position: relative;          /* Làm điểm neo cho các thẻ absolute bên trong (như điểm rating) */
+    width: 100%;
+}
+
+/* Định dạng hình ảnh poster phim */
+.movie-poster {
+    width: 100%;
+    aspect-ratio: 2 / 3;         /* Giữ tỷ lệ ảnh đứng 2:3 chuẩn poster phim */
+    object-fit: cover;           /* Đảm bảo ảnh lấp đầy khung mà không bị bóp méo hình */
+    display: block;
+}
+
+/* Điểm đánh giá (Rating) hiển thị đè lên góc trái ảnh */
+.movie-rating {
+    position: absolute;          /* Đặt vị trí tự do nổi lên trên ảnh */
+    top: 10px;                   /* Cách mép trên ảnh 10px */
+    left: 10px;                  /* Cách mép trái ảnh 10px */
+    background-color: rgba(0, 0, 0, 0.75); /* Nền đen trong suốt 75% */
+    color: #ffaa00;              /* Màu vàng gold cho ngôi sao và điểm số */
+    padding: 4px 8px;            /* Khoảng đệm xung quanh chữ */
+    border-radius: 4px;          /* Bo tròn nhẹ góc nhãn rating */
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Vùng chứa thông tin chữ bên dưới ảnh */
+.movie-info {
+    padding: 12px;               /* Khoảng cách từ nội dung chữ đến mép thẻ */
+    display: flex;
+    flex-direction: column;      /* Xếp tên phim và năm sản xuất dọc */
+    gap: 6px;                    /* Khoảng cách giữa tên phim và năm */
+}
+
+/* Tên phim */
+.movie-title {
+    margin: 0;
+    font-size: 15px;
+    color: #ffffff;              /* Chữ tên phim màu trắng */
+    font-weight: 600;
+    
+    /* Xử lý khi tên phim quá dài: không cho xuống dòng mà chuyển thành dấu ba chấm (...) */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Năm sản xuất phim */
+.movie-year {
+    font-size: 13px;
+    color: #8c8c8c;              /* Màu chữ xám nhạt để làm nổi bật tên phim */
+}
