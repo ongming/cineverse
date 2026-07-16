@@ -1,0 +1,15 @@
+.search-page {
+  padding: 50px clamp(10px, 5vw, 100px);
+  padding-top: 20px;
+  background-color: #080808;
+  color: #ffffff;
+  min-height: 100vh;
+  box-sizing: border-box;
+  margin-top: 0;
+}
+.search-page-title {
+  margin-bottom: 20px;
+  margin-top: 0;
+  font-size: 30px;
+  font-weight: bold;
+}

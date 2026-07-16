@@ -1,37 +1,39 @@
-.category{
-    position : relative;
+.category {
+  position: relative;
 }
-.dropdown-menu{
-    display: none;
-    position:absolute;
-    top: 100%;
-    left: 0;
-    width: 700px;   
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 700px;
 }
-.category:hover .dropdown-menu{
-    display: block;
+.category:hover .dropdown-menu {
+  display: block;
 }
-.category-title:hover{
-    cursor: pointer;
-    color: #ffaa00;
+.category-title:hover {
+  cursor: pointer;
+  color: #ffaa00;
 }
-.dropdown-menu ul{
-    display: Grid;
-    grid-template-columns: repeat(5, 1fr);;
-    gap: 10px 20px;
-    padding: 10px;
-    background-color: #000000;
-    border: 1px solid #222222;
-    list-style: none;
-    padding-left : 10px;    
-    margin: 0;
-    color: white;
+.dropdown-menu ul {
+  display: Grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px 20px;
+  padding: 10px;
+  background-color: #000000;
+  border: 1px solid #222222;
+  list-style: none;
+  padding-left: 10px;
+  margin: 0;
+  color: white;
 }
-.dropdown-menu li{
-    white-space: nowrap;
-    text-align: left;
+.dropdown-menu li a {
+  white-space: nowrap;
+  text-align: left;
+  color: white;
+  text-decoration: none; /* Bỏ gạch chân */
 }
-.dropdown-menu li:hover{
-    color: #ffaa00;
-    cursor: pointer;
+.dropdown-menu li a:hover {
+  color: #ffaa00;
+  cursor: pointer;
 }
