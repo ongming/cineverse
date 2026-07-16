@@ -1,4 +1,4 @@
-/* Khung ngoài của từng thẻ phim */
+/* Khung ngoài của từng thẻ phim (Sử dụng thẻ Link) */
 .movie-card {
     display: flex;
     flex-direction: column;      /* Xếp poster và thông tin theo chiều dọc */
@@ -8,6 +8,12 @@
     cursor: pointer;
     transition: transform 0.3s ease, box-shadow 0.3s ease; /* Tạo hiệu ứng chuyển động mượt mà */
     border: 1px solid #252525;   /* Viền mỏng xung quanh thẻ */
+    
+    /* CẤU HÌNH ĐỂ THẺ LINK HOẠT ĐỘNG NHƯ THẺ DIV */
+    text-decoration: none;       /* Bỏ gạch chân mặc định của link */
+    color: inherit;              /* Giữ màu chữ gốc, không bị chuyển thành màu tím */
+    width: 100%;                 /* Chiếm trọn bề ngang cột grid */
+    box-sizing: border-box;
 }
 
 /* Hiệu ứng phóng to nhẹ và đổ bóng khi di chuột qua thẻ phim */
@@ -53,20 +59,23 @@
 }
 
 /* Tên phim */
-.movie-title {
+.movie-detail-title {
     margin: 0;
-    font-size: 15px;
+    font-size: 14px;             /* Giảm nhẹ kích thước chữ cho cân đối */
     color: #ffffff;              /* Chữ tên phim màu trắng */
     font-weight: 600;
+    line-height: 1.3;
     
-    /* Xử lý khi tên phim quá dài: không cho xuống dòng mà chuyển thành dấu ba chấm (...) */
-    white-space: nowrap;
-    overflow: hidden;
+    /* THAY THẾ white-space: nowrap để cho phép xuống tối đa 3 dòng nếu tên phim quá dài */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;       /* Giới hạn tối đa 3 dòng */
+    -webkit-box-orient: vertical;
+    overflow: hidden;            /* Ẩn các từ bị tràn ở dòng thứ 3 */
     text-overflow: ellipsis;
 }
 
 /* Năm sản xuất phim */
 .movie-year {
-    font-size: 13px;
+    font-size: 12px;
     color: #8c8c8c;              /* Màu chữ xám nhạt để làm nổi bật tên phim */
 }

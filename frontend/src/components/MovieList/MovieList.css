@@ -13,4 +13,5 @@
     /* Khoảng cách giữa các hàng và cột là 20px */
     gap: 20px;
     width: 100%;
+    margin-bottom: 80px; /* Thêm khoảng cách dưới cùng của danh sách phim */
 }

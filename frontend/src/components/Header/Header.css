@@ -1,6 +1,7 @@
 header{
     height: 80px;
     background-color: #000000;
+    border-bottom: 1px solid #151515; /* Thêm viền dưới màu xám đậm để phân tách header với nội dung */
 }
 nav{
     display: flex;
