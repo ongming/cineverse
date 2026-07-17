@@ -1,565 +1,568 @@
 .trailer-detail-container {
-    padding: 50px clamp(10px, 5vw, 100px);
-    background-color: #080808;
-    color: #ffffff;
-    min-height: 100vh;
-    box-sizing: border-box;
+  padding: 50px clamp(10px, 5vw, 100px);
+  background-color: #080808;
+  color: #ffffff;
+  min-height: 100vh;
+  box-sizing: border-box;
 }
 
 /* 1. Phần thông tin chính (Flex layout) */
 .trailer-content-wrapper {
-    display: flex;
-    gap: 50px;
-    align-items: flex-start;
-    margin-bottom: 60px;
-    flex-wrap: wrap;
+  display: flex;
+  gap: 50px;
+  align-items: flex-start;
+  margin-bottom: 60px;
+  flex-wrap: wrap;
 }
 
 /* Cột trái: Poster & Nút */
 .poster-column {
-    flex: 0 0 260px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    width: 100%;
+  flex: 0 0 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
 }
 
 .poster-img-container {
-    width: 100%;
-    aspect-ratio: 2 / 3;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-    border: 1px solid #1f1f1f;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+  border: 1px solid #1f1f1f;
 }
 
 .movie-poster {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* Nút Xem Trailer (Vàng Hổ Phách) */
 .trailer-btn {
-    width: 100%;
-    background-color: #f5c518;
-    color: #000000;
-    border: none;
-    padding: 15px;
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 0.95rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    transition: all 0.2s ease;
-    letter-spacing: 0.5px;
+  width: 100%;
+  background-color: #f5c518;
+  color: #000000;
+  border: none;
+  padding: 15px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+  letter-spacing: 0.5px;
+  font-family: "Roboto Mono", monospace; /* Áp dụng phông chữ Roboto Mono */
 }
 
 .trailer-btn:hover {
-    background-color: #dfb311;
-    transform: translateY(-2px);
+  background-color: #dfb311;
+  transform: translateY(-2px);
 }
 
 .play-icon {
-    font-size: 0.8rem;
+  font-size: 0.8rem;
 }
 
 /* Nút Thêm vào danh sách (Xám Đậm) */
 .saved-btn {
-    width: 100%;
-    background-color: #1e1e1e;
-    color: #ffffff;
-    border: 1px solid #333333;
-    padding: 15px;
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 0.95rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    transition: all 0.2s ease;
+  width: 100%;
+  background-color: #1e1e1e;
+  color: #ffffff;
+  border: 1px solid #333333;
+  padding: 15px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+  font-family: "Roboto Mono", monospace;
 }
 
 .saved-btn:hover {
-    background-color: #2b2b2b;
-    border-color: #444444;
+  background-color: #2b2b2b;
+  border-color: #444444;
 }
 
 .heart-icon {
-    font-size: 1.1rem;
+  font-size: 1.1rem;
 }
 
 /* Cột phải: Chi tiết chữ */
 .detail-column {
-    flex: 1 1 500px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  flex: 1 1 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.movie-title {  
-    font-size: clamp(2.2rem, 5vw, 3.2rem);
-    font-weight: 800;
-    margin: 0;
-    line-height: 1.1;
-    text-transform: uppercase;
-    letter-spacing: -0.5px;
+.movie-title {
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
+  font-weight: 800;
+  margin: 0;
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: -0.5px;
 }
 
 .movie-meta-bar {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    color: #888888;
-    font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #888888;
+  font-size: 0.95rem;
 }
 
 .separator {
-    color: #333333;
+  color: #333333;
 }
 
 .age-limit-badge {
-    border: 1px solid #555555;
-    padding: 1px 6px;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: bold;
-    color: #cccccc;
+  border: 1px solid #555555;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #cccccc;
 }
 
 .movie-genres {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .genre-pill {
-    background-color: #121212;
-    color: #777777;
-    border: 1px solid #222222;
-    padding: 6px 18px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 600;
+  background-color: #121212;
+  color: #777777;
+  border: 1px solid #222222;
+  padding: 6px 18px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
 }
 
 .movie-description {
-    color: #aaaaaa;
-    font-size: 1.05rem;
-    line-height: 1.6;
-    margin: 10px 0;
-    max-width: 800px;
+  color: #aaaaaa;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin: 10px 0;
+  max-width: 800px;
 }
 
 /* Lưới thông tin Đạo diễn/Diễn viên */
 .credits-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 24px 40px;
-    border-top: 1px solid #1f1f1f;
-    padding-top: 25px;
-    max-width: 800px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px 40px;
+  border-top: 1px solid #1f1f1f;
+  padding-top: 25px;
+  max-width: 800px;
 }
 
 .credit-item {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .credit-label {
-    font-size: 0.85rem;
-    color: #555555;
+  font-size: 0.85rem;
+  color: #555555;
 }
 
 .credit-value {
-    font-size: 1rem;
-    color: #cccccc;
-    font-weight: 500;
+  font-size: 1rem;
+  color: #cccccc;
+  font-weight: 500;
 }
 
 .rating-value {
-    color: #f5c518;
-    font-weight: bold;
+  color: #f5c518;
+  font-weight: bold;
 }
 
 /* ------------------------------------------- */
 /* CÁC THÀNH PHẦN CHUNG: Tiêu đề danh mục có vạch xanh */
 .section-title {
-    font-size: 1.4rem;
-    font-weight: 700;
-    border-left: 3px solid #00bcd4; /* Vạch xanh ngọc */
-    padding-left: 12px;
-    margin: 0 0 25px 0;
-    letter-spacing: 0.5px;
+  font-size: 1.4rem;
+  font-weight: 700;
+  border-left: 3px solid #00bcd4; /* Vạch xanh ngọc */
+  padding-left: 12px;
+  margin: 0 0 25px 0;
+  letter-spacing: 0.5px;
 }
 
 /* ------------------------------------------- */
 /* 2. Danh Sách Dàn Diễn Viên */
 .cast-wrapper {
-    margin-bottom: 60px;
+  margin-bottom: 60px;
 }
 
 .cast-list {
-    display: flex;
-    gap: 30px;
-    overflow-x: auto;
-    padding-bottom: 10px;
+  display: flex;
+  gap: 30px;
+  overflow-x: auto;
+  padding-bottom: 10px;
 }
 
 .cast-list::-webkit-scrollbar {
-    height: 6px;
+  height: 6px;
 }
 
 .cast-list::-webkit-scrollbar-thumb {
-    background-color: #222222;
-    border-radius: 4px;
+  background-color: #222222;
+  border-radius: 4px;
 }
 
 .actor-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    flex: 0 0 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 0 0 120px;
 }
 
 .actor-avatar {
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin-bottom: 12px;
-    border: 2px solid #1a1a1a;
-    background-color: #222222;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 12px;
+  border: 2px solid #1a1a1a;
+  background-color: #222222;
 }
 
 .actor-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .actor-avatar-placeholder {
-    font-size: 2.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    color: #444444;
+  font-size: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #444444;
 }
 
 .actor-name {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: #ffffff;
-    margin-bottom: 4px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 4px;
 }
 
 .character-name {
-    font-size: 0.8rem;
-    color: #555555;
+  font-size: 0.8rem;
+  color: #555555;
 }
 
 /* ------------------------------------------- */
 /* 3. Nhận Xét Của Người Xem */
 .user-review-wrapper {
-    margin-bottom: 60px;
+  margin-bottom: 60px;
 }
 
 /* Khung viết nhận xét */
 .review-input-box {
-    display: flex;
-    gap: 20px;
-    background-color: #0f0f0f;
-    border: 1px solid #1a1a1a;
-    padding: 24px;
-    border-radius: 12px;
-    align-items: flex-start;
-    margin-bottom: 40px;
+  display: flex;
+  gap: 20px;
+  background-color: #0f0f0f;
+  border: 1px solid #1a1a1a;
+  padding: 24px;
+  border-radius: 12px;
+  align-items: flex-start;
+  margin-bottom: 40px;
 }
 
 .user-avatar-circle {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background-color: #1a1a1a;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.3rem;
-    color: #00bcd4;
-    border: 1px solid #333333;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  color: #00bcd4;
+  border: 1px solid #333333;
 }
 
 .review-input-box textarea {
-    flex-grow: 1;
-    height: 60px;
-    background-color: transparent;
-    border: none;
-    outline: none;
-    color: #ffffff;
-    resize: none;
-    font-family: inherit;
-    font-size: 1rem;
-    padding-top: 10px;
+  flex-grow: 1;
+  height: 60px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: #ffffff;
+  resize: none;
+  font-family: "Roboto Mono", monospace; /* Áp dụng phông chữ Roboto Mono */
+  font-size: 1rem;
+  padding-top: 10px;
 }
 
 .review-input-box textarea::placeholder {
-    color: #444444;
+  color: #444444;
 }
 
 .send-btn {
-    background-color: #f5c518;
-    color: #000000;
-    border: none;
-    padding: 12px 28px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.95rem;
-    align-self: center;
-    transition: all 0.2s;
+  background-color: #f5c518;
+  color: #000000;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  align-self: center;
+  transition: all 0.2s;
 }
 
 .send-btn:hover {
-    background-color: #dfb311;
-    transform: scale(1.02);
+  background-color: #dfb311;
+  transform: scale(1.02);
 }
 
 .send-icon {
-    font-size: 0.85rem;
+  font-size: 0.85rem;
 }
 
 /* Danh sách nhận xét */
 .reviews-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-    gap: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 24px;
 }
 
 .review-card {
-    background-color: #0d0d0d;
-    border: 1px solid #151515;
-    padding: 24px;
-    border-radius: 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+  background-color: #0d0d0d;
+  border: 1px solid #151515;
+  padding: 24px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .review-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .reviewer-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: #151515;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #00bcd4;
-    border: 1px solid #222222;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #151515;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #00bcd4;
+  border: 1px solid #222222;
 }
 
 .reviewer-info {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-grow: 1;
 }
 
 .reviewer-info h3 {
-    margin: 0;
-    font-size: 1rem;
-    font-weight: 600;
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 .reviewer-info span {
-    font-size: 0.8rem;
-    color: #555555;
+  font-size: 0.8rem;
+  color: #555555;
 }
 
 .review-stars {
-    color: #f5c518;
-    font-size: 0.9rem;
-    letter-spacing: 2px;
+  color: #f5c518;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
 }
 
 .review-content {
-    color: #999999;
-    font-size: 0.95rem;
-    line-height: 1.5;
-    margin: 0;
+  color: #999999;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
 }
 
 /* ------------------------------------------- */
 /* 4. Trailer Được Đề Xuất */
 .recommended-trailer-wrapper {
-    margin-bottom: 80px;
+  margin-bottom: 80px;
 }
 
 .recommended-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
 }
 
 .recommended-header .section-title {
-    margin: 0;
+  margin: 0;
 }
 
 .view-all-link {
-    color: #00bcd4;
-    font-size: 0.9rem;
-    cursor: pointer;
-    font-weight: 600;
+  color: #00bcd4;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-weight: 600;
 }
 
 .view-all-link:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 .recommended-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px;
 }
 
 .rec-movie-card {
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .rec-poster-wrapper {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 16 / 9; /* Ảnh nằm ngang kiểu trailer */
-    border-radius: 8px;
-    overflow: hidden;
-    border: 1px solid #1a1a1a;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9; /* Ảnh nằm ngang kiểu trailer */
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #1a1a1a;
 }
 
 .rec-poster-wrapper img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
 }
 
 .rec-movie-card:hover .rec-poster-wrapper img {
-    transform: scale(1.05);
+  transform: scale(1.05);
 }
 
 /* Lớp phủ nút play khi hover */
 .rec-play-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0.6;
-    transition: opacity 0.2s;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.6;
+  transition: opacity 0.2s;
 }
 
 .rec-movie-card:hover .rec-play-overlay {
-    opacity: 1;
-    background-color: rgba(0, 0, 0, 0.6);
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
 .rec-play-icon {
-    font-size: 1.5rem;
-    color: #ffffff;
-    background-color: rgba(255, 255, 255, 0.2);
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    transition: all 0.2s;
+  font-size: 1.5rem;
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.2);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  transition: all 0.2s;
 }
 
 .rec-movie-card:hover .rec-play-icon {
-    transform: scale(1.1);
-    background-color: #f5c518;
-    color: #000000;
-    border-color: #f5c518;
+  transform: scale(1.1);
+  background-color: #f5c518;
+  color: #000000;
+  border-color: #f5c518;
 }
 
 .rec-info h3 {
-    margin: 0;
-    font-size: 0.95rem;
-    font-weight: bold;
-    color: #cccccc;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: bold;
+  color: #cccccc;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 /* Responsive cho máy tính bảng & điện thoại */
 @media (max-width: 900px) {
-    .trailer-content-wrapper {
-        flex-direction: column;
-        align-items: center;
-        gap: 30px;
-    }
-    
-    .poster-column {
-        max-width: 300px;
-    }
-    
-    .detail-column {
-        width: 100%;
-        align-items: center;
-        text-align: center;
-    }
-    
-    .movie-meta-bar, .movie-genres {
-        justify-content: center;
-    }
-    
-    .credits-grid {
-        width: 100%;
-        text-align: left;
-    }
+  .trailer-content-wrapper {
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+  }
+
+  .poster-column {
+    max-width: 300px;
+  }
+
+  .detail-column {
+    width: 100%;
+    align-items: center;
+    text-align: center;
+  }
+
+  .movie-meta-bar,
+  .movie-genres {
+    justify-content: center;
+  }
+
+  .credits-grid {
+    width: 100%;
+    text-align: left;
+  }
 }
 
 @media (max-width: 480px) {
-    .credits-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-    
-    .reviews-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .review-input-box {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    
-    .send-btn {
-        width: 100%;
-        justify-content: center;
-    }
+  .credits-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .reviews-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .review-input-box {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .send-btn {
+    width: 100%;
+    justify-content: center;
+  }
 }

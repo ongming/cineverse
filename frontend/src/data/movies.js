@@ -1,120 +1,91 @@
 export const movies = [
-    {
-        id: 1,
-        name: "AVATAR",
-        year: 2009,
-        rating: 7.8,
-        image: "https://m.media-amazon.com/images/I/41kTVLeW1CL._AC_.jpg",
-        genre: [
-            "Hành động",
-            "Phiêu lưu",
-            "Khoa học viễn tưởng"
-        ],
-        saved: false,
-        duration: "162 phút",
-        director: "James Cameron",
-        cast: [
-            "Sam Worthington",
-            "Zoe Saldana",
-            "Sigourney Weaver"
-        ],
-        country: "Mỹ",
-        ageRating: "T13",
-        trailerUrl: "https://youtu.be/d9MyW72ELq0",
-        description: "Jake Sully, một cựu thủy quân lục chiến bị liệt, được gửi đến hành tinh Pandora xinh đẹp nhưng đầy nguy hiểm để tham gia dự án Avatar. Tại đây, anh gặp gỡ tộc người Na'vi và đứng trước sự lựa chọn khó khăn giữa nhiệm vụ được giao và bảo vệ thế giới mới này."
-    },
-    {
-        id: 2,
-        name: "TITANIC",
-        year: 1997,
-        rating: 7.8,
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw-Ji2gTq0uacV-LOJn6W0b9GP5zGt4CYEzTIMAg25WQ&s=10",
-        genre: [
-            "Tình Cảm",
-            "Phiêu Lưu"
-        ],
-        saved: false,
-        duration: "194 phút",
-        director: "James Cameron",
-        cast: [
-            "Leonardo DiCaprio",
-            "Kate Winslet",
-            "Billy Zane"
-        ],
-        country: "Mỹ",
-        ageRating: "T16",
-        trailerUrl: "https://youtu.be/kVrqfYjkTdQ",
-        description: "Mượn bối cảnh vụ đắm tàu lịch sử RMS Titanic vào năm 1912, bộ phim kể về câu chuyện tình lãng mạn nhưng đầy bi kịch giữa chàng họa sĩ nghèo Jack Dawson và tiểu thư quý tộc Rose DeWitt Bukater."
-    },
-    {
-        id: 3,
-        name: "AVENGERS",
-        year: 1993,
-        rating: 8.1,
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWrgXa4jDB7AAYqZuNJ9EUu0IWi4YN5oaKUZldp86nAQ&s=10",
-        genre: [
-            "Hành Động",
-            "Khoa Học",
-            "Viễn Tưởng"
-        ],
-        saved: false,
-        duration: "143 phút",
-        director: "Joss Whedon",
-        cast: [
-            "Robert Downey Jr.",
-            "Chris Evans",
-            "Scarlett Johansson"
-        ],
-        country: "Mỹ",
-        ageRating: "T13",
-        trailerUrl: "https://youtu.be/eOrNdBpGMv8",
-        description: "Khi Loki, người em trai độc ác của Thor, đe dọa sự an nguy của Trái Đất, giám đốc tổ chức S.H.I.E.L.D. Nick Fury đã tập hợp biệt đội siêu anh hùng gồm Iron Man, Captain America, Hulk, Thor, Black Widow và Hawkeye để cùng nhau chiến đấu bảo vệ nhân loại."
-    },
-    {
-        id: 4,
-        name: "THE LORD OF THE RINGS",
-        year: 2001,
-        rating: 8.8,
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTspb5aTqB8roNwRo-O-gaQvAC5EEBql7jdH2Dghkz7aw&s=10",
-        genre: [
-            "Hành Động",
-            "Phiêu Lưu",
-            "Viễn Tưởng"
-        ],
-        saved: false,
-        duration: "178 phút",
-        director: "Peter Jackson",
-        cast: [
-            "Elijah Wood",
-            "Ian McKellen",
-            "Orlando Bloom"
-        ],
-        country: "Mỹ",
-        ageRating: "T13",
-        trailerUrl: "https://www.youtube.com/watch?v=V75dMMIW2B4",
-        description: "Frodo Baggins, một người lùn Hobbit hiền lành vùng Shire, cùng những người đồng hành quả cảm bắt đầu cuộc hành trình đầy gian khổ để tiêu hủy chiếc nhẫn quyền lực tối thượng tại ngọn núi Doom nhằm cứu lấy vùng Trung Địa khỏi bóng tối của Sauron."
-    },
-    {
-        id: 5,
-        name: "Family Guy the Movie",
-        year: 2008,
-        rating: 9.9,
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHHv7KFW_oDRJXkv3HgXk9NE8myAF7myJn8x7U27-5Pw&s=10",
-        genre: [
-            "Hài Hước",
-            "Hoạt Hình"
-        ],
-        saved: false,
-        duration: "88 phút",
-        director: "Pete Michels",
-        cast: [
-            "Seth MacFarlane",
-            "Alex Borstein",
-            "Seth Green"
-        ],
-        country: "Mỹ",
-        ageRating: "T16",
-        trailerUrl: "https://youtu.be/jfBKSTo67c0",
-        description: "Sau khi gặp một sự cố cận kề cái chết, Stewie Griffin, cậu bé thiên tài siêu quậy, phát hiện ra một bí mật động trời về bản thân và quyết định bắt đầu cuộc hành trình xuyên thời gian đầy hài hước để tìm ra sự thật."
-    }
+  {
+    id: 1,
+    name: "AVATAR",
+    year: 2009,
+    rating: 7.8,
+    image: "https://m.media-amazon.com/images/I/41kTVLeW1CL._AC_.jpg",
+    genre: ["Hành Động", "Phiêu Lưu", "Khoa Học ", "Viễn Tưởng"],
+    saved: false,
+    duration: "162 phút",
+    director: "James Cameron",
+    cast: ["Sam Worthington", "Zoe Saldana", "Sigourney Weaver"],
+    country: "Mỹ",
+    ageRating: "T13",
+    trailerUrl: "https://youtu.be/d9MyW72ELq0",
+    description:
+      "Jake Sully, một cựu thủy quân lục chiến bị liệt, được gửi đến hành tinh Pandora xinh đẹp nhưng đầy nguy hiểm để tham gia dự án Avatar. Tại đây, anh gặp gỡ tộc người Na'vi và đứng trước sự lựa chọn khó khăn giữa nhiệm vụ được giao và bảo vệ thế giới mới này.",
+  },
+  {
+    id: 2,
+    name: "TITANIC",
+    year: 1997,
+    rating: 7.8,
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw-Ji2gTq0uacV-LOJn6W0b9GP5zGt4CYEzTIMAg25WQ&s=10",
+    genre: ["Tình Cảm", "Phiêu Lưu"],
+    saved: false,
+    duration: "194 phút",
+    director: "James Cameron",
+    cast: ["Leonardo DiCaprio", "Kate Winslet", "Billy Zane"],
+    country: "Mỹ",
+    ageRating: "T16",
+    trailerUrl: "https://youtu.be/kVrqfYjkTdQ",
+    description:
+      "Mượn bối cảnh vụ đắm tàu lịch sử RMS Titanic vào năm 1912, bộ phim kể về câu chuyện tình lãng mạn nhưng đầy bi kịch giữa chàng họa sĩ nghèo Jack Dawson và tiểu thư quý tộc Rose DeWitt Bukater.",
+  },
+  {
+    id: 3,
+    name: "AVENGERS",
+    year: 1993,
+    rating: 8.1,
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWrgXa4jDB7AAYqZuNJ9EUu0IWi4YN5oaKUZldp86nAQ&s=10",
+    genre: ["Hành Động", "Khoa Học", "Viễn Tưởng"],
+    saved: false,
+    duration: "143 phút",
+    director: "Joss Whedon",
+    cast: ["Robert Downey Jr.", "Chris Evans", "Scarlett Johansson"],
+    country: "Mỹ",
+    ageRating: "T13",
+    trailerUrl: "https://youtu.be/eOrNdBpGMv8",
+    description:
+      "Khi Loki, người em trai độc ác của Thor, đe dọa sự an nguy của Trái Đất, giám đốc tổ chức S.H.I.E.L.D. Nick Fury đã tập hợp biệt đội siêu anh hùng gồm Iron Man, Captain America, Hulk, Thor, Black Widow và Hawkeye để cùng nhau chiến đấu bảo vệ nhân loại.",
+  },
+  {
+    id: 4,
+    name: "THE LORD OF THE RINGS",
+    year: 2001,
+    rating: 8.8,
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTspb5aTqB8roNwRo-O-gaQvAC5EEBql7jdH2Dghkz7aw&s=10",
+    genre: ["Hành Động", "Phiêu Lưu", "Viễn Tưởng"],
+    saved: false,
+    duration: "178 phút",
+    director: "Peter Jackson",
+    cast: ["Elijah Wood", "Ian McKellen", "Orlando Bloom"],
+    country: "Mỹ",
+    ageRating: "T13",
+    trailerUrl: "https://www.youtube.com/watch?v=V75dMMIW2B4",
+    description:
+      "Frodo Baggins, một người lùn Hobbit hiền lành vùng Shire, cùng những người đồng hành quả cảm bắt đầu cuộc hành trình đầy gian khổ để tiêu hủy chiếc nhẫn quyền lực tối thượng tại ngọn núi Doom nhằm cứu lấy vùng Trung Địa khỏi bóng tối của Sauron.",
+  },
+  {
+    id: 5,
+    name: "Family Guy the Movie",
+    year: 2008,
+    rating: 9.9,
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHHv7KFW_oDRJXkv3HgXk9NE8myAF7myJn8x7U27-5Pw&s=10",
+    genre: ["Hài Hước", "Hoạt Hình"],
+    saved: false,
+    duration: "88 phút",
+    director: "Pete Michels",
+    cast: ["Seth MacFarlane", "Alex Borstein", "Seth Green"],
+    country: "Mỹ",
+    ageRating: "T16",
+    trailerUrl: "https://youtu.be/jfBKSTo67c0",
+    description:
+      "Sau khi gặp một sự cố cận kề cái chết, Stewie Griffin, cậu bé thiên tài siêu quậy, phát hiện ra một bí mật động trời về bản thân và quyết định bắt đầu cuộc hành trình xuyên thời gian đầy hài hước để tìm ra sự thật.",
+  },
 ];

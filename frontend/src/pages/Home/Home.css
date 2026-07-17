@@ -6,6 +6,7 @@
   min-height: 100vh;
   box-sizing: border-box;
   margin-top: 0;
+  font-family: "Roboto Mono", monospace; /* Áp dụng phông chữ Roboto Mono */
 }
 
 .movie-content-title {

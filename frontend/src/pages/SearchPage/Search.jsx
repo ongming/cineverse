@@ -1,9 +1,9 @@
 import { useSearchParams } from "react-router-dom";
 import { movies } from "../../data/movies.js";
 import MovieList from "../../components/MovieList/MovieList.jsx";
-import "./SearchPage.css";
+import "./Search.css";
 
-function SearchPage() {
+function Search() {
   const [searchParams] = useSearchParams();
   const searchTerm = searchParams.get("q");
   const searchMovies = movies.filter((movie) =>
@@ -17,4 +17,4 @@ function SearchPage() {
   );
 }
 
-export default SearchPage;
+export default Search;

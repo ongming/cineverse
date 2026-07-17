@@ -1,4 +1,411 @@
-.ranking-container:hover{
-    color: #ffaa00;
+.ranking-page-container {
+    padding: 40px clamp(15px, 5vw, 100px);
+    background-color: #080808;
+    color: #ffffff;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+/* Khung chia 2 cột */
+.ranking-content-wrapper {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+    flex-wrap: wrap; /* Hỗ trợ responsive */
+}
+
+/* ========================================================================== */
+/* CỘT TRÁI: DANH SÁCH BẢNG XẾP HẠNG */
+.rankings-list-section {
+    flex: 1 1 650px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.ranking-title {
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 800;
+    margin: 0 0 4px 0;
+    letter-spacing: -0.5px;
+}
+
+.ranking-subtitle {
+    color: #888888;
+    font-size: 1rem;
+    margin: 0 0 20px 0;
+}
+
+.updated-time {
+    color: #555555;
+    font-size: 0.85rem;
+    margin-left: 10px;
+}
+
+/* Danh sách thẻ phim */
+.ranking-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.ranking-item-card-wrapper {
+    width: 100%;
+}
+
+.ranking-item-card {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background-color: #0d0d0d;
+    border: 1px solid #1a1a1a;
+    padding: 16px 24px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.ranking-item-card:hover {
+    transform: translateY(-2px);
+    border-color: #333333;
+    background-color: #111111;
+}
+
+/* Huy hiệu thứ hạng (Rank Badge) */
+.rank-badge {
+    width: 54px;
+    height: 54px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1.25rem;
+    background-color: #1a1a1a;
+    color: #888888;
+    flex-shrink: 0;
+}
+
+/* Đổi màu đặc biệt cho Top 1 và Top 2 */
+.rank-badge.rank-1 {
+    background-color: #00bcd4; /* Xanh ngọc */
+    color: #000000;
+    box-shadow: 0 0 15px rgba(0, 188, 212, 0.3);
+}
+
+.rank-badge.rank-2 {
+    background-color: #f5c518; /* Vàng gold */
+    color: #000000;
+    box-shadow: 0 0 15px rgba(245, 197, 24, 0.3);
+}
+
+.rank-badge.rank-3 {
+    background-color: #2b2b2b;
+    color: #ffffff;
+}
+
+/* Ảnh poster phim nhỏ */
+.rank-poster-container {
+    width: 60px;
+    aspect-ratio: 2 / 3;
+    border-radius: 6px;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 1px solid #222222;
+}
+
+.rank-poster {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Thông tin phim */
+.rank-movie-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.rank-movie-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: 0.3px;
+    color: #ffffff;
+}
+
+.rank-movie-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #666666;
+    font-size: 0.85rem;
+}
+
+.dot {
+    color: #333333;
+}
+
+.age-rating-box {
+    border: 1px solid #444444;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: #999999;
+}
+
+.rank-movie-rating {
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.star-icon {
+    color: #f5c518;
+    font-size: 1.1rem;
+}
+
+.max-rating {
+    color: #444444;
+    font-weight: normal;
+    font-size: 0.85rem;
+}
+
+/* Nút Đánh dấu đã xem (Mark as Watched) */
+.rank-action-watched {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: #888888;
     cursor: pointer;
+    padding: 8px 14px;
+    border-radius: 20px;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+}
+
+.rank-action-watched:hover {
+    color: #ffffff;
+    background-color: #1a1a1a;
+    border-color: #333333;
+}
+
+.bookmark-icon {
+    font-size: 0.95rem;
+}
+
+/* Icon thông tin i ở góc phải */
+.rank-info-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #444444;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.rank-info-btn:hover {
+    color: #ffffff;
+    background-color: #1a1a1a;
+}
+
+.info-icon-char {
+    font-size: 1.1rem;
+}
+
+/* Nút tải thêm */
+.load-more-rank-btn {
+    background-color: transparent;
+    color: #ffffff;
+    border: 1px solid #222222;
+    padding: 14px 28px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    align-self: center;
+    margin-top: 20px;
+    transition: all 0.2s;
+}
+
+.load-more-rank-btn:hover {
+    background-color: #111111;
+    border-color: #444444;
+}
+
+/* ========================================================================== */
+/* CỘT PHẢI: SIDEBAR WIDGETS */
+.ranking-sidebar-section {
+    flex: 0 0 300px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.sidebar-widget {
+    background-color: #0a0a0a;
+    border: 1px solid #141414;
+    border-radius: 12px;
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+.widget-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.widget-icon {
+    color: #00bcd4;
+    font-size: 1.1rem;
+}
+
+.widget-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.4;
+}
+
+/* Khung bọc nút thể loại */
+.genre-pills-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.genre-pill-btn {
+    background-color: #121212;
+    color: #777777;
+    border: 1px solid #222222;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.genre-pill-btn:hover {
+    color: #ffffff;
+    border-color: #444444;
+}
+
+/* Nút thể loại đang được active (Vàng Gold) */
+.genre-pill-btn.active {
+    background-color: #f5c518;
+    color: #000000;
+    border-color: #f5c518;
+    box-shadow: 0 4px 12px rgba(245, 197, 24, 0.25);
+}
+
+/* Widget Đang thịnh hành (Trending Now) */
+.trending-widget {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.trending-label {
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: #00bcd4; /* Xanh ngọc */
+    letter-spacing: 1px;
+}
+
+.trending-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.trending-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.trending-thumb-placeholder {
+    width: 48px;
+    height: 36px;
+    background-color: #141414;
+    border: 1px solid #222222;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.trending-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.trending-item-info h4 {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.trend-status {
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.trend-status.up {
+    color: #2e7d32; /* Xanh lá cây */
+}
+
+.trend-status.new {
+    color: #1976d2; /* Xanh dương */
+}
+
+/* ========================================================================== */
+/* Mobile responsive */
+@media (max-width: 900px) {
+    .ranking-content-wrapper {
+        flex-direction: column;
+    }
+    
+    .ranking-sidebar-section {
+        flex: 1 1 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .ranking-item-card {
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+    
+    .rank-action-watched {
+        width: 100%;
+        justify-content: center;
+        background-color: #141414;
+    }
+    
+    .rank-info-btn {
+        margin-left: auto;
+    }
 }

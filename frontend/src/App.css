@@ -17,6 +17,6 @@ body,
   height: 100%;
   margin: 0;
   padding: 0;
-  font-family: Cariel, sans-serif;
+  font-family: "Roboto Mono", monospace; /* Áp dụng phông chữ Roboto Mono */
   color: #fff;
 }
