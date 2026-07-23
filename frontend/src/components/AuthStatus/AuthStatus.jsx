@@ -1,9 +1,10 @@
-import './AuthStatus.css';
+import { Link } from "react-router-dom";
+import "./AuthStatus.css";
 
 export default function AuthStatus() {
-    return(
-        <div className="auth-status-container">
-            Đăng nhập
-        </div>
-    )
+  return (
+    <Link to="/login" className="auth-status-container">
+      Đăng nhập
+    </Link>
+  );
 }

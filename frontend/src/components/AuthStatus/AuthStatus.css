@@ -1,4 +1,11 @@
-.auth-status-container:hover{
-    color: #ffaa00;
-    cursor: pointer;
+.auth-status-container {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.auth-status-container:hover {
+  color: #ffaa00;
+  cursor: pointer;
 }
