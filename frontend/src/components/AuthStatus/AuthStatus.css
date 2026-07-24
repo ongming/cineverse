@@ -1,11 +1,82 @@
 .auth-status-container {
-  color: #ffffff;
-  text-decoration: none;
-  font-weight: 600;
-  transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
 }
 
-.auth-status-container:hover {
-  color: #ffaa00;
+.auth-status-btn {
+  display: inline-block;
+  padding: 8px 18px;
+  background: linear-gradient(135deg, #ffb800 0%, #f5c518 100%);
+  color: #000000;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(255, 184, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+.auth-status-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 20px rgba(255, 184, 0, 0.5);
+  background: linear-gradient(135deg, #ffc425 0%, #f7cd38 100%);
+}
+
+/* User Profile Box Header */
+.user-profile-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 5px 12px 5px 6px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* ===================================================
+   CẶP THUỘC TÍNH BẮT BUỘC ĐỂ ẢNH THU NHỎ KHÍT Ô TRÒN
+   =================================================== */
+.user-avatar-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  overflow: hidden; /* BẮT BUỘC: Cắt bỏ phần dư thừa của ảnh tràn ra ngoài */
+  background: linear-gradient(135deg, #ffb800 0%, #f5c518 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(255, 184, 0, 0.4);
+  border: 1.5px solid #ffb800;
+  flex-shrink: 0;
+}
+
+/* Ép thẻ <img> phải thu nhỏ đúng 100% bằng với khung tròn 36px */
+.user-avatar-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Giúp ảnh không bị móp méo khi thu nhỏ */
+  display: block;
+}
+
+.user-name {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.logout-btn {
+  background: transparent;
+  border: none;
+  font-size: 14px;
   cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logout-btn:hover {
+  transform: scale(1.15);
 }
