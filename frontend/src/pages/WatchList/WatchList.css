@@ -1,0 +1,126 @@
+.watchlist-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  min-height: calc(100vh - 160px);
+  color: #ffffff;
+}
+
+.watchlist-header {
+  margin-bottom: 36px;
+  text-align: left;
+}
+
+.watchlist-title {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.highlight-user {
+  color: #ffb800;
+}
+
+.watchlist-subtitle {
+  color: #8a90a2;
+  font-size: 14px;
+}
+
+.watchlist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px;
+}
+
+.watchlist-card {
+  background: rgba(18, 20, 26, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.watchlist-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+  border-color: rgba(255, 184, 0, 0.4);
+}
+
+.watchlist-poster-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 140%;
+  overflow: hidden;
+}
+
+.watchlist-poster-wrapper img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.play-overlay-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  background: linear-gradient(135deg, #ffb800, #f5c518);
+  color: #000;
+  padding: 10px 18px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 13px;
+  text-decoration: none;
+  opacity: 0;
+  transition: all 0.25s ease;
+  box-shadow: 0 0 15px rgba(255, 184, 0, 0.5);
+}
+
+.watchlist-card:hover .play-overlay-btn {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.watchlist-card-info {
+  padding: 14px;
+  text-align: left;
+}
+
+.watchlist-card-info h3 {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0 0 6px 0;
+  color: #ffffff;
+}
+
+.watchlist-meta {
+  font-size: 12px;
+  color: #ffb800;
+}
+
+.empty-watchlist {
+  text-align: center;
+  padding: 60px 20px;
+  background: rgba(18, 20, 26, 0.5);
+  border-radius: 16px;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.empty-watchlist p {
+  color: #8a90a2;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.browse-now-btn {
+  display: inline-block;
+  padding: 10px 24px;
+  background: #ffb800;
+  color: #000;
+  font-weight: 700;
+  border-radius: 8px;
+  text-decoration: none;
+}

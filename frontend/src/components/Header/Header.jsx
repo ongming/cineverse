@@ -16,8 +16,11 @@ export default function Header() {
         </Link>
         <div className="nav-items-container">
           <Category />
-          <Link to="/ranking" className="ranking-container">
+          <Link to="/ranking" className="items-container">
             Bảng xếp hạng
+          </Link>
+          <Link to="/Watchlist" className="items-container">
+            Danh sách theo dõi
           </Link>
         </div>
         <div className="nav-tools-container">

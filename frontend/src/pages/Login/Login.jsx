@@ -1,28 +1,28 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { login } from "../../service/authService.jsx";
+import { login as loginService } from "../../service/authService.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
 
 import "./Login.css";
 
 export default function Login() {
   const navigate = useNavigate();
-  const { setUser } = useAuth();
+  const { setUser, login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const user = login(email, password);
+    const user = loginService(email, password);
     if (!user) {
       alert("Email hoặc mật khẩu không đúng. Vui lòng thử lại.");
       return;
     }
-    setUser (user);
+    login(user); 
 
     alert("Đăng nhập thành công! Chào mừng bạn.");
-    navigate("/"); // Cập nhật thông tin người dùng trong context
+    navigate("/");
   };
 
   return (
