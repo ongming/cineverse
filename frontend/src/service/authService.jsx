@@ -1,12 +1,14 @@
-import {users} from "../data/users.js";
+import { users } from "../data/users.js";
 
-function login(email, password) {
-    const user = users.find((u) => u.email === email && u.password === password);
-    if (user) {
-        return user;
-    }
-    return null;
-    
+export function login(email, password) {
+  const user = users.find((u) => u.email === email && u.password === password);
+  if (user) {
+    localStorage.setItem("user", JSON.stringify(user));
+    return user;
+  }
+  return null;
 }
 
-export default login;
+export function logout() {
+  localStorage.removeItem("user");
+}

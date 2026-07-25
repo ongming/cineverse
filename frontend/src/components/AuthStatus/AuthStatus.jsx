@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import defaultAvatar from "../../assets/images/Avatar.png";
+import { logout } from "../../service/authService.jsx";
+import { useAuth } from "../../context/AuthContext.jsx";
 import "./AuthStatus.css";
 
 export default function AuthStatus() {
-  const [user, setUser] = useState(null);
+  const {user, setUser} = useAuth();
+  const { clearUser } = useAuth();
 
   useEffect(() => {
     // 1. Kiểm tra xem đã có user đăng nhập trong localStorage chưa
@@ -23,15 +26,11 @@ export default function AuthStatus() {
 
     checkUser();
 
-    // 2. Lắng nghe sự kiện authChange để tự cập nhật Header khi vừa đăng nhập/đăng xuất
-    window.addEventListener("authChange", checkUser);
-    return () => window.removeEventListener("authChange", checkUser);
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
-    setUser(null);
-    window.dispatchEvent(new Event("authChange"));
+    logout();
+    clearUser();
   };
 
   return (

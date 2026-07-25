@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import login from "../../service/authService.jsx";
+import { login } from "../../service/authService.jsx";
+import { useAuth } from "../../context/AuthContext.jsx";
+
 import "./Login.css";
 
 export default function Login() {
   const navigate = useNavigate();
+  const { setUser } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,13 +19,10 @@ export default function Login() {
       alert("Email hoặc mật khẩu không đúng. Vui lòng thử lại.");
       return;
     }
-    
-    // Lưu thông tin người dùng vào localStorage và phát sự kiện cập nhật Header
-    localStorage.setItem("user", JSON.stringify(user));
-    window.dispatchEvent(new Event("authChange"));
+    setUser (user);
 
-    alert(`Đăng nhập thành công! Chào mừng ${user.username || email}`);
-    navigate("/");
+    alert("Đăng nhập thành công! Chào mừng bạn.");
+    navigate("/"); // Cập nhật thông tin người dùng trong context
   };
 
   return (
