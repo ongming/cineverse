@@ -1,6 +1,7 @@
 import MovieList from "../../components/MovieList/MovieList.jsx";
 import { movies } from "../../data/movies.js";
 import { useState, useEffect } from "react";
+import { getMovies } from "../../service/MoviesService.js";
 import "./Home.css";
 
 function Home() {
@@ -8,10 +9,22 @@ function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => {
-      setMovieList(movies);
-      setLoading(false);
-    }, 1000);
+    // setTimeout(() => { 
+    //   setMovieList(movies);
+    //   setLoading(false);
+    // }, 1000);
+    async function fetchMovies() {
+      try {
+        const movies = await getMovies();
+        setMovieList(movies);
+      } catch (error) {
+        console.error('Error fetching movies:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchMovies();
   }, []);
 
   if (loading) {
