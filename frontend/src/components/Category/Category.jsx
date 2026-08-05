@@ -1,5 +1,4 @@
-import { Link } from "react-router-dom"; // 1. Nhớ import Link
-import "./Category.css";
+import { Link } from "react-router-dom";
 
 export default function Category() {
   const categories = [
@@ -19,15 +18,16 @@ export default function Category() {
   ];
 
   return (
-    <div className="category">
-      <span className="category-title">Thể Loại</span>
-      <div className="dropdown-menu">
-        <ul>
+    <div className="relative group">
+      <span className="text-white hover:cursor-pointer hover:text-amber-500 transition-colors">Thể Loại</span>
+      <div className="hidden group-hover:block absolute top-full left-0 w-[700px] z-[999] pt-2.5">
+        <ul className="grid grid-cols-5 gap-x-[20px] gap-y-[10px] p-4 bg-[#0d0d0d] border border-[#222222] rounded-lg shadow-2xl list-none m-0 text-white">
           {categories.map((category) => (
-            // 2. Đặt 'key' ở thẻ <li> ngoài cùng để chuẩn React
-            // 3. Cấu trúc <ul> -> <li> -> <Link> để chuẩn HTML
             <li key={category}>
-              <Link to={`/category/${encodeURIComponent(category)}`}>
+              <Link
+                to={`/category/${encodeURIComponent(category)}`}
+                className="whitespace-nowrap text-left text-white no-underline hover:text-amber-500 transition-colors block"
+              >
                 {category}
               </Link>
             </li>

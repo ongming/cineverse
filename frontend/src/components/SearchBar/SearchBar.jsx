@@ -1,27 +1,26 @@
 import { useState } from "react";
-import "./SearchBar.css";
-import { useNavigate } from "react-router-dom"; // Thay Link bằng useNavigate
-import SearchIcon from "../../assets/icons/search-interface-symbol.png";
+import { useNavigate } from "react-router-dom";
+import { Search } from "lucide-react";
 
 export default function SearchBar() {
   const [inputValue, setInputValue] = useState("");
-  const navigate = useNavigate(); // Khởi tạo hàm điều hướng
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
-    e.preventDefault(); // Ngăn trình duyệt tải lại trang khi submit form
+    e.preventDefault();
     if (inputValue.trim()) {
-      // Chỉ chuyển hướng khi nhấn Enter (hoặc submit form) và có nhập chữ
       navigate(`/search?q=${encodeURIComponent(inputValue.trim())}`);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="search-bar-container">
-      <div className="search-box">
-        <img src={SearchIcon} className="search-icon" alt="Search" />
+    <form onSubmit={handleSubmit} className="flex items-center">
+      <div className="flex items-center bg-[#1a1a1a] border border-[#363636] rounded-full px-3.5 py-1.5 w-[250px] transition-colors hover:border-[#555555]">
+        <Search className="w-4 h-4 mr-2.5 text-[#b0adad] shrink-0" />
         <input
           type="text"
           placeholder="Tìm kiếm..."
+          className="border-none bg-transparent outline-none text-white text-sm w-full placeholder:text-[#b0adad]"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
         />

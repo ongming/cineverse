@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+@theme {
+  /* 1. Định nghĩa Tên Màu Thương Hiệu dùng chung toàn bộ dự án */
+  --color-gold: #ffb800;
+  --color-gold-hover: #f5c518;
+  --color-cyan-neon: #00e5e5;
+  --color-dark-bg: #080808;
+  --color-card-bg: #12141a;
+  
+  /* 2. Định nghĩa Phông Chữ dùng chung cho toàn bộ dự án */
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "Roboto Mono", monospace;
+}
+
+@layer base {
+  /* 3. Định nghĩa Màu Chữ & Màu Nền mặc định cho toàn bộ thẻ <body> */
+  body {
+    @apply bg-dark-bg text-white font-mono antialiased min-h-screen selection:bg-gold selection:text-black;
+  }
+
+  /* Định nghĩa kiểu đường cuộn đẹp mắt (Scrollbar) toàn trang */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #080808;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #222222;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #ffb800;
+  }
+}

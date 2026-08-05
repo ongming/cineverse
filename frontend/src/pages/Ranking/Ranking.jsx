@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { movies } from "../../data/movies.js";
-import "./Ranking.css";
+import { Clock, Star, Bookmark, Info, Grid } from "lucide-react";
 
 export default function Ranking() {
-  const [activeGenre, setActiveGenre] = useState(""); // Lưu trữ thể loại đang được chọn");
+  const [activeGenre, setActiveGenre] = useState("");
 
-  // Danh sách thể loại ở cột bên phải
   const uniqueGenres = [...new Set(movies.map((movie) => movie.genre).flat())];
 
   const filteredMovies =
@@ -14,73 +13,72 @@ export default function Ranking() {
       ? movies
       : movies.filter((movie) => movie.genre.includes(activeGenre));
 
-  // Sắp xếp danh sách phim theo điểm đánh giá từ cao xuống thấp để tự động phân hạng
   const rankedMovies = [...filteredMovies].sort((a, b) => b.rating - a.rating);
 
   return (
-    <div className="ranking-page-container">
-      <div className="ranking-content-wrapper">
-        <div className="rankings-list-section">
-          <h1 className="ranking-title">Bảng xếp hạng chung</h1>
-          <p className="ranking-subtitle">
+    <div className="max-w-[1200px] mx-auto px-5 py-10 text-white font-mono text-left">
+      <div className="flex flex-col lg:flex-row gap-10">
+        <div className="flex-1">
+          <h1 className="text-3xl font-extrabold text-white mb-2">Bảng xếp hạng chung</h1>
+          <p className="text-[#8a90a2] text-sm mb-8 flex items-center gap-2">
             Danh sách các phim được đánh giá cao nhất
-            <span className="updated-time">Updated: 24m ago</span>
+            <span className="text-amber-400 font-semibold flex items-center gap-1 ml-2">
+              <Clock className="w-3.5 h-3.5 inline" /> Updated: 24m ago
+            </span>
           </p>
 
-          <div className="ranking-list">
+          <div className="flex flex-col gap-4">
             {rankedMovies.map((movie, index) => {
               const rank = index + 1;
               return (
-                <div key={movie.id} className="ranking-item-card-wrapper">
+                <div key={movie.id} className="block">
                   <Link
                     to={`/trailer/${movie.id}`}
-                    className="ranking-item-card"
+                    className="flex items-center gap-4 bg-[#12141a] border border-white/10 rounded-xl p-4 no-underline text-inherit transition-all hover:border-amber-400 hover:-translate-y-0.5 shadow-lg group"
                   >
-                    {/* Hạng phim (Rank) */}
-                    <div className={`rank-badge rank-${rank}`}>#{rank}</div>
-
-                    {/* Poster phim */}
-                    <div className="rank-poster-container">
-                      <img
-                        src={movie.image}
-                        alt={movie.name}
-                        className="rank-poster"
-                      />
+                    {/* Rank Badge */}
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg shrink-0 ${
+                      rank === 1 ? "bg-amber-400 text-black shadow-lg shadow-amber-400/40" :
+                      rank === 2 ? "bg-zinc-300 text-black" :
+                      rank === 3 ? "bg-amber-700 text-white" : "bg-zinc-800 text-zinc-400"
+                    }`}>
+                      #{rank}
                     </div>
 
-                    {/* Thông tin phim */}
-                    <div className="rank-movie-info">
-                      <h3 className="rank-movie-title">{movie.name}</h3>
-                      <div className="rank-movie-meta">
+                    {/* Poster */}
+                    <div className="w-16 h-24 rounded-lg overflow-hidden shrink-0 border border-white/10">
+                      <img src={movie.image} alt={movie.name} className="w-full h-full object-cover" />
+                    </div>
+
+                    {/* Info */}
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-base font-bold text-white m-0 truncate group-hover:text-amber-400 transition-colors">{movie.name}</h3>
+                      <div className="flex items-center gap-2 text-xs text-[#8c8c8c] mt-1">
                         <span>{movie.year}</span>
-                        <span className="dot">•</span>
+                        <span>•</span>
                         <span>{movie.duration}</span>
-                        <span className="dot">•</span>
-                        <span className="age-rating-box">
-                          {movie.ageRating}
-                        </span>
+                        <span>•</span>
+                        <span className="px-1.5 py-0.5 bg-zinc-800 border border-zinc-700 text-white rounded text-[10px] font-bold">{movie.ageRating}</span>
                       </div>
-                      <div className="rank-movie-rating">
-                        <span className="star-icon">★</span> {movie.rating}{" "}
-                        <span className="max-rating">/ 10</span>
+                      <div className="text-amber-400 font-bold text-sm mt-2 flex items-center gap-1">
+                        <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400 inline" />
+                        {movie.rating} <span className="text-zinc-600 text-xs font-normal">/ 10</span>
                       </div>
                     </div>
 
-                    {/* Nút đánh dấu đã xem */}
+                    {/* Watched Action */}
                     <div
-                      className="rank-action-watched"
+                      className="hidden md:flex items-center gap-1.5 px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-xs text-white hover:bg-amber-400 hover:text-black transition-colors"
                       onClick={(e) => {
-                        e.preventDefault(); // Tránh kích hoạt Link chuyển trang
+                        e.preventDefault();
                         alert(`Đã đánh dấu đã xem phim: ${movie.name}`);
                       }}
                     >
-                      <span className="bookmark-icon">🔖</span> Lưu vào danh
-                      sách xem sau
+                      <Bookmark className="w-3.5 h-3.5" /> Lưu
                     </div>
 
-                    {/* Icon thông tin bên phải */}
-                    <div className="rank-info-btn">
-                      <span className="info-icon-char">ⓘ</span>
+                    <div className="text-zinc-500">
+                      <Info className="w-4 h-4" />
                     </div>
                   </Link>
                 </div>
@@ -88,21 +86,24 @@ export default function Ranking() {
             })}
           </div>
 
-          <button className="load-more-rank-btn">Tải thêm xếp hạng</button>
+          <button className="w-full mt-6 py-3 bg-white/5 border border-white/10 text-white font-bold rounded-xl cursor-pointer hover:bg-white/10 transition-colors">
+            Tải thêm xếp hạng
+          </button>
         </div>
 
-        {/* CỘT PHẢI: SIDEBAR LỌC THỂ LOẠI & XU HƯỚNG */}
-        <div className="ranking-sidebar-section">
-          {/* Widget 1: Lọc thể loại */}
-          <div className="sidebar-widget genre-widget">
-            <div className="widget-header">
-              <span className="widget-icon">㗊</span>
-              <h3>Bảng xếp hạng dựa theo thể loại</h3>
+        {/* SIDEBAR */}
+        <div className="w-full lg:w-[320px] shrink-0">
+          <div className="bg-[#12141a] border border-white/10 rounded-xl p-5">
+            <div className="flex items-center gap-2 mb-4 text-amber-400 font-bold text-sm">
+              <Grid className="w-4 h-4" />
+              <h3 className="m-0 text-white text-base">Thể loại</h3>
             </div>
 
-            <div className="genre-pills-container">
+            <div className="flex flex-wrap gap-2">
               <button
-                className={`genre-pill-btn ${activeGenre === "" ? "active" : ""}`}
+                className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all cursor-pointer ${
+                  activeGenre === "" ? "bg-amber-400 border-amber-400 text-black" : "bg-white/5 border-white/10 text-white hover:border-amber-400"
+                }`}
                 onClick={() => setActiveGenre("")}
               >
                 Tất Cả
@@ -110,7 +111,9 @@ export default function Ranking() {
               {uniqueGenres.map((g) => (
                 <button
                   key={g}
-                  className={`genre-pill-btn ${activeGenre === g ? "active" : ""}`}
+                  className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all cursor-pointer ${
+                    activeGenre === g ? "bg-amber-400 border-amber-400 text-black" : "bg-white/5 border-white/10 text-white hover:border-amber-400"
+                  }`}
                   onClick={() => setActiveGenre(g)}
                 >
                   {g}
