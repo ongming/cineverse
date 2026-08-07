@@ -5,10 +5,10 @@ export default function MovieCard({ movie }) {
     return (
         <Link
             to={`/trailer/${movie.id}`}
-            className="flex flex-col bg-[#161616] rounded-lg overflow-hidden cursor-pointer transition-all duration-300 border border-[#252525] no-underline text-inherit w-full box-border hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-black/50 hover:border-[#383838]"
+            className="flex flex-col group bg-dark  cursor-pointer transition-all duration-300 no-underline text-inherit w-full box-border"
         >
-            <div className="relative w-full">
-                <img className="w-full aspect-[2/3] object-cover block" src={movie.image} alt={movie.name} />
+            <div className="relative w-full overflow-hidden rounded-lg">
+                <img className="w-full aspect-[2/3] group-hover:scale-110 transition-transform duration-300 object-cover block" src={movie.image} alt={movie.name} />
                 <span className="absolute top-[10px] left-[10px] bg-black/75 text-[#ffaa00] px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
                     <Star className="w-3 h-3 fill-[#ffaa00] text-[#ffaa00]" />
                     {movie.rating}

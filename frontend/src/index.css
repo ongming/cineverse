@@ -7,16 +7,20 @@
   --color-cyan-neon: #00e5e5;
   --color-dark-bg: #080808;
   --color-card-bg: #12141a;
+  --color-dark-panel: #121212;
   
-  /* 2. Định nghĩa Phông Chữ dùng chung cho toàn bộ dự án */
+  /* 2. Định nghĩa Mốc Màn Hình tùy chỉnh */
+  --breakpoint-1400: 1400px;
+
+  /* 3. Định nghĩa Phông Chữ dùng chung cho toàn bộ dự án */
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
   --font-mono: "Roboto Mono", monospace;
 }
 
 @layer base {
-  /* 3. Định nghĩa Màu Chữ & Màu Nền mặc định cho toàn bộ thẻ <body> */
+  /* 4. Định nghĩa Màu Chữ & Màu Nền mặc định cho toàn bộ thẻ <body> */
   body {
-    @apply bg-dark-bg text-white font-mono antialiased min-h-screen selection:bg-gold selection:text-black;
+    @apply bg-dark-bg text-white font-mono antialiased min-h-screen selection:bg-cyan-neon selection:text-black;
   }
 
   /* Định nghĩa kiểu đường cuộn đẹp mắt (Scrollbar) toàn trang */
@@ -31,6 +35,6 @@
     border-radius: 4px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #ffb800;
+    background: #00e5e5;
   }
 }

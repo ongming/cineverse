@@ -5,6 +5,7 @@ import Search from "../pages/SearchPage/Search.jsx";
 import MainLayout from "../layouts/MainLayout/MainLayout.jsx";
 import Category from "../pages/Category/Category.jsx";
 import Ranking from "../pages/Ranking/Ranking.jsx";
+import Schedule from "../pages/Schedule/Schedule.jsx";
 import Login from "../pages/Login/Login.jsx";
 import WatchList from "../pages/WatchList/WatchList.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
@@ -18,6 +19,7 @@ function AppRoutes() {
         <Route path="/search" element={<Search />} />
         <Route path="/category/:name" element={<Category />} />
         <Route path="/ranking" element={<Ranking />} />
+        <Route path="/schedule" element={<Schedule />} />
         <Route path="/login" element={<Login />} />
 
         <Route

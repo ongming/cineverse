@@ -1,0 +1,15 @@
+export const categories = [
+    "Hành Động",
+    "Hài Hước",
+    "Kinh Dị",
+    "Tình Cảm",
+    "Hoạt Hình",
+    "Phiêu Lưu",
+    "Châm Biếm",
+    "Học Đường",
+    "Thể Thao",
+    "Võ Thuật",
+    "Âm Nhạc",
+    "Khoa Học",
+    "Viễn Tưởng",
+  ];

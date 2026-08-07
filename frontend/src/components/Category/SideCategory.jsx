@@ -1,17 +1,25 @@
 import { Link } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
 import { categories } from "../../data/category.js";
+import { useState } from "react";
 
-export default function Category() {
+export default function SideCategory() {
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="relative group">
-      <span className="inline-block text-white hover:cursor-pointer hover:text-cyan-neon hover:scale-105 transition-all duration-400">
+      <span
+        onClick={() => setIsOpen(!isOpen)}
+        className="inline-block text-white hover:cursor-pointer hover:text-cyan-neon hover:scale-105 transition-all duration-400"
+      >
         Thể Loại
-        <ChevronDown className="w-4 h-4 inline-block ml-1 group-hover:rotate-180 transition-transform duration-300" />
+        <ChevronDown
+          className={`w-4 h-4 inline-block ml-1 ${isOpen ? "rotate-180" : ""} transition-transform duration-300`}
+        />
       </span>
-      <div className="hidden group-hover:block absolute top-full left-0 w-[700px] z-[999] pt-2.5">
-        <ul className="grid grid-cols-5 gap-x-[20px] gap-y-[10px] p-4 bg-[#0d0d0d] border border-[#222222] rounded-lg shadow-2xl list-none m-0 text-white">
+
+      {isOpen && (
+        <ul className="grid grid-cols-2 gap-x-[20px] gap-y-[10px] p-4 bg-dark-panel  rounded-lg list-none m-0 text-white">
           {categories.map((category) => (
             <li key={category}>
               <Link
@@ -23,7 +31,7 @@ export default function Category() {
             </li>
           ))}
         </ul>
-      </div>
+      )}
     </div>
   );
 }
