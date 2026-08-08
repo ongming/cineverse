@@ -4,8 +4,17 @@ import { useEffect } from "react";
 
 export const AuthContext = createContext();
 
+const getStoredUser = () => {
+  try {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  } catch (error) {
+    console.error("Error parsing stored user:", error);
+    return null;
+  }
+};
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(getStoredUser);
   const login = (user) => {
     localStorage.setItem("user", JSON.stringify(user));
     setUser(user);
@@ -16,27 +25,8 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
-  const restoreSession = () => {
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      try {
-        setUser(JSON.parse(savedUser));
-      } catch (e) {
-        setUser(null);
-      }
-    } else {
-      setUser(null);
-    }
-  };
-
-  useEffect(() => {
-    restoreSession();
-  }, []);
-
   return (
-    <AuthContext.Provider
-      value={{ user, login, logout }}
-    >
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

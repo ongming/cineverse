@@ -30,25 +30,25 @@ export default function Header() {
           <Category />
           <Link
             to="/ranking"
-            className="inline-block text-white hover:text-cyan-neon hover:scale-105 transition-all duration-300 ease-in-out"
+            className="inline-block text-white hover:text-cyan-neon hover:scale-105 hover:-translate-y-1.5 transition-all duration-300 ease-in-out"
           >
             Bảng xếp hạng
           </Link>
           <Link
             to="/watchlist"
-            className="inline-block text-white hover:text-cyan-neon hover:scale-105 transition-all duration-300 ease-in-out"
+            className="inline-block text-white hover:text-cyan-neon hover:scale-105 hover:-translate-y-1.5 transition-all duration-300 ease-in-out"
           >
             Danh sách theo dõi
           </Link>
           <Link
             to="/schedule"
-            className="inline-block text-white hover:text-cyan-neon hover:scale-105 transition-all duration-300 ease-in-out"
+            className="inline-block text-white hover:text-cyan-neon hover:scale-105 hover:-translate-y-1.5 transition-all duration-300 ease-in-out"
           >
-            Lịch chiếu phim
+            Ngày ra mắt
           </Link>
           <Link
             to="/ranking"
-            className="inline-block text-white hover:text-cyan-neon hover:scale-105 transition-all duration-300 ease-in-out"
+            className="inline-block text-white hover:text-cyan-neon hover:scale-105 hover:-translate-y-1.5 transition-all duration-300 ease-in-out"
           >
             Doanh thu hàng đầu
           </Link>

@@ -3,10 +3,9 @@ import { ChevronDown } from "lucide-react";
 import { categories } from "../../data/category.js";
 
 export default function Category() {
-
   return (
     <div className="relative group">
-      <span className="inline-block text-white hover:cursor-pointer hover:text-cyan-neon hover:scale-105 transition-all duration-400">
+      <span className="inline-block text-white hover:cursor-pointer hover:-translate-y-1.5 hover:text-cyan-neon hover:scale-105 transition-all duration-400">
         Thể Loại
         <ChevronDown className="w-4 h-4 inline-block ml-1 group-hover:rotate-180 transition-transform duration-300" />
       </span>

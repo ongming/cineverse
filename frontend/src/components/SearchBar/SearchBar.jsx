@@ -16,9 +16,6 @@ export default function SearchBar() {
     }
   }, [isOpen]);
 
-  // Click ra ngoài thì tự thu gọn ô tìm kiếm lại (nếu chưa gõ gì)
-  
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (inputValue.trim()) {

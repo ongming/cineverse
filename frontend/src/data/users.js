@@ -6,8 +6,6 @@ export const users = [
     password: "123456",
     avatar: null,
     role: "user",
-    favorite: [],
-    watchLater: [],
     history: [],
   },
 ];
