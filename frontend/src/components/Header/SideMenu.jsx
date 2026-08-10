@@ -60,7 +60,7 @@ export default function SideMenu({ isMobileMenuOpen, setIsMobileMenuOpen }) {
             Ngày ra mắt
           </Link>
           <Link
-            to="/ranking"
+            to="/revenue"
             onClick={() => setIsMobileMenuOpen(false)}
             className="text-gray-200 hover:text-cyan-neon py-2.5 px-3 rounded-lg hover:bg-[#1f1f1f] transition-colors"
           >

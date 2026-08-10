@@ -1,4 +1,6 @@
 import { ChevronDown } from "lucide-react";
+import useClickOutside from "../../hooks/HandleClickOutside.js";
+import { useRef } from "react";
 
 export default function SortBar({
   isSortOpen,
@@ -6,15 +8,21 @@ export default function SortBar({
   sortOptions,
   sortBy,
   setSortBy,
+  Icon=null,
 }) {
+  const sortRef = useRef(null);
+
+  useClickOutside(sortRef, () => setIsSortOpen(false));
+
   return (
-    <div className="relative w-full sm:w-auto shrink-0 ">
+    <div className="relative w-full sm:w-auto shrink-0 " ref={sortRef}>
+      
       <button
         type="button"
         onClick={() => setIsSortOpen(!isSortOpen)}
-        className="w-full sm:w-auto px-4 py-2.5 bg-[#0a0b0e] border border-[#232736] hover:border-amber-400/50 rounded-xl text-xs font-mono text-gray-300 hover:text-white flex items-center justify-between gap-3 cursor-pointer transition-all"
+        className="w-full sm:w-auto px-4 py-2.5 bg-[#0a0b0e] border border-[#232736] hover:border-amber-400/50 rounded-lg text-xs font-mono text-gray-300 hover:text-white flex items-center justify-between gap-3 cursor-pointer transition-all"
       >
-        <span className="text-gray-400">Sort by:</span>
+        {Icon}
         <span className="font-bold text-amber-400">
           {sortOptions.find((o) => o.value === sortBy)?.label}
         </span>
@@ -27,7 +35,7 @@ export default function SortBar({
 
       {/* Dropdown Menu */}
       {isSortOpen && (
-        <div className="absolute w-full right-0 top-full mt-2 w-48 bg-[#12141a] border border-[#282d3e] rounded-xl shadow-2xl overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-150">
+        <div className="absolute w-full max-h-48 overflow-y-auto right-0 top-full mt-2 w-48 bg-[#12141a] border border-[#282d3e] rounded-sm shadow-2xl overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-150">
           {sortOptions.map((opt) => (
             <button
               key={opt.value}

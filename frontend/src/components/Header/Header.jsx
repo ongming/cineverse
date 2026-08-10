@@ -47,7 +47,7 @@ export default function Header() {
             Ngày ra mắt
           </Link>
           <Link
-            to="/ranking"
+            to="/revenue"
             className="inline-block text-white hover:text-cyan-neon hover:scale-105 hover:-translate-y-1.5 transition-all duration-300 ease-in-out"
           >
             Doanh thu hàng đầu

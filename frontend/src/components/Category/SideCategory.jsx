@@ -19,7 +19,7 @@ export default function SideCategory() {
       </span>
 
       {isOpen && (
-        <ul className="grid grid-cols-2 gap-x-[20px] gap-y-[10px] p-4 bg-dark-panel  rounded-lg list-none m-0 text-white">
+        <ul className="grid grid-cols-2 gap-x-4 gap-y-2.5 p-4 bg-dark-panel  rounded-lg list-none m-0 text-white">
           {categories.map((category) => (
             <li key={category}>
               <Link

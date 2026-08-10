@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { useMovies } from "../../hooks/useMovies.jsx";
+import { useMovies } from "../../hooks/useMovies.js";
 import { Calendar } from "lucide-react";
 import CustomDatePicker from "../../components/DatePicker/CustomDatePicker.jsx";
 import TrailerCard from "./TrailerCard.jsx";

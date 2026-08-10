@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { login as loginService } from "../../service/authService.jsx";
+import { login as loginService } from "../../service/authService.js";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 

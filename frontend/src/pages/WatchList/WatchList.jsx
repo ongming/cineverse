@@ -1,9 +1,8 @@
 import { useState, useMemo } from "react";
-import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
-import { useMovies } from "../../hooks/useMovies.jsx";
-import { useWatchList } from "../../hooks/useWatchList.jsx";
-import { Bookmark, Search, Film, ChevronDown, Trash2, X } from "lucide-react";
+import { useMovies } from "../../hooks/useMovies.js";
+import { useWatchList } from "../../hooks/useWatchList.js";
+import { Bookmark, Search, Film, Trash2, X, Filter } from "lucide-react";
 import { useEffect } from "react";
 import SortBar from "../../components/SortBar/SortBar.jsx";
 import TrailerWatchList from "./TrailerWatchList.jsx";
@@ -11,7 +10,7 @@ import TrailerWatchList from "./TrailerWatchList.jsx";
 export default function WatchList() {
   const { user } = useAuth();
   const { data: userWatchlistData, isLoading, isError } = useWatchList();
-  const [userWatchlist, setUserWatchlist] = useState(null);
+  const [userWatchlist, setUserWatchlist] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("recent");
   const [isSortOpen, setIsSortOpen] = useState(false);
@@ -27,29 +26,10 @@ export default function WatchList() {
     }
   }, [userWatchlistData]);
 
-  // Map DB records to full movie objects from movies.js
-  const watchlist = useMemo(() => {
-    if (!userWatchlist || !movies) return [];
-    return userWatchlist
-      .map((item) => {
-        const movieObj = movies.find((m) => m.id === item.movie_id);
-        if (!movieObj) return null;
-        return {
-          ...movieObj,
-          watchlistId: item.id,
-          created_at: item.created_at,
-        };
-      })
-      .filter(Boolean);
-  }, [userWatchlist, movies]);
-
-  // Remove a movie from watchlist
   const handleRemoveMovie = (movieId, e) => {
     e.preventDefault();
     e.stopPropagation();
-    setUserWatchlist((prev) =>
-      prev.filter((item) => item.movie_id !== movieId),
-    );
+    setUserWatchlist((prev) => prev.filter((item) => item.id !== movieId));
   };
 
   // Clear all movies for current user
@@ -63,7 +43,7 @@ export default function WatchList() {
 
   // Filter and sort movies
   const processedMovies = useMemo(() => {
-    let result = [...watchlist];
+    let result = [...userWatchlist];
     // Filter by search query
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
@@ -82,7 +62,7 @@ export default function WatchList() {
     }
 
     return result;
-  }, [watchlist, searchQuery, sortBy]);
+  }, [userWatchlist, searchQuery, sortBy]);
 
   const sortOptions = [
     { value: "recent", label: "Mới thêm gần đây" },
@@ -136,13 +116,13 @@ export default function WatchList() {
             <Film className="w-4 h-4 text-amber-400" />
             <span>
               <strong className="text-amber-400 text-sm">
-                {watchlist.length}
+                {userWatchlist.length}
               </strong>{" "}
               PHIM ĐÃ LƯU
             </span>
           </div>
 
-          {watchlist.length > 0 && (
+          {userWatchlist.length > 0 && (
             <button
               type="button"
               onClick={handleClearAll}
@@ -184,6 +164,7 @@ export default function WatchList() {
             sortOptions={sortOptions}
             sortBy={sortBy}
             setSortBy={setSortBy}
+            Icon = {<Filter className="w-4 h-4 text-amber-400" />}
           />
         </div>
       </div>

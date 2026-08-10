@@ -9,8 +9,8 @@ export default function Category() {
         Thể Loại
         <ChevronDown className="w-4 h-4 inline-block ml-1 group-hover:rotate-180 transition-transform duration-300" />
       </span>
-      <div className="hidden group-hover:block absolute top-full left-0 w-[700px] z-[999] pt-2.5">
-        <ul className="grid grid-cols-5 gap-x-[20px] gap-y-[10px] p-4 bg-[#0d0d0d] border border-[#222222] rounded-lg shadow-2xl list-none m-0 text-white">
+      <div className="hidden group-hover:block absolute top-full left-0 w-175 z-999 pt-2.5">
+        <ul className="grid grid-cols-5 gap-x-5 gap-y-2.5 p-4 bg-[#0d0d0d] border border-[#222222] rounded-lg shadow-2xl list-none m-0 text-white">
           {categories.map((category) => (
             <li key={category}>
               <Link

@@ -1,6 +1,6 @@
 import MovieList from "../../components/MovieList/MovieList.jsx";
 import { useState, useEffect } from "react";
-import { useMovies } from "../../hooks/useMovies.jsx";
+import { useMovies } from "../../hooks/useMovies.js";
 
 function Home() {
   const [movieList, setMovieList] = useState([]);

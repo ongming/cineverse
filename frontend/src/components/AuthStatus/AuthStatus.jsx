@@ -3,11 +3,15 @@ import defaultAvatar from "../../assets/images/Avatar.png";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { LogOut, LogIn, User } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
+import useClickOutside from "../../hooks/HandleClickOutside.js";
 
 export default function AuthStatus() {
   const { user, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
+
+  useClickOutside(dropdownRef, () => setIsOpen(false));
+
 
   const handleLogout = () => {
     logout();

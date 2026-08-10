@@ -15,6 +15,8 @@ export const movies = [
     status: "released",
     releaseStatus: "Released",
     releaseDate: "2009-12-18",
+    budget: 237000000,
+    revenue: 2923706026,
     trailerUrl: "https://youtu.be/d9MyW72ELq0",
     description:
       "Jake Sully, một cựu thủy quân lục chiến bị liệt, được gửi đến hành tinh Pandora xinh đẹp nhưng đầy nguy hiểm để tham gia dự án Avatar. Tại đây, anh gặp gỡ tộc người Na'vi và đứng trước sự lựa chọn khó khăn giữa nhiệm vụ được giao và bảo vệ thế giới mới này.",
@@ -36,6 +38,8 @@ export const movies = [
     status: "released",
     releaseStatus: "Released",
     releaseDate: "1997-12-19",
+    budget: 200000000,
+    revenue: 2264743305,
     trailerUrl: "https://youtu.be/kVrqfYjkTdQ",
     description:
       "Mượn bối cảnh vụ đắm tàu lịch sử RMS Titanic vào năm 1912, bộ phim kể về câu chuyện tình lãng mạn nhưng đầy bi kịch giữa chàng họa sĩ nghèo Jack Dawson và tiểu thư quý tộc Rose DeWitt Bukater.",
@@ -57,6 +61,8 @@ export const movies = [
     status: "released",
     releaseStatus: "Released",
     releaseDate: "2012-05-04",
+    budget: 220000000,
+    revenue: 1520538536,
     trailerUrl: "https://youtu.be/eOrNdBpGMv8",
     description:
       "Khi Loki, người em trai độc ác của Thor, đe dọa sự an nguy của Trái Đất, giám đốc tổ chức S.H.I.E.L.D. Nick Fury đã tập hợp biệt đội siêu anh hùng gồm Iron Man, Captain America, Hulk, Thor, Black Widow và Hawkeye để cùng nhau chiến đấu bảo vệ nhân loại.",
@@ -78,6 +84,8 @@ export const movies = [
     status: "released",
     releaseStatus: "Released",
     releaseDate: "2001-12-19",
+    budget: 93000000,
+    revenue: 898800000,
     trailerUrl: "https://www.youtube.com/watch?v=V75dMMIW2B4",
     description:
       "Frodo Baggins, một người lùn Hobbit hiền lành vùng Shire, cùng những người đồng hành quả cảm bắt đầu cuộc hành trình đầy gian khổ để tiêu hủy chiếc nhẫn quyền lực tối thượng tại ngọn núi Doom nhằm cứu lấy vùng Trung Địa khỏi bóng tối của Sauron.",
@@ -99,6 +107,8 @@ export const movies = [
     status: "released",
     releaseStatus: "Released",
     releaseDate: "2005-09-27",
+    budget: 15000000,
+    revenue: 4000000,
     trailerUrl: "https://youtu.be/jfBKSTo67c0",
     description:
       "Sau khi gặp một sự cố cận kề cái chết, Stewie Griffin, cậu bé thiên tài siêu quậy, phát hiện ra một bí mật động trời về bản thân và quyết định bắt đầu cuộc hành trình xuyên thời gian đầy hài hước để tìm ra sự thật.",
@@ -120,6 +130,8 @@ export const movies = [
     status: "released",
     releaseStatus: "Released",
     releaseDate: "2010-07-16",
+    budget: 160000000,
+    revenue: 839000000,
     trailerUrl: "https://www.youtube.com/watch?v=YoHD9XEInc0",
     description:
       "Dom Cobb là một kẻ cắp bậc thầy có khả năng xâm nhập vào giấc mơ của người khác để đánh cắp bí mật sâu thẳm. Lần này, anh nhận nhiệm vụ cấy một ý tưởng vào tâm trí đối phương để có cơ hội trở về nhà.",
@@ -141,6 +153,8 @@ export const movies = [
     status: "released",
     releaseStatus: "Released",
     releaseDate: "2014-11-07",
+    budget: 165000000,
+    revenue: 731000000,
     trailerUrl: "https://www.youtube.com/watch?v=zSWdZVtXT7E",
     description:
       "Trái Đất kiệt quệ tài nguyên, một nhóm phi hành gia dấn thân vào hố đen vũ trụ để tìm kiếm hành tinh mới có thể duy trì sự sống cho toàn nhân loại.",
@@ -162,6 +176,8 @@ export const movies = [
     status: "released",
     releaseStatus: "Released",
     releaseDate: "2008-07-18",
+    budget: 185000000,
+    revenue: 1006000000,
     trailerUrl: "https://www.youtube.com/watch?v=EXeTwQWrcwY",
     description:
       "Batman đối đầu với tên tội phạm thiên tài tâm thần Joker khi hắn reo rắc hỗn loạn khắp thành phố Gotham và dồn kỵ sĩ bóng đêm vào ranh giới đạo đức mong mong.",
@@ -183,6 +199,8 @@ export const movies = [
     status: "released",
     releaseStatus: "Released",
     releaseDate: "2018-12-14",
+    budget: 90000000,
+    revenue: 384300000,
     trailerUrl: "https://www.youtube.com/watch?v=g4Hbz2jLxvQ",
     description:
       "Cậu bé Miles Morales trở thành Người Nhện mới và vô tình phát hiện ra sự tồn tại của đa vũ trụ, nơi hội tụ nhiều Người Nhện từ các không gian khác nhau.",
@@ -204,6 +222,8 @@ export const movies = [
     status: "released",
     releaseStatus: "Released",
     releaseDate: "2001-07-20",
+    budget: 19000000,
+    revenue: 395800000,
     trailerUrl: "https://www.youtube.com/watch?v=ByXuk9QqQkk",
     description:
       "Cô bé Chihiro 10 tuổi lạc vào thế giới linh hồn kỳ quái và phải tìm cách giải cứu cha mẹ mình sau khi họ bị biến thành những con heo.",
@@ -225,6 +245,8 @@ export const movies = [
     status: "released",
     releaseStatus: "Released",
     releaseDate: "2019-05-30",
+    budget: 11400000,
+    revenue: 263100000,
     trailerUrl: "https://www.youtube.com/watch?v=5xH0HfJHsaY",
     description:
       "Một gia đình nghèo khổ từng bước thâm nhập vào cuộc sống của một gia đình giàu có thông qua các chiêu trò lừa đảo tinh vi, dẫn đến bi kịch bất ngờ.",
@@ -246,6 +268,8 @@ export const movies = [
     status: "released",
     releaseStatus: "Released",
     releaseDate: "2023-07-21",
+    budget: 100000000,
+    revenue: 957000000,
     trailerUrl: "https://www.youtube.com/watch?v=uYPbbksJxIg",
     description:
       "Câu chuyện về nhà vật lý lý thuyết J. Robert Oppenheimer, người lãnh đạo Dự án Manhattan phát minh ra bom nguyên tử thay đổi cục diện thế giới.",
@@ -256,7 +280,7 @@ export const movies = [
     year: 2024,
     rating: 8.6,
     image:
-      "https://imgs.search.brave.com/L3DqIrwL1rs_PrJQDeX3QfTwkTzD5PB-AqUaBqscR7Y/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL1Mv/cHYtdGFyZ2V0LWlt/YWdlcy81OWI5OWU0/YWQ0ODI0ZDIxMmY3/NGYxNGRjOTNiNzg3/ZmI1NjVkY2Y4ZDFl/NTg5MThiNDNlMzgw/ZGJkMDE1MTgyLmpw/Zw",
+      "https://imgs.search.brave.com/L3DqIrwL1rs_PrJQDeX3QfTwkTzD5PB-AqUaBqscR7Y/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL1Mv/cHYtdGFyZ2V0LWlt/YWdlcy81OWI5OWU4YWQ0ODI0ZDIxMmY3NGYxNGRjOTNiNzg3ZmI1NjVkY2Y4ZDFlNTg5MThiNDNlMzgwZGJkMDE1MTgyLmpwZw",
     genre: ["Hành Động", "Viễn Tưởng", "Phiêu Lưu"],
     saved: false,
     duration: "166 phút",
@@ -267,6 +291,8 @@ export const movies = [
     status: "now_playing",
     releaseStatus: "Released",
     releaseDate: "2024-03-01",
+    budget: 190000000,
+    revenue: 714400000,
     trailerUrl: "https://www.youtube.com/watch?v=Way9Dexny3w",
     description:
       "Paul Atreides hợp lực cùng Chani và người Fremen để trả thù những kẻ đã hủy hoại gia đình anh, đồng thời đứng trước lựa chọn định mệnh cho vũ trụ.",
@@ -277,7 +303,7 @@ export const movies = [
     year: 2016,
     rating: 8.4,
     image:
-      "https://imgs.search.brave.com/8Wv-YVvGWzQEQv2W_Bn4gWZcUY_iui3ApRrTyeDIYkI/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/Y3dmaWxtcy5qcC9l/bi9wcm9kdWN0cy9h/c3NldHNfYy8yMDE4/LzA5L3lvdXIlMjBu/YW1lLl90b3BfMDEt/dGh1bWItODUweDEy/MDAtNTI3LmpwZw",
+      "https://imgs.search.brave.com/8Wv-YVvGWzQEQv2W_Bn4gWZcUY_iui3ApRrTyeDIYkI/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cuY3dmaWxtcy5qcC9lbi9wcm9kdWN0cy9hc3NldHNfYy8yMDE4LzA5L3lvdXIlMjBu/YW1lLl90b3BfMDEtdGh1bWItODUweDEyMDAtNTI3LmpwZw",
     genre: ["Hoạt Hình", "Tình Cảm", "Học Đường"],
     saved: false,
     duration: "106 phút",
@@ -288,6 +314,8 @@ export const movies = [
     status: "released",
     releaseStatus: "Released",
     releaseDate: "2016-08-26",
+    budget: 3300000,
+    revenue: 382200000,
     trailerUrl: "https://www.youtube.com/watch?v=xU47nhruN-Q",
     description:
       "Cậu nam sinh Taki ở Tokyo và cô nữ sinh Mitsuha ở vùng quê hẻo lánh bất ngờ bị tráo đổi thân xác trong giấc mơ, dẫn đến một mối duyên kỳ diệu vượt không gian thời gian.",
@@ -309,6 +337,8 @@ export const movies = [
     status: "released",
     releaseStatus: "Released",
     releaseDate: "2014-10-24",
+    budget: 20000000,
+    revenue: 86000000,
     trailerUrl: "https://www.youtube.com/watch?v=C0BMx-qxsP4",
     description:
       "Sát thủ giải nghệ John Wick tái xuất giang hồ để thanh toán những kẻ đã sát hại chú chó cưng - kỷ vật cuối cùng mà người vợ quá cố để lại.",
@@ -330,6 +360,8 @@ export const movies = [
     status: "released",
     releaseStatus: "Released",
     releaseDate: "1999-03-31",
+    budget: 63000000,
+    revenue: 467200000,
     trailerUrl: "https://www.youtube.com/watch?v=vKQi3bBA1y8",
     description:
       "Lập trình viên Neo khám phá ra thế giới thực tại mà loài người đang sống chỉ là một mô phỏng máy tính do trí tuệ nhân tạo kiểm soát.",
@@ -351,6 +383,8 @@ export const movies = [
     status: "released",
     releaseStatus: "Released",
     releaseDate: "2000-05-05",
+    budget: 103000000,
+    revenue: 460500000,
     trailerUrl: "https://www.youtube.com/watch?v=P5ieIbInFpg",
     description:
       "Vị tướng La Mã Maximus bị hãm hại trở thành nô lệ đấu sĩ và chiến đấu tại Đấu trường La Mã để trả thù tên hoàng đế tàn bạo Commodus.",
@@ -372,6 +406,8 @@ export const movies = [
     status: "released",
     releaseStatus: "Released",
     releaseDate: "2017-11-22",
+    budget: 175000000,
+    revenue: 807800000,
     trailerUrl: "https://www.youtube.com/watch?v=Rvr68u6k5sI",
     description:
       "Cậu bé Miguel đam mê âm nhạc lạc vào Vùng Đất Người Chết trong Ngày hội Của Những Người Quá Cố để tìm kiếm người cụ tổ âm nhạc của mình.",
@@ -393,6 +429,8 @@ export const movies = [
     status: "released",
     releaseStatus: "Released",
     releaseDate: "2016-12-09",
+    budget: 30000000,
+    revenue: 447400000,
     trailerUrl: "https://www.youtube.com/watch?v=0pdqf4P9MB8",
     description:
       "Một nhạc công Jazz đam mê và một nữ diễn viên trẻ nuôi hoài bão theo đuổi ước mơ nghệ thuật tại thành phố Los Angeles hoa lệ.",
@@ -414,6 +452,8 @@ export const movies = [
     status: "released",
     releaseStatus: "Released",
     releaseDate: "2018-04-06",
+    budget: 17000000,
+    revenue: 341000000,
     trailerUrl: "https://www.youtube.com/watch?v=WR7cc5t7niU",
     description:
       "Một gia đình phải sống trong sự im lặng tuyệt đối để trốn nắp khỏi những sinh vật ngoài hành tinh mù lòa có thính giác cực kỳ nhạy bén.",
@@ -435,6 +475,8 @@ export const movies = [
     status: "released",
     releaseStatus: "Released",
     releaseDate: "2014-08-01",
+    budget: 170000000,
+    revenue: 773300000,
     trailerUrl: "https://www.youtube.com/watch?v=d96cjJhvlMA",
     description:
       "Một nhóm tên tội phạm vũ trụ lập dị gồm Peter Quill, Gamora, Drax, Rocket và Groot hợp lực để ngăn chặn kẻ phản diện Ronan tiêu diệt cả ngân hà.",
@@ -456,6 +498,8 @@ export const movies = [
     status: "released",
     releaseStatus: "Released",
     releaseDate: "2021-12-17",
+    budget: 200000000,
+    revenue: 1921847111,
     trailerUrl: "https://www.youtube.com/watch?v=JfVOs4VSpmA",
     description:
       "Danh tính bị lộ khiến cuộc sống của Peter Parker đảo lộn. Anh nhờ Doctor Strange làm phép xóa trí nhớ nhân loại, nhưng phép thuật thất bại đã xé rách ranh giới đa vũ trụ.",
@@ -477,6 +521,8 @@ export const movies = [
     status: "released",
     releaseStatus: "Released",
     releaseDate: "2019-10-04",
+    budget: 55000000,
+    revenue: 1074458282,
     trailerUrl: "https://www.youtube.com/watch?v=zAGVQLHvwOY",
     description:
       "Hành trình bi kịch của Arthur Fleck - một gã hề thất bại bị xã hội xa lánh và chà đạp, từng bước biến đổi thành tên tội phạm khét tiếng Joker.",
@@ -499,6 +545,8 @@ export const movies = [
     status: "now_playing",
     releaseStatus: "Released",
     releaseDate: "2026-07-29",
+    budget: 210000000,
+    revenue: 680000000,
     trailerUrl: "https://www.youtube.com/watch?v=JfVOs4VSpmA",
     description:
       "Không còn Tony Stark, MJ hay Ned kề cận, Peter buộc phải đơn thân độc mã đối diện với phe đối đầu bí ẩn. Tuy nhiên, khi áp lực ngày càng gia tăng, nó kích hoạt một sự biến đổi thể chất bất ngờ, đe dọa chính sự tồn tại của anh.",
@@ -519,6 +567,8 @@ export const movies = [
     status: "now_playing",
     releaseStatus: "Released",
     releaseDate: "2026-07-15",
+    budget: 250000000,
+    revenue: 890000000,
     trailerUrl: "https://www.youtube.com/watch?v=o4s236zGkMM",
     description:
       "Câu chuyện theo chân Odysseus trong hành trình kéo dài 10 năm trở về nhà sau cuộc chiến thành Troy, nơi ông phải đối mặt với các vị thần, quái vật và vô vàn thử thách để giành lại vương quốc của mình.",
@@ -539,6 +589,8 @@ export const movies = [
     status: "now_playing",
     releaseStatus: "Released",
     releaseDate: "2026-07-08",
+    budget: 150000000,
+    revenue: 420000000,
     trailerUrl: "https://www.youtube.com/watch?v=hDZ7y8RP5HE",
     description:
       "Nghe theo tiếng gọi của Đại Dương, Moana dũng cảm rời đảo Motunui vượt rạn san hô khám phá thế giới rộng lớn cùng á thần Maui với sứ mệnh mang lại sự thịnh vượng cho quê hương.",
@@ -559,6 +611,8 @@ export const movies = [
     status: "now_playing",
     releaseStatus: "Released",
     releaseDate: "2026-06-24",
+    budget: 80000000,
+    revenue: 610000000,
     trailerUrl: "https://www.youtube.com/watch?v=PXi3Mv6KMz0",
     description:
       "Câu chuyện đầy náo nhiệt lố bịch và điên rồ về cách các Minion chinh phục Hollywood, giải phóng quái vật ra thế giới và sát cánh bên nhau cứu lấy Trái Đất.",
@@ -579,6 +633,8 @@ export const movies = [
     status: "now_playing",
     releaseStatus: "Released",
     releaseDate: "2026-07-07",
+    budget: 180000000,
+    revenue: 65000000,
     trailerUrl: "https://www.youtube.com/watch?v=k10ETZ41q5o",
     description:
       "Cuộc đụng độ nghẹt thở kịch tính với thế lực ma quái cổ xưa bùng phát giữa lòng rừng tăm tối đầy ám ảnh.",
@@ -599,6 +655,8 @@ export const movies = [
     status: "now_playing",
     releaseStatus: "Released",
     releaseDate: "2026-06-17",
+    budget: 60000000,
+    revenue: 12000000,
     trailerUrl: "https://www.youtube.com/watch?v=k10ETZ41q5o",
     description:
       "Hai chàng trai tuổi teen phải tìm cách trốn thoát khỏi một thực thể bạo tàn có thể mang hình hài của người mà họ khao khát nhất.",
@@ -619,6 +677,8 @@ export const movies = [
     status: "upcoming",
     releaseStatus: "Released",
     releaseDate: "2026-08-08",
+    budget: 25000000,
+    revenue: 4500000,
     trailerUrl: "https://www.youtube.com/watch?v=0pdqf4P9MB8",
     description:
       "Bộ phim tâm lý tình cảm sâu sắc khai thác tâm tư hoài niệm tuổi trẻ.",
@@ -639,6 +699,8 @@ export const movies = [
     status: "upcoming",
     releaseStatus: "Released",
     releaseDate: "2026-08-08",
+    budget: 30000000,
+    revenue: 8000000,
     trailerUrl: "https://www.youtube.com/watch?v=EXeTwQWrcwY",
     description:
       "Tác phẩm giật gân hồi hộp kịch tính theo chân cuộc đấu trí cam go tại nước Ý.",
@@ -659,6 +721,8 @@ export const movies = [
     status: "upcoming",
     releaseStatus: "Released",
     releaseDate: "2026-08-08",
+    budget: 12000000,
+    revenue: 3000000,
     trailerUrl: "https://www.youtube.com/watch?v=jfBKSTo67c0",
     description:
       "Câu chuyện hài hước nhẹ nhàng về những tình huống dở khóc dở cười ngoài dự kiến.",
@@ -679,6 +743,8 @@ export const movies = [
     status: "upcoming",
     releaseStatus: "Released",
     releaseDate: "2026-08-08",
+    budget: 45000000,
+    revenue: 15000000,
     trailerUrl: "https://www.youtube.com/watch?v=WR7cc5t7niU",
     description:
       "Những hiện tượng tâm linh kỳ quái bắt đầu xảy ra khi kẻ không mời xuất hiện.",
