@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import useRevenueAnalytics from "../../hooks/useRevenueAnalytics.js";
 import { useMovies } from "../../hooks/useMovies.js";
 import SortBar from "../../components/SortBar/SortBar.jsx";
-import FinancialDataTable from "./FinancialDataTable.jsx";
-import StatCard from "./StatCard.jsx";
-import { formatUSD } from "../../utils/FormatUSD.js";
+import FinancialDataTable from "../Revenue/FinancialDataTable.jsx";
+import StatCard from "../Revenue/StatCard.jsx";
+import { formatUSDExact, formatUSD } from "../../utils/revenueUtils.js";
 import {
   TrendingUp,
   TrendingDown,
@@ -60,7 +60,7 @@ export default function Revenue() {
   }
 
   return (
-    <div className="w-full min-h-screen bg-[#080808] text-white py-8 px-4 sm:px-8 xl:px-16 font-sans">
+    <div className="w-full min-h-screen bg-[#080808] text-white py-8 px-4 sm:px-8 xl:px-16 font-mono">
       {/* Header Banner */}
       <div className="max-w-7xl mx-auto mb-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
@@ -72,10 +72,10 @@ export default function Revenue() {
               CINEVERSE FINANCIAL ANALYTICS
             </span>
           </div>
-          <h1 className="text-3xl sm:text-4xl xl:text-5xl font-black tracking-tight text-white font-sans">
+          <h1 className="text-3xl sm:text-4xl xl:text-5xl font-black tracking-tight text-white font-mono">
             Phân Tích Doanh Thu Toàn Cầu
           </h1>
-          <p className="text-gray-400 text-xs sm:text-sm max-w-xl font-sans mt-2">
+          <p className="text-gray-400 text-xs sm:text-sm max-w-xl font-mono mt-2">
             Thống kê doanh thu phòng vé, tỷ lệ sinh lời ROI và hiệu quả đầu tư
             các tác phẩm điện ảnh.
           </p>
@@ -135,7 +135,7 @@ export default function Revenue() {
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-2.5">
                 <Award className="w-5 h-5 text-amber-400" />
-                <h2 className="text-lg font-bold text-white font-sans uppercase tracking-wide">
+                <h2 className="text-lg font-bold text-white font-mono uppercase tracking-wide">
                   Top Doanh Thu Phòng Vé
                 </h2>
               </div>
@@ -153,7 +153,7 @@ export default function Revenue() {
                     <div className="flex items-center justify-between text-xs font-mono">
                       <div className="flex items-center gap-2">
                         <span
-                          className={`w-5 h-5 rounded-md flex items-center justify-center font-bold text-[10px] ${
+                          className={`w-5 h-5 rounded-sm flex items-center justify-center font-bold text-[10px] ${
                             rankNum === 1
                               ? "bg-amber-400 text-black font-black"
                               : "bg-[#1f2333] text-gray-400"
@@ -174,9 +174,9 @@ export default function Revenue() {
                     </div>
 
                     {/* Single Color Gold Bar */}
-                    <div className="w-full bg-[#1a1d29] h-3 rounded-full overflow-hidden p-0.5 border border-[#252a3b]">
+                    <div className="w-full bg-[#1a1d29] h-4 rounded-sm overflow-hidden p-0.5 border border-[#252a3b]">
                       <div
-                        className="bg-amber-400 h-full rounded-full transition-all duration-700 ease-out group-hover:brightness-125 shadow-[0_0_10px_rgba(255,184,0,0.4)]"
+                        className="bg-amber-400 h-full rounded-sm transition-all duration-700 ease-out group-hover:brightness-125 shadow-[0_0_10px_rgba(255,184,0,0.4)]"
                         style={{ width: `${percent}%` }}
                       />
                     </div>
@@ -198,7 +198,7 @@ export default function Revenue() {
             label="THỂ LOẠI HÁI RA TIỀN NHẤT (IN DB)"
             description="Dẫn đầu tổng doanh thu trong kho dữ liệu phim CINEVERSE."
           >
-            <div className="text-xl sm:text-2xl font-black text-amber-400 font-sans tracking-tight uppercase">
+            <div className="text-xl sm:text-2xl font-black text-amber-400 font-mono tracking-tight uppercase">
               {topGenreInDB}
             </div>
           </StatCard>
@@ -209,7 +209,7 @@ export default function Revenue() {
             description="Số liệu trung bình của toàn bộ danh mục phim hiện có."
           >
             <div className="text-3xl font-black text-emerald-400 font-mono">
-              {formatUSD(avgROI)}
+              {formatUSDExact(avgROI)}
             </div>
           </StatCard>
 
@@ -221,7 +221,7 @@ export default function Revenue() {
           >
             {topMovieInFilter ? (
               <div>
-                <div className="text-lg font-black text-white font-sans uppercase line-clamp-1">
+                <div className="text-lg font-black text-white font-mono uppercase line-clamp-1">
                   {topMovieInFilter.name}
                 </div>
                 <div className="text-amber-400 font-mono font-bold text-sm mt-0.5">
@@ -245,7 +245,7 @@ export default function Revenue() {
             <div className="p-2 bg-emerald-500/10 rounded-xl text-emerald-400 border border-emerald-500/30">
               <Sparkles className="w-5 h-5" />
             </div>
-            <h3 className="text-lg font-bold text-white font-sans uppercase tracking-wide">
+            <h3 className="text-lg font-bold text-white font-mono uppercase tracking-wide">
               Vua Lợi Nhuận (Super Profit)
             </h3>
           </div>
@@ -263,7 +263,7 @@ export default function Revenue() {
                     className="w-10 h-14 object-cover rounded-lg border border-white/10 shrink-0"
                   />
                   <div>
-                    <h4 className="text-sm font-bold text-white font-sans uppercase line-clamp-1">
+                    <h4 className="text-sm font-bold text-white font-mono uppercase line-clamp-1">
                       {movie.name}
                     </h4>
                     <span className="text-xs font-mono text-gray-400">
@@ -291,7 +291,7 @@ export default function Revenue() {
             <div className="p-2 bg-red-500/10 rounded-xl text-red-400 border border-red-500/30">
               <TrendingDown className="w-5 h-5" />
             </div>
-            <h3 className="text-lg font-bold text-white font-sans uppercase tracking-wide">
+            <h3 className="text-lg font-bold text-white font-mono uppercase tracking-wide">
               Thua Lỗ Phòng Vé (Box Office Flop)
             </h3>
           </div>
@@ -309,7 +309,7 @@ export default function Revenue() {
                     className="w-10 h-14 object-cover rounded-lg border border-white/10 shrink-0"
                   />
                   <div>
-                    <h4 className="text-sm font-bold text-white font-sans uppercase line-clamp-1">
+                    <h4 className="text-sm font-bold text-white font-mono uppercase line-clamp-1">
                       {movie.name}
                     </h4>
                     <span className="text-xs font-mono text-gray-400">

@@ -1,11 +1,13 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "../pages/Home/Home.jsx";
 import TrailerDetail from "../pages/TrailerDetail/TrailerDetail.jsx";
+import ActorDetail from "../pages/ActorDetail/ActorDetail.jsx";
+import MovieListCategoryPage from "../pages/Home/MovieList.jsx";
 import Search from "../pages/SearchPage/Search.jsx";
 import MainLayout from "../layouts/MainLayout/MainLayout.jsx";
 import Category from "../pages/Category/Category.jsx";
 import Ranking from "../pages/Ranking/Ranking.jsx";
-import Revenue from "../pages/Revenue/Revenue.jsx";
+import Revenue from "../pages/Schedule/Revenue.jsx";
 import Schedule from "../pages/Schedule/Schedule.jsx";
 import Login from "../pages/Login/Login.jsx";
 import WatchList from "../pages/WatchList/WatchList.jsx";
@@ -17,8 +19,11 @@ function AppRoutes() {
       <Route element={<MainLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/trailer/:id" element={<TrailerDetail />} />
+        <Route path="/actor/:id" element={<ActorDetail />} />
+        <Route path="/person/:id" element={<ActorDetail />} />
         <Route path="/search" element={<Search />} />
         <Route path="/category/:name" element={<Category />} />
+        <Route path="/movie-list/:type" element={<MovieListCategoryPage />} />
         <Route path="/ranking" element={<Ranking />} />
         <Route path="/revenue" element={<Revenue />} />
         <Route path="/schedule" element={<Schedule />} />

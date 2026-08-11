@@ -86,7 +86,7 @@ export default function WatchList() {
     );
   }
   return (
-    <div className="w-full min-h-screen bg-[#080808] text-white py-8 px-4 sm:px-8 xl:px-16 font-sans">
+    <div className="w-full min-h-screen bg-[#080808] text-white py-8 px-4 sm:px-8 xl:px-16 font-mono">
       {/* Header Banner Section */}
       <div className="max-w-7xl mx-auto mb-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
@@ -98,10 +98,10 @@ export default function WatchList() {
               CINEVERSE WATCHLIST
             </span>
           </div>
-          <h1 className="text-3xl sm:text-4xl xl:text-5xl font-black tracking-tight text-white font-sans">
+          <h1 className="text-3xl sm:text-4xl xl:text-5xl font-black tracking-tight text-white font-mono">
             Danh sách theo dõi phim
           </h1>
-          <p className="text-gray-400 text-sm sm:text-base max-w-xl font-sans mt-2">
+          <p className="text-gray-400 text-sm sm:text-base max-w-xl font-mono mt-2">
             Quản lý danh sách các bộ phim bom tấn đã lưu của{" "}
             <span className="text-amber-400 font-semibold">
               {user?.username || "Minh"}

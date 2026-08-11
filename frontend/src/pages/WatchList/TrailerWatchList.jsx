@@ -60,7 +60,7 @@ export default function TrailerWatchList({
 
               {/* Movie Details Info */}
               <div className="mt-3 text-left">
-                <h3 className="text-sm font-bold text-white group-hover:text-amber-400 transition-colors duration-200 line-clamp-1 uppercase font-sans tracking-wide">
+                <h3 className="text-sm font-bold text-white group-hover:text-amber-400 transition-colors duration-200 line-clamp-1 uppercase font-mono tracking-wide">
                   {movie.name}
                 </h3>
 

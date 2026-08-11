@@ -12,8 +12,8 @@
   /* 2. Định nghĩa Mốc Màn Hình tùy chỉnh */
   --breakpoint-1400: 1400px;
 
-  /* 3. Định nghĩa Phông Chữ dùng chung cho toàn bộ dự án */
-  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  /* 3. Định nghĩa Phông Chữ dùng chung - TOÀN BỘ TRANG DÙNG MONO */
+  --font-sans: "Roboto Mono", monospace;
   --font-mono: "Roboto Mono", monospace;
 }
 
@@ -21,6 +21,11 @@
   /* 4. Định nghĩa Màu Chữ & Màu Nền mặc định cho toàn bộ thẻ <body> */
   body {
     @apply bg-dark-bg text-white font-mono antialiased min-h-screen selection:bg-cyan-neon selection:text-black;
+    font-family: var(--font-mono) !important;
+  }
+
+  * {
+    font-family: var(--font-mono);
   }
 
   /* Định nghĩa kiểu đường cuộn đẹp mắt (Scrollbar) toàn trang */

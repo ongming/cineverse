@@ -50,7 +50,7 @@ export default function TrailerCard({
       <div className="p-5 sm:p-6 flex flex-col justify-between flex-1">
         <div>
           {/* Title & Metadata */}
-          <h3 className="text-xl font-black text-white group-hover:text-cyan-neon transition-colors duration-300 mb-2 tracking-wide uppercase font-sans">
+          <h3 className="text-xl font-black text-white group-hover:text-cyan-neon transition-colors duration-300 mb-2 tracking-wide uppercase font-mono">
             {movie.name}
           </h3>
 
@@ -102,7 +102,7 @@ export default function TrailerCard({
           </div>
 
           {/* Description */}
-          <p className="text-xs text-gray-400 line-clamp-2 mb-4 leading-relaxed font-sans">
+          <p className="text-xs text-gray-400 line-clamp-2 mb-4 leading-relaxed font-mono">
             {movie.description}
           </p>
         </div>

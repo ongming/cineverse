@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Layers } from "lucide-react";
-import { formatUSD } from "../../utils/FormatUSD.js";
+import { formatUSD } from "../../utils/revenueUtils.js";
 
 export default function FinancialDataTable({ rankedMovies }) {
   return (
@@ -8,7 +8,7 @@ export default function FinancialDataTable({ rankedMovies }) {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
           <Layers className="w-5 h-5 text-amber-400" />
-          <h3 className="text-lg font-bold text-white font-sans uppercase tracking-wide">
+          <h3 className="text-lg font-bold text-white font-mono uppercase tracking-wide">
             Bảng Dữ Liệu Tài Chính Chi Tiết
           </h3>
         </div>
@@ -59,7 +59,7 @@ export default function FinancialDataTable({ rankedMovies }) {
                       {String(rank).padStart(2, "0")}
                     </span>
                   </td>
-                  <td className="py-3.5 px-3 font-sans">
+                  <td className="py-3.5 px-3 font-mono">
                     <Link
                       to={`/trailer/${movie.id}`}
                       className="flex items-center gap-3 group-hover:text-amber-400 font-bold text-white transition-colors"

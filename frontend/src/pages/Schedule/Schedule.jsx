@@ -100,10 +100,10 @@ export default function Schedule() {
             CINEVERSE CALENDAR
           </span>
         </div>
-        <h1 className="text-3xl sm:text-4xl xl:text-5xl font-black tracking-tight text-white mb-3 font-sans">
+        <h1 className="text-3xl sm:text-4xl xl:text-5xl font-black tracking-tight text-white mb-3 font-mono">
           Lịch Khởi Chiếu Phim
         </h1>
-        <p className="text-gray-400 text-sm sm:text-base max-w-2xl font-sans">
+        <p className="text-gray-400 text-sm sm:text-base max-w-2xl font-mono">
           Cập nhật danh sách phim bom tấn mới nhất sắp khởi chiếu & đang công
           chiếu với chất lượng điện ảnh đỉnh cao tại CINEVERSE.
         </p>
