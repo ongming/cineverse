@@ -1,6 +1,6 @@
-// hooks/TrailerHooks/useTrailerVideo.js
+// hooks/ui/useTrailerVideo.js
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useYouTubePlayer } from "./useYouTubePlayer.js";
+import { useVideoPlayer } from "./useVideoPlayer.js";
 
 export function formatTime(seconds) {
   if (!seconds || isNaN(seconds)) return "00:00";
@@ -32,7 +32,7 @@ export function useTrailerVideo(isOpen, onClose, videoKey) {
     setVolume,
     toggleMute,
     setSpeed,
-  } = useYouTubePlayer(isOpen ? videoKey : null, "yt-player-modal-frame");
+  } = useVideoPlayer(isOpen ? videoKey : null, "yt-player-modal-frame");
 
   // Toggle Browser Native Fullscreen API
   const toggleFullscreen = useCallback(() => {

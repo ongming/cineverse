@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useTrailerDetail } from "../../hooks/TrailerHooks/useTrailerDetail.js";
-import { useMovieImages } from "../../hooks/TrailerHooks/useMovieImages.js";
-import { useMovieReviews } from "../../hooks/TrailerHooks/useMovieReviews.js";
+import { useTrailerDetail } from "../../hooks/data/useTrailerDetail.js";
+import { useMovieImages } from "../../hooks/data/useMovieImages.js";
+import { useMovieReviews } from "../../hooks/data/useMovieReviews.js";
 import MovieCard from "../../components/MovieCard/MovieCard.jsx";
 import CastModal from "../../components/CastModal/CastModal.jsx";
 import TrailerVideo from "./trailerVideo.jsx";
@@ -59,11 +59,7 @@ export default function TrailerDetail() {
     handleNextThumbStrip,
     handlePrevThumbStrip,
     thumbStripStyle,
-    // Pointer Drag Gesture Exports
-    dragStyle,
-    handlePointerDown,
-    handlePointerMove,
-    handlePointerUp,
+    // Pointer Drag Gesture Export
   } = useMovieImages(id);
 
   const {
@@ -77,7 +73,6 @@ export default function TrailerDetail() {
     setUserRating,
     hoverRating,
     setHoverRating,
-    likedReviews,
     handleSendReview,
     toggleLikeReview,
   } = useMovieReviews(id);
@@ -131,14 +126,7 @@ export default function TrailerDetail() {
         {/* Left Column: Image Gallery Viewer (7 Cols) */}
         <div className="lg:col-span-7 flex flex-col gap-4">
           {/* Main Hero Image Viewport with Drag Gesture */}
-          <div
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerUp}
-            onPointerCancel={handlePointerUp}
-            style={dragStyle}
-            className="relative w-full aspect-[16/9] bg-[#12141a] border border-[#222533] rounded-2xl overflow-hidden shadow-2xl group select-none"
-          >
+          <div className="relative w-full aspect-[16/9] bg-[#12141a] border border-[#222533] rounded-2xl overflow-hidden shadow-2xl group select-none">
             {activeImage && (
               <img
                 src={activeImage.file_path}
@@ -415,6 +403,7 @@ export default function TrailerDetail() {
                 <span
                   className={`text-base font-black ${roi < 0 ? "text-red-400" : "text-emerald-400 "}`}
                 >
+                  {console.log(roi)}
                   {roi < 0 ? `${roi}%` : `+${roi}%`}
                 </span>
               </div>
@@ -626,18 +615,6 @@ export default function TrailerDetail() {
               <div className="flex items-center gap-5 pt-2 font-mono text-xs text-gray-400">
                 <button
                   type="button"
-                  onClick={() => toggleLikeReview(rev.id)}
-                  className={`flex items-center gap-1.5 transition-colors cursor-pointer ${
-                    likedReviews[rev.id]
-                      ? "text-cyan-400 font-bold"
-                      : "hover:text-white"
-                  }`}
-                >
-                  <ThumbsUp className="w-3.5 h-3.5" />
-                  <span>Thích ({rev.likes_count})</span>
-                </button>
-                <button
-                  type="button"
                   onClick={() => alert(`Phản hồi bình luận của ${rev.author}`)}
                   className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer"
                 >
@@ -699,11 +676,7 @@ export default function TrailerDetail() {
       <TrailerVideo
         isOpen={isTrailerVideoOpen}
         onClose={() => setIsTrailerVideoOpen(false)}
-        videoKey={
-          movie?.trailerUrl?.includes("v=")
-            ? movie.trailerUrl.split("v=")[1]?.split("&")[0]
-            : movie?.trailerUrl?.split("/").pop() || "d9MyW72ELq0"
-        }
+        videoKey={movie?.trailerKey || movie?.trailerUrl || "d9MyW72ELq0"}
         movieTitle={movie?.name}
       />
     </div>

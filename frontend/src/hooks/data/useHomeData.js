@@ -1,21 +1,8 @@
-// hooks/useHomeData.js
+// hooks/data/useHomeData.js
 import { useQuery } from "@tanstack/react-query";
-import { movies } from "../data/movies.js";
-import { actors } from "../data/actors.js";
-import { movie_images } from "../data/movieImages.js";
-
-// Helper to reliably extract YouTube key or provide working fallback
-const getTrailerKey = (movie) => {
-  if (!movie || !movie.trailerUrl) return "dQw4w9WgXcQ";
-  if (movie.trailerUrl.includes("v=")) {
-    return movie.trailerUrl.split("v=")[1]?.split("&")[0] || "dQw4w9WgXcQ";
-  }
-  if (movie.trailerUrl.includes("youtu.be/")) {
-    return movie.trailerUrl.split("youtu.be/")[1]?.split("?")[0] || "dQw4w9WgXcQ";
-  }
-  const parts = movie.trailerUrl.split("/");
-  return parts[parts.length - 1] || "dQw4w9WgXcQ";
-};
+import { movies } from "../../data/movies.js";
+import { actors } from "../../data/actors.js";
+import { movie_images } from "../../data/movieImages.js";
 
 const fetchHomeData = async () => {
   return new Promise((resolve) => {
@@ -28,30 +15,19 @@ const fetchHomeData = async () => {
         return {
           ...m,
           banner: backdropObj?.file_path || m.image,
-          trailerKey: getTrailerKey(m),
         };
       });
 
-      // 2. Now Playing Movies
-      const nowPlaying = movies.map((m) => ({
-        ...m,
-        trailerKey: getTrailerKey(m),
-      }));
+      // 2. Now Playing Movies (Direct master list)
+      const nowPlaying = movies;
 
       // 3. Top Rated Movies (Sorted by rating descending)
       const topRated = [...movies]
         .sort((a, b) => b.rating - a.rating)
-        .slice(0, 5)
-        .map((m) => ({
-          ...m,
-          trailerKey: getTrailerKey(m),
-        }));
+        .slice(0, 5);
 
       // 4. Upcoming Movies
-      const upcoming = movies.slice(2, 8).map((m) => ({
-        ...m,
-        trailerKey: getTrailerKey(m),
-      }));
+      const upcoming = movies.slice(2, 8);
 
       // 5. Featured Single Movie of the Week
       const featuredMovie = {
@@ -59,7 +35,6 @@ const fetchHomeData = async () => {
         banner:
           movie_images.find((img) => img.movie_id === 1 && img.type === "backdrop")
             ?.file_path || movies[0].image,
-        trailerKey: getTrailerKey(movies[0]),
       };
 
       // 6. Popular Actors List

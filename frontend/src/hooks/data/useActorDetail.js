@@ -1,8 +1,8 @@
-// hooks/useActorDetail.js
+// hooks/data/useActorDetail.js
 import { useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { actors } from "../data/actors.js";
-import { getActorFilmography } from "../utils/movieRelationUtils.js";
+import { actors } from "../../data/actors.js";
+import { getActorFilmography } from "../../utils/movieRelationUtils.js";
 
 export const useActorDetail = () => {
   const { id } = useParams();

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useActorDetail } from "../../hooks/useActorDetail.js";
+import { useActorDetail } from "../../hooks/data/useActorDetail.js";
 import MovieCard from "../../components/MovieCard/MovieCard.jsx";
 import {
   ArrowLeft,

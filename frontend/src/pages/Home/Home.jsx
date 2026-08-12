@@ -1,5 +1,5 @@
 // pages/Home/Home.jsx
-import { useHomeData } from "../../hooks/useHomeData.js";
+import { useHomeData } from "../../hooks/data/useHomeData.js";
 import HeroBanner from "./HeroBanner.jsx";
 import StatsBar from "./StatsBar.jsx";
 import MovieRow from "./MovieRow.jsx";

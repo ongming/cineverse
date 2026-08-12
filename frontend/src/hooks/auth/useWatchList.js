@@ -1,7 +1,8 @@
+// hooks/auth/useWatchList.js
 import { useQuery } from "@tanstack/react-query";
-import SortedWatchList from "../service/SortedWatchList.js";
-import { useAuth } from "../context/AuthContext.jsx";
-import { watchlistData } from "../data/watchlist.js";
+import SortedWatchList from "../../service/SortedWatchList.js";
+import { useAuth } from "../../context/AuthContext.jsx";
+import { watchlistData } from "../../data/watchlist.js";
 
 const fetchWatchList = async (userId) => {
   return new Promise((resolve, reject) => {

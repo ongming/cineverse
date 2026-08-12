@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { useMovies } from "../../hooks/useMovies.js";
+import { useHomeData } from "../../hooks/data/useHomeData.js";
 import { Calendar } from "lucide-react";
 import CustomDatePicker from "../../components/DatePicker/CustomDatePicker.jsx";
 import TrailerCard from "./TrailerCard.jsx";
@@ -7,8 +7,9 @@ import TrailerCard from "./TrailerCard.jsx";
 export default function Schedule() {
   const [selectedDateIndex, setSelectedDateIndex] = useState("ALL");
   const [customDate, setCustomDate] = useState("");
-  const [activeFilter, setActiveFilter] = useState("ALL");
-  const { data: movies, isLoading, isError } = useMovies();
+  const { data, isLoading, isError } = useHomeData();
+
+  const { nowPlaying, upcoming } = data || { nowPlaying: [], upcoming: [] };
 
   // Dynamic Date List (Hôm nay, Ngày mai, T6, T7, CN, T2, T3)
   const dateList = useMemo(() => {
@@ -65,29 +66,44 @@ export default function Schedule() {
 
   // Filter movies by Selected Date & Filter Category
   const filteredMovies = useMemo(() => {
-    if (!movies) return [];
-
-    let result = [...movies];
-
-    if (activeFilter === "NOW_SHOWING") {
-      result = result.filter((m) => m.status === "now_playing");
-    } else if (activeFilter === "UPCOMING") {
-      result = result.filter((m) => m.status === "upcoming");
-    }
-
+    let result = [...nowPlaying, ...upcoming];
+    if(result.length === 0) return [];
     if (selectedDateIndex !== "ALL" && selectedDateIndex !== "CUSTOM") {
-      result = result.filter(
+      return result.filter(
         (m) => m.releaseDate === dateList[selectedDateIndex].fullFormatted,
       );
+      console.log("Filtered by date index:", selectedDateIndex, result);
     } else if (selectedDateIndex === "CUSTOM" && customDate) {
-      result = result.filter(
+      return result.filter(
         (m) => formatReleaseDate(m.releaseDate) === customDate,
       );
     }
+    return [...nowPlaying];
+  }, [selectedDateIndex, customDate, upcoming, nowPlaying, dateList]);
 
-    return result;
-  }, [activeFilter, selectedDateIndex, customDate, movies, dateList]);
+  if (isLoading) {
+    return (
+      <div className="w-full min-h-screen bg-[#080808] text-white flex flex-col items-center justify-center gap-4 font-mono">
+        <div className="w-12 h-12 border-4 border-amber-400/30 border-t-amber-400 rounded-full animate-spin" />
+        <p className="text-xs text-gray-400 uppercase tracking-widest animate-pulse">
+          ĐANG TẢI GIAO DIỆN LỊCH KHỞI CHIẾU CINEVERSE...
+        </p>
+      </div>
+    );
+  }
 
+  if (isError || !data) {
+    return (
+      <div className="w-full min-h-screen bg-[#080808] text-white flex flex-col items-center justify-center gap-4 font-mono">
+        <h2 className="text-lg font-bold text-amber-400">
+          Không thể tải dữ liệu Trang Chủ!
+        </h2>
+        <p className="text-xs text-gray-400">
+          Vui lòng kiểm tra kết nối và thử lại sau.
+        </p>
+      </div>
+    );
+  }
   return (
     <div className="w-full min-h-screen bg-[#080808] text-white py-8 px-4 sm:px-8 xl:px-16">
       {/* Header Banner */}

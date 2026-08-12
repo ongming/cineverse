@@ -104,3 +104,18 @@ export const getMovieGenres = (movieId) => {
     .map((mg) => genres.find((g) => g.id === mg.genre_id)?.name)
     .filter(Boolean);
 };
+
+/**
+ * Get related movies by matching genres
+ */
+export const getRelatedMovies = (movieId, limit = 4) => {
+  const numericId = Number(movieId);
+  const target = movies.find((m) => m.id === numericId);
+  if (!target) return movies.slice(0, limit);
+  const targetGenres = target.genre || [];
+  const related = movies.filter(
+    (m) => m.id !== numericId && m.genre?.some((g) => targetGenres.includes(g))
+  );
+  if (related.length === 0) return movies.filter((m) => m.id !== numericId).slice(0, limit);
+  return related.slice(0, limit);
+};

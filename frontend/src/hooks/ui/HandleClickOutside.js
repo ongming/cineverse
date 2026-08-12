@@ -1,3 +1,4 @@
+// hooks/ui/HandleClickOutside.js
 import { useEffect } from "react";
 
 export default function useClickOutside(ref, callback) {
@@ -11,5 +12,5 @@ export default function useClickOutside(ref, callback) {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [ref, callback]);
 }

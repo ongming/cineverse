@@ -2,7 +2,7 @@
 import {
   useTrailerVideo,
   formatTime,
-} from "../../hooks/TrailerHooks/useTrailerVideo.js";
+} from "../../hooks/ui/useTrailerVideo.js";
 import {
   Play,
   Pause,

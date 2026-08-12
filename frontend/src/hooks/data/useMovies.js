@@ -1,5 +1,6 @@
+// hooks/data/useMovies.js
 import { useQuery } from "@tanstack/react-query";
-import { movies } from "../data/movies.js";
+import { movies } from "../../data/movies.js";
 
 const fetchMovies = async () => {
   return new Promise((resolve, reject) => {
@@ -12,6 +13,7 @@ const fetchMovies = async () => {
     }, 1000);
   });
 };
+
 export const useMovies = () => {
   return useQuery({
     queryKey: ["movies"],

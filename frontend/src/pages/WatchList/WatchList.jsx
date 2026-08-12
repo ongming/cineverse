@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { useAuth } from "../../context/AuthContext.jsx";
-import { useMovies } from "../../hooks/useMovies.js";
-import { useWatchList } from "../../hooks/useWatchList.js";
+import { useMovies } from "../../hooks/data/useMovies.js";
+import { useWatchList } from "../../hooks/auth/useWatchList.js";
 import { Bookmark, Search, Film, Trash2, X, Filter } from "lucide-react";
 import { useEffect } from "react";
 import SortBar from "../../components/SortBar/SortBar.jsx";

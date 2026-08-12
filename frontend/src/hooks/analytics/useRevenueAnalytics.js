@@ -1,6 +1,6 @@
-// hooks/useRevenueAnalytics.js
+// hooks/analytics/useRevenueAnalytics.js
 import { useState, useMemo } from "react";
-import { useMovies } from "./useMovies.js";
+import { useMovies } from "../data/useMovies.js";
 
 export default function useRevenueAnalytics() {
   const [selectedYear, setSelectedYear] = useState("ALL");

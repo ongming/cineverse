@@ -1,5 +1,5 @@
 import { ChevronDown } from "lucide-react";
-import useClickOutside from "../../hooks/HandleClickOutside.js";
+import useClickOutside from "../../hooks/ui/HandleClickOutside.js";
 import { useRef } from "react";
 
 export default function SortBar({

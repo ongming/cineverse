@@ -1,7 +1,7 @@
-// hooks/useYouTubePlayer.js
+// hooks/ui/useVideoPlayer.js
 import { useState, useEffect, useRef, useCallback } from "react";
 
-export function useYouTubePlayer(videoKey, containerId = "yt-player-frame") {
+export function useVideoPlayer(videoKey, containerId = "yt-player-frame") {
   const playerRef = useRef(null);
   const timerRef = useRef(null);
 
@@ -40,7 +40,7 @@ export function useYouTubePlayer(videoKey, containerId = "yt-player-frame") {
 
     const initPlayer = () => {
       if (!window.YT || !window.YT.Player) return;
-      if (playerRef.current) {
+      if (playerRef.current && typeof playerRef.current.destroy === "function") {
         playerRef.current.destroy();
       }
 
@@ -57,7 +57,8 @@ export function useYouTubePlayer(videoKey, containerId = "yt-player-frame") {
         events: {
           onReady: (event) => {
             setIsReady(true);
-            setDuration(event.target.getDuration() || 0);
+            const dur = event.target.getDuration();
+            setDuration(dur || 0);
             event.target.playVideo();
             setIsPlaying(true);
           },
@@ -65,7 +66,8 @@ export function useYouTubePlayer(videoKey, containerId = "yt-player-frame") {
             // YT.PlayerState.PLAYING = 1, PAUSED = 2, ENDED = 0
             if (event.data === window.YT.PlayerState.PLAYING) {
               setIsPlaying(true);
-              setDuration(event.target.getDuration() || 0);
+              const dur = event.target.getDuration();
+              if (dur && dur > 0) setDuration(dur);
             } else if (
               event.data === window.YT.PlayerState.PAUSED ||
               event.data === window.YT.PlayerState.ENDED
@@ -81,7 +83,7 @@ export function useYouTubePlayer(videoKey, containerId = "yt-player-frame") {
 
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
-      if (playerRef.current && playerRef.current.destroy) {
+      if (playerRef.current && typeof playerRef.current.destroy === "function") {
         playerRef.current.destroy();
         playerRef.current = null;
       }
@@ -97,7 +99,7 @@ export function useYouTubePlayer(videoKey, containerId = "yt-player-frame") {
     }
 
     timerRef.current = setInterval(() => {
-      if (playerRef.current && playerRef.current.getCurrentTime) {
+      if (playerRef.current && typeof playerRef.current.getCurrentTime === "function") {
         setCurrentTime(playerRef.current.getCurrentTime());
       }
     }, 250);
@@ -107,16 +109,16 @@ export function useYouTubePlayer(videoKey, containerId = "yt-player-frame") {
     };
   }, [isReady, isPlaying]);
 
-  // Controls API
+  // Controls API with safe method checks
   const play = useCallback(() => {
-    if (playerRef.current && playerRef.current.playVideo) {
+    if (playerRef.current && typeof playerRef.current.playVideo === "function") {
       playerRef.current.playVideo();
       setIsPlaying(true);
     }
   }, []);
 
   const pause = useCallback(() => {
-    if (playerRef.current && playerRef.current.pauseVideo) {
+    if (playerRef.current && typeof playerRef.current.pauseVideo === "function") {
       playerRef.current.pauseVideo();
       setIsPlaying(false);
     }
@@ -131,21 +133,21 @@ export function useYouTubePlayer(videoKey, containerId = "yt-player-frame") {
   }, [isPlaying, play, pause]);
 
   const seekTo = useCallback((seconds) => {
-    if (playerRef.current && playerRef.current.seekTo) {
+    if (playerRef.current && typeof playerRef.current.seekTo === "function") {
       playerRef.current.seekTo(seconds, true);
       setCurrentTime(seconds);
     }
   }, []);
 
   const setVolume = useCallback((val) => {
-    if (playerRef.current && playerRef.current.setVolume) {
+    if (playerRef.current && typeof playerRef.current.setVolume === "function") {
       playerRef.current.setVolume(val);
       setVolumeState(val);
       if (val === 0) {
-        playerRef.current.mute();
+        if (typeof playerRef.current.mute === "function") playerRef.current.mute();
         setIsMutedState(true);
       } else {
-        playerRef.current.unMute();
+        if (typeof playerRef.current.unMute === "function") playerRef.current.unMute();
         setIsMutedState(false);
       }
     }
@@ -154,17 +156,17 @@ export function useYouTubePlayer(videoKey, containerId = "yt-player-frame") {
   const toggleMute = useCallback(() => {
     if (playerRef.current) {
       if (isMuted) {
-        playerRef.current.unMute();
+        if (typeof playerRef.current.unMute === "function") playerRef.current.unMute();
         setIsMutedState(false);
       } else {
-        playerRef.current.mute();
+        if (typeof playerRef.current.mute === "function") playerRef.current.mute();
         setIsMutedState(true);
       }
     }
   }, [isMuted]);
 
   const setSpeed = useCallback((rate) => {
-    if (playerRef.current && playerRef.current.setPlaybackRate) {
+    if (playerRef.current && typeof playerRef.current.setPlaybackRate === "function") {
       playerRef.current.setPlaybackRate(rate);
       setPlaybackRateState(rate);
     }

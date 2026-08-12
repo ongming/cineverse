@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import useRevenueAnalytics from "../../hooks/useRevenueAnalytics.js";
-import { useMovies } from "../../hooks/useMovies.js";
+import useRevenueAnalytics from "../../hooks/analytics/useRevenueAnalytics.js";
+import { useMovies } from "../../hooks/data/useMovies.js";
 import SortBar from "../../components/SortBar/SortBar.jsx";
 import FinancialDataTable from "../Revenue/FinancialDataTable.jsx";
 import StatCard from "../Revenue/StatCard.jsx";
