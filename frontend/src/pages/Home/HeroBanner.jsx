@@ -44,7 +44,7 @@ export default function HeroBanner({ movies = [] }) {
 
   if (!movies || movies.length === 0) return null;
   const currentMovie = movies[currentIndex];
-  const startSeconds = currentMovie.startTime || 10;
+  const startSeconds = 5;
 
   return (
     <div
@@ -75,7 +75,7 @@ export default function HeroBanner({ movies = [] }) {
             </div>
           ) : (
             <img
-              src={currentMovie.banner}
+              src={currentMovie.banner || currentMovie.poster_path}
               alt={currentMovie.name}
               loading="eager"
               className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
@@ -92,22 +92,22 @@ export default function HeroBanner({ movies = [] }) {
             <div className="flex items-center gap-2 mb-4 font-mono text-xs">
               <span className="px-3 py-1 bg-amber-400 text-black font-extrabold rounded-full flex items-center gap-1 shadow-lg shadow-amber-400/20">
                 <Star className="w-3.5 h-3.5 fill-black" />
-                {currentMovie.rating} TMDb
+                {currentMovie.vote_average ? currentMovie.vote_average   : "N/A"} TMDb
               </span>
 
               <span className="px-3 py-1 text-cyan-400 font-bold rounded-full uppercase">
-                BOM TẤT HOT NHẤT
+                BOM TẤT HOT NHẤT TUẦN
               </span>
             </div>
 
             {/* Title */}
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white font-mono uppercase tracking-tight mb-3 line-clamp-2 max-w-3xl drop-shadow-2xl">
-              {currentMovie.name}
+              {currentMovie.title}
             </h1>
 
             {/* Description */}
             <p className="text-xs sm:text-sm text-gray-300 font-mono leading-relaxed line-clamp-3 max-w-2xl mb-6 text-shadow">
-              {currentMovie.description}
+              {currentMovie.overview || "Không có mô tả chi tiết cho bộ phim này. Hãy xem trailer để biết thêm thông tin!"}
             </p>
 
             {/* Action CTA Buttons Bar */}

@@ -14,7 +14,7 @@ export default function MovieCardHover({ movie }) {
         className="w-full h-full block relative"
       >
         <img
-          src={movie.image || movie.banner}
+          src={movie.poster_path}
           alt={movie.name}
           loading="lazy"
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
@@ -23,7 +23,7 @@ export default function MovieCardHover({ movie }) {
         {/* Rating Badge */}
         <div className="absolute top-2.5 right-2.5 z-20 px-2 py-0.5 bg-black/70 backdrop-blur-md rounded-md border border-white/10 text-amber-400 text-[10px] font-mono font-bold flex items-center gap-1">
           <Star className="w-3 h-3 fill-amber-400" />
-          {movie.rating}
+          {movie.vote_average ? movie.vote_average: "N/A"}
         </div>
 
         <div

@@ -1,7 +1,8 @@
 // app.js - Cấu hình Express Application (Middlewares, Router, Error Handlers)
+require("dotenv").config();
 const express = require("express");
 const apiRoutes = require("./routes");
-const { errorHandler, notFoundHandler } = require("./middlewares/errorHandler");
+const { errorHandler } = require("./middlewares/errorHandler");
 
 const app = express();
 
@@ -21,7 +22,6 @@ app.get("/", (req, res) => {
 app.use("/api", apiRoutes);
 
 // Xử lý 404 Not Found & Error Handler
-app.use(notFoundHandler);
 app.use(errorHandler);
 
 module.exports = app;

@@ -7,6 +7,7 @@ import { getMovieCast, getRelatedMovies } from "../../utils/movieRelationUtils.j
 
 export const useTrailerDetail = () => {
   const { id } = useParams();
+  console.log("useTrailerDetail - Movie ID from URL:", id);
   const navigate = useNavigate();
 
   // Watchlist state & Modal state

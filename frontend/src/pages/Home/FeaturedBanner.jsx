@@ -1,7 +1,7 @@
 // pages/Home/FeaturedBanner.jsx
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Play, Star, Sparkles } from "lucide-react";
+import { Play, Star, Flame, Bookmark } from "lucide-react";
 
 export default function FeaturedBanner({ movie }) {
   if (!movie) return null;
@@ -14,10 +14,10 @@ export default function FeaturedBanner({ movie }) {
       transition={{ duration: 0.6 }}
       className="max-w-7xl mx-auto px-4 sm:px-8 py-8 font-mono text-left"
     >
-      <div className="relative w-full h-72 sm:h-80 rounded-2xl overflow-hidden shadow-2xl border border-[#222533] group select-none">
+      <div className="relative w-full h-72 sm:h-120 rounded-lg overflow-hidden shadow-2xl border border-[#222533] group select-none">
         {/* Background Image with Hover Scale Zoom */}
         <img
-          src={movie.banner || movie.image}
+          src={movie.banner}
           alt={movie.name}
           loading="lazy"
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -29,12 +29,13 @@ export default function FeaturedBanner({ movie }) {
 
         {/* Content Details */}
         <div className="absolute inset-0 p-6 sm:p-10 flex flex-col justify-center items-start max-w-xl z-10">
-          <div className="flex items-center gap-2 mb-3">
+          <div className="flex items-center gap-2 mb-5 md:mb-10">
             <span className="px-3 py-1 bg-amber-400 text-black font-extrabold text-[11px] font-mono rounded-full uppercase flex items-center gap-1 shadow-md">
-              <Sparkles className="w-3.5 h-3.5 fill-black" /> ĐANG HOT TUẦN NÀY
+              <Flame className="w-3.5 h-3.5 fill-black" /> ĐANG HOT TUẦN NÀY
             </span>
-            <span className="px-2.5 py-1 bg-black/60 backdrop-blur-md border border-white/10 text-amber-400 font-bold text-xs rounded-full flex items-center gap-1">
-              <Star className="w-3.5 h-3.5 fill-amber-400" /> {movie.rating} TMDb
+            <span className="px-2.5 py-1 bg-transparent backdrop-blur-md text-amber-400 font-bold text-xs rounded-full flex items-center gap-1">
+              <Star className="w-3.5 h-3.5 fill-amber-400" />{" "}
+              {movie.vote_average || "N/A"} TMDb
             </span>
           </div>
 
@@ -46,13 +47,25 @@ export default function FeaturedBanner({ movie }) {
             {movie.description}
           </p>
 
-          <Link
-            to={`/trailer/${movie.id}`}
-            className="py-3 px-6 bg-cyan-400 hover:bg-cyan-300 text-black font-extrabold text-xs sm:text-sm font-mono uppercase tracking-wider rounded-xl flex items-center gap-2 transition-all shadow-lg shadow-cyan-400/20 active:scale-95 no-underline"
-          >
-            <Play className="w-4 h-4 fill-black" />
-            <span>XEM TRAILER NGAY</span>
-          </Link>
+          <div className="flex flex-wrap items-center gap-3">
+            <Link
+              to={`/trailer/${movie.id}`}
+              className="py-4 px-6 bg-cyan-400 hover:bg-cyan-300 text-black font-extrabold text-xs sm:text-sm font-mono uppercase tracking-wider rounded-xl flex items-center gap-2 transition-all shadow-lg shadow-cyan-400/30 active:scale-95 no-underline"
+            >
+              <Play className="w-4.5 h-4.5 fill-black" />
+              <span>XEM TRAILER ĐẦY ĐỦ</span>
+            </Link>
+
+            <button
+              type="button"
+              onClick={() => alert("Đã thêm vào Danh sách theo dõi!")}
+              className="py-4 px-4 bg-black/60 hover:bg-black/80 border border-white/20 hover:border-amber-400 text-white hover:text-amber-400 text-xs sm:text-sm font-mono font-bold rounded-xl flex items-center gap-2 transition-all cursor-pointer"
+            >
+              <Bookmark className="w-5 h-5" />
+            </button>
+
+            {/* Sound Toggle Mute/Unmute Button */}
+          </div>
         </div>
       </div>
     </motion.section>

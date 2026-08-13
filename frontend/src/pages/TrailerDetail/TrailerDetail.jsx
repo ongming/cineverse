@@ -402,8 +402,7 @@ export default function TrailerDetail() {
                 </span>
                 <span
                   className={`text-base font-black ${roi < 0 ? "text-red-400" : "text-emerald-400 "}`}
-                >
-                  {console.log(roi)}
+                >           
                   {roi < 0 ? `${roi}%` : `+${roi}%`}
                 </span>
               </div>

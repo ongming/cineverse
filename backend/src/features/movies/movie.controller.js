@@ -1,28 +1,59 @@
-// movie.controller.js - Xử lý Controller cho Movies Feature
 const movieService = require("./movie.service");
-const { successResponse } = require("../../utils/apiResponse");
 
-const getMovies = async (req, res, next) => {
+const getPopularMovies = async (req, res, next) => {
   try {
-    const movies = await movieService.getAllMovies();
-    return successResponse(res, "Fetched movies list successfully", movies);
+    const popularMovies = await movieService.getPopularMovies();
+    res.status(200).json({
+      success: true,
+      data: popularMovies,
+    });
   } catch (error) {
     next(error);
   }
 };
 
-const updateMovie = async (req, res, next) => {
+
+const getNowPlayingMovies = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const { title, year } = req.body;
-    const updated = await movieService.updateMovie(id, title, year);
-    return successResponse(res, "Movie updated successfully", updated);
+    const nowPlayingMovies = await movieService.getNowPlayingMovies();
+    res.status(200).json({
+      success: true,
+      data: nowPlayingMovies,
+    });
   } catch (error) {
     next(error);
   }
 };
+
+const getUpcomingMovies = async (req, res, next) => {
+  try {
+    const upcomingMovies = await movieService.getUpcomingMovies();
+    res.status(200).json({
+      success: true,
+      data: upcomingMovies,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+const getTopRatedMovies = async (req, res, next) => {
+  try {
+    const topRatedMovies = await movieService.getTopRatedMovies();
+    res.status(200).json({
+      success: true,
+      data: topRatedMovies,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 
 module.exports = {
-  getMovies,
-  updateMovie,
+  getPopularMovies,
+  getNowPlayingMovies,
+  getUpcomingMovies,
+  getTopRatedMovies,
 };
