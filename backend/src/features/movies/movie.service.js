@@ -22,7 +22,7 @@ const getPopularMovies = async () => {
 
     return {
       ...movie,
-      name: movie.title || movie.name,
+      name: movie.title,
       banner: fullBanner,
       trailerKey: movie.youtube_key
         ? movie.youtube_key.replace(YOUTUBE_WATCH_BASE, "")
@@ -41,7 +41,7 @@ const getNowPlayingMovies = async () => {
 
     return {
       ...movie,
-      name: movie.title || movie.name,
+      name: movie.title,
       poster_path: fullPoster,
       trailerKey: movie.youtube_key
         ? movie.youtube_key.replace(YOUTUBE_WATCH_BASE, "")
@@ -60,7 +60,7 @@ const getUpcomingMovies = async (id) => {
     const fullPoster = formatUrl(movie.poster_path, IMAGE_BASE_W500);
     return {
       ...movie,
-      name: movie.title || movie.name,
+      name: movie.title,
       poster_path: fullPoster,
       trailerKey: movie.youtube_key
         ? movie.youtube_key.replace(YOUTUBE_WATCH_BASE, "")
@@ -80,7 +80,7 @@ const getTopRatedMovies = async () => {
 
     return {
       ...movie,
-      name: movie.title || movie.name,
+      name: movie.title,
       banner: fullBanner,
       trailerKey: movie.youtube_key
         ? movie.youtube_key.replace(YOUTUBE_WATCH_BASE, "")
@@ -89,9 +89,33 @@ const getTopRatedMovies = async () => {
   });
 };
 
+const getMovieDetailsById = async (movieId) => {
+  const movieDetails = await movieModel.findMovieDetailsById(movieId);
+  if (!movieDetails) {
+    throw new NotFoundError(`Movie with ID ${movieId} not found`);
+  }
+  const TrailerImage = movieDetails.images.map((image) => {
+      return formatUrl(image.file_path, IMAGE_BASE_W1280);
+  });
+  const actorImages = movieDetails.cast_members.map((actor) => ({
+    ...actor,
+    profile_path: formatUrl(actor.profile_path, IMAGE_BASE_W500),
+  }));
+  return {
+    ...movieDetails,  
+    name: movieDetails.title,
+    images: TrailerImage,
+    cast_members: actorImages,
+    trailerKey: movieDetails.trailers[0]?.youtube_key
+      ? movieDetails.trailers[0].youtube_key
+      : null,
+  };
+};
+
 module.exports = {
   getPopularMovies,
   getNowPlayingMovies,
   getUpcomingMovies,
   getTopRatedMovies,
+  getMovieDetailsById,
 };

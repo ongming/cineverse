@@ -41,3 +41,23 @@ export const formatUSDExact = (amount) => {
     maximumFractionDigits: 0,
   }).format(amount);
 };
+
+export const formatReleaseDate = (dateStr) => {
+  if (!dateStr) return null;
+  const parts = dateStr.split("-");
+  if (parts.length === 3) {
+    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+  }
+  return dateStr;
+};
+  // Format YYYY-MM-DD to DD/MM/YYYY
+// Handle custom date selection from CustomDatePicker component
+export const handleSelectCustomDate = (dateFormatted) => {
+  if (dateFormatted) {
+    setCustomDate(dateFormatted);
+    setSelectedDateIndex("CUSTOM");
+  } else {
+    setCustomDate("");
+    setSelectedDateIndex("ALL");
+  }
+};

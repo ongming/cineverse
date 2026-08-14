@@ -63,11 +63,22 @@ const findTopRatedMovies = async () => {
     LIMIT 5
   `);
   return result.rows;
-}
+};
+
+const findMovieDetailsById = async (movieId) => {
+  const result = await pool.query(
+    `
+    SELECT * FROM get_movie_details_by_id($1)
+  `,
+    [movieId],
+  );
+  return result.rows[0];
+};
 
 module.exports = {
   findPopularMovies,
   findUpcomingMovies,
   findNowPlayingMovies,
   findTopRatedMovies,
+  findMovieDetailsById,
 };

@@ -18,6 +18,7 @@ const fetchHomeData = async () => {
     getUpcomingMovies(),
     getTopRatedMovies(),
   ]);
+  console.log("Fetched home data:", { heroMovies, nowPlaying, upcoming, topRated });
   // 3. Featured Single Movie of the Week
   const featuredMovie = heroMovies[0];  
 

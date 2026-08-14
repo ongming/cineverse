@@ -1,0 +1,71 @@
+import { useState, useMemo } from "react";
+import { useHomeData } from "../../hooks/data/useHomeData.js";
+
+export default function useScheduleData() {
+  const [selectedDateIndex, setSelectedDateIndex] = useState("ALL");
+  const [customDate, setCustomDate] = useState("");
+  const { data, isLoading, isError } = useHomeData();
+
+  const { nowPlaying, upcoming } = data || { nowPlaying: [], upcoming: [] };
+
+  // Dynamic Date List (Hôm nay, Ngày mai, T6, T7, CN, T2, T3)
+  const dateList = useMemo(() => {
+    const days = [];
+    const dayNames = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
+    const today = new Date();
+
+    for (let i = 0; i < 7; i++) {
+      const d = new Date();
+      d.setDate(today.getDate() + i);
+
+      const dayNum = String(d.getDate()).padStart(2, "0");
+      const monthNum = String(d.getMonth() + 1).padStart(2, "0");
+      const yearNum = String(d.getFullYear());
+      const formatted = `${dayNum}/${monthNum}`;
+      const fullFormatted = `${yearNum}-${monthNum}-${dayNum}`;
+      const dayOfWeek = dayNames[d.getDay()];
+
+      let badge = "";
+      if (i === 0) badge = "Hôm nay";
+      else badge = dayOfWeek;
+
+      days.push({
+        index: i,
+        badge,
+        dayOfWeek,
+        formatted,
+        fullFormatted,
+      });
+    }
+    return days;
+  }, []);
+  // Filter movies by Selected Date & Filter Category
+  const filteredMovies = useMemo(() => {
+    let result = [...nowPlaying, ...upcoming];
+    if (result.length === 0) return [];
+    if (selectedDateIndex !== "ALL" && selectedDateIndex !== "CUSTOM") {
+      return result.filter(
+        (m) => m.release_date === dateList[selectedDateIndex].fullFormatted,
+      );
+      console.log("Filtered by date index:", selectedDateIndex, result);
+    } else if (selectedDateIndex === "CUSTOM" && customDate) {
+      return result.filter(
+        (m) => formatReleaseDate(m.releaseDate) === customDate,
+      );
+    }
+    return [...nowPlaying];
+  }, [selectedDateIndex, customDate, upcoming, nowPlaying, dateList]);
+
+  return {
+    selectedDateIndex,
+    setSelectedDateIndex,
+    customDate,
+    setCustomDate,
+    dateList,
+    filteredMovies,
+    isLoading,
+    isError,
+    nowPlaying,
+    upcoming,
+  }
+}

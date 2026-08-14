@@ -59,6 +59,8 @@ CREATE TABLE movies (
 
     popularity NUMERIC(10,3) DEFAULT 0,
 
+    genre_ids INTEGER[],
+
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -308,6 +310,111 @@ CREATE TABLE trending_weekly (
 
 CREATE INDEX idx_trending_weekly_rank
 ON trending_weekly(trending_rank ASC);
+
+
+-- =========================================================
+-- 11. STORED FUNCTION: GET ALL MOVIE DETAILS BY ID
+-- =========================================================
+
+CREATE OR REPLACE FUNCTION get_movie_details_by_id(p_movie_id INT)
+RETURNS TABLE (
+    id INT,
+    title VARCHAR,
+    overview TEXT,
+    release_date DATE,
+    runtime INT,
+    vote_average NUMERIC,
+    vote_count INT,
+    poster_path VARCHAR,
+    banner VARCHAR,
+    budget BIGINT,
+    revenue BIGINT,
+    country VARCHAR,
+    age_rating VARCHAR,
+    release_status release_status_enum,
+    director_name VARCHAR,
+    imdb_id VARCHAR,
+    popularity NUMERIC,
+    genres JSONB,
+    trailers JSONB,
+    images JSONB,
+    cast_members JSONB
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        m.id,
+        m.title,
+        m.overview,
+        m.release_date,
+        m.runtime,
+        m.vote_average,
+        m.vote_count,
+        m.poster_path,
+        mi_banner.file_path AS banner,
+        m.budget,
+        m.revenue,
+        m.country,
+        m.age_rating,
+        m.release_status,
+        m.director_name,
+        m.imdb_id,
+        m.popularity,
+        COALESCE((
+            SELECT jsonb_agg(jsonb_build_object(
+                'id', g.id,
+                'name', g.name
+            ))
+            FROM movie_genres mg
+            JOIN genres g ON g.id = mg.genre_id
+            WHERE mg.movie_id = m.id
+        ), '[]'::jsonb) AS genres,
+        COALESCE((
+            SELECT jsonb_agg(jsonb_build_object(
+                'id', t.id,
+                'youtube_key', t.youtube_key,
+                'name', t.name,
+                'type', t.type,
+                'published_at', t.published_at
+            ) ORDER BY t.id ASC)
+            FROM trailers t
+            WHERE t.movie_id = m.id
+        ), '[]'::jsonb) AS trailers,
+        COALESCE((
+            SELECT jsonb_agg(jsonb_build_object(
+                'id', img.id,
+                'file_path', img.file_path,
+                'type', img.type,
+                'width', img.width,
+                'height', img.height,
+                'vote_average', img.vote_average
+            ) ORDER BY img.display_order ASC)
+            FROM movie_images img
+            WHERE img.movie_id = m.id
+        ), '[]'::jsonb) AS images,
+        COALESCE((
+            SELECT jsonb_agg(jsonb_build_object(
+                'id', a.id,
+                'name', a.name,
+                'profile_path', a.profile_path,
+                'character_name', mc.character_name,
+                'cast_order', mc.cast_order
+            ) ORDER BY mc.cast_order ASC)
+            FROM movie_cast mc
+            JOIN actors a ON a.id = mc.actor_id
+            WHERE mc.movie_id = m.id
+        ), '[]'::jsonb) AS cast_members
+    FROM movies m
+    LEFT JOIN LATERAL (
+        SELECT mi_sub.file_path 
+        FROM movie_images mi_sub
+        WHERE mi_sub.movie_id = m.id AND mi_sub.type = 'backdrop' 
+        ORDER BY mi_sub.display_order ASC, mi_sub.vote_average DESC 
+        LIMIT 1
+    ) mi_banner ON true
+    WHERE m.id = p_movie_id;
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- =========================================================

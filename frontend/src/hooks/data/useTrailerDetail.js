@@ -1,73 +1,61 @@
 // hooks/data/useTrailerDetail.js
 import { useState, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useParams, useNavigate } from "react-router-dom";
 import { useMovies } from "./useMovies.js";
+import { getMovieDetailsById } from "../../service/movie.js";
 import { calculateROI, formatUSDExact } from "../../utils/revenueUtils.js";
-import { getMovieCast, getRelatedMovies } from "../../utils/movieRelationUtils.js";
+import {
+  getMovieCast,
+  getRelatedMovies,
+} from "../../utils/movieRelationUtils.js";
 
-export const useTrailerDetail = () => {
+const fetchTrailerDetail = async (id) => {
+  const movie = await getMovieDetailsById(id);
+  console.log("Fetched movie details:", movie);
+  return movie;
+};
+
+export function useTrailerDetail() {
   const { id } = useParams();
-  console.log("useTrailerDetail - Movie ID from URL:", id);
   const navigate = useNavigate();
 
-  // Watchlist state & Modal state
   const [isSaved, setIsSaved] = useState(false);
   const [isCastModalOpen, setIsCastModalOpen] = useState(false);
 
-  // Query master movies list
-  const { data: movies = [], isLoading, isError } = useMovies();
+  const {
+    data: movie,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["trailer-detail", id],
+    queryFn: () => fetchTrailerDetail(id),
+    staleTime: 5 * 60 * 1000, // 5 minutes cache
+    gcTime: 10 * 60 * 1000, // 10 minutes garbage collection
+  });
 
-  // Find movie matching URL parameter ID
-  const movie = useMemo(() => {
-    const numericId = parseInt(id, 10);
-    const found = movies.find((m) => m.id === numericId);
-    return found || movies[0] || null;
-  }, [id, movies]);
-
-  // Derived movie financial and cast calculations
-  const roi = useMemo(() => {
-    if (!movie) return 0;
-    return calculateROI(movie.budget, movie.revenue);
-  }, [movie]);
-
-  const formattedBudget = useMemo(() => {
-    if (!movie) return "$0";
-    return formatUSDExact(movie.budget);
-  }, [movie]);
-
-  const formattedRevenue = useMemo(() => {
-    if (!movie) return "$0";
-    return formatUSDExact(movie.revenue);
-  }, [movie]);
-
-  const movieCast = useMemo(() => {
-    if (!movie) return [];
-    return getMovieCast(movie.id);
-  }, [movie]);
-
-  const relatedMovies = useMemo(() => {
-    if (!movie) return [];
-    return getRelatedMovies(movie.id, 4);
+  const movieData = useMemo(() => {
+    if (!movie) return null;
+    return {
+      ...movie,
+      roi: calculateROI(movie.budget, movie.revenue),
+      budget: formatUSDExact(movie.budget),
+      revenue: formatUSDExact(movie.revenue),
+      relatedMovies: getRelatedMovies(movie.id, 4),
+    };
   }, [movie]);
 
   const toggleSaveWatchlist = () => {
     setIsSaved((prev) => !prev);
   };
-
   return {
-    id,
-    movie,
-    movieCast,
+    movieData,
     isLoading,
     isError,
-    roi,
-    formattedBudget,
-    formattedRevenue,
-    relatedMovies,
     isSaved,
     toggleSaveWatchlist,
     isCastModalOpen,
     setIsCastModalOpen,
     navigate,
   };
-};
+}

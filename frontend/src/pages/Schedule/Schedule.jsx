@@ -1,85 +1,24 @@
-import { useState, useMemo } from "react";
-import { useHomeData } from "../../hooks/data/useHomeData.js";
 import { Calendar } from "lucide-react";
 import CustomDatePicker from "../../components/DatePicker/CustomDatePicker.jsx";
 import TrailerCard from "./TrailerCard.jsx";
+import {handleSelectCustomDate} from "../../utils/revenueUtils.js";
+import  useScheduleData  from "../../hooks/data/useScheduleData.js";
 
 export default function Schedule() {
-  const [selectedDateIndex, setSelectedDateIndex] = useState("ALL");
-  const [customDate, setCustomDate] = useState("");
-  const { data, isLoading, isError } = useHomeData();
 
-  const { nowPlaying, upcoming } = data || { nowPlaying: [], upcoming: [] };
+  const {
+    selectedDateIndex,
+    setSelectedDateIndex,
+    customDate,
+    setCustomDate,
+    dateList,
+    filteredMovies,
+    isLoading,
+    isError,
+    nowPlaying,
+    upcoming,
+  } = useScheduleData();
 
-  // Dynamic Date List (Hôm nay, Ngày mai, T6, T7, CN, T2, T3)
-  const dateList = useMemo(() => {
-    const days = [];
-    const dayNames = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
-    const today = new Date();
-
-    for (let i = 0; i < 7; i++) {
-      const d = new Date();
-      d.setDate(today.getDate() + i);
-
-      const dayNum = String(d.getDate()).padStart(2, "0");
-      const monthNum = String(d.getMonth() + 1).padStart(2, "0");
-      const yearNum = String(d.getFullYear());
-      const formatted = `${dayNum}/${monthNum}`;
-      const fullFormatted = `${yearNum}-${monthNum}-${dayNum}`;
-      const dayOfWeek = dayNames[d.getDay()];
-
-      let badge = "";
-      if (i === 0) badge = "Hôm nay";
-      else badge = dayOfWeek;
-
-      days.push({
-        index: i,
-        badge,
-        dayOfWeek,
-        formatted,
-        fullFormatted,
-      });
-    }
-    return days;
-  }, []);
-
-  // Format YYYY-MM-DD to DD/MM/YYYY
-  const formatReleaseDate = (dateStr) => {
-    if (!dateStr) return null;
-    const parts = dateStr.split("-");
-    if (parts.length === 3) {
-      return `${parts[2]}/${parts[1]}/${parts[0]}`;
-    }
-    return dateStr;
-  };
-
-  // Handle custom date selection from CustomDatePicker component
-  const handleSelectCustomDate = (dateFormatted) => {
-    if (dateFormatted) {
-      setCustomDate(dateFormatted);
-      setSelectedDateIndex("CUSTOM");
-    } else {
-      setCustomDate("");
-      setSelectedDateIndex("ALL");
-    }
-  };
-
-  // Filter movies by Selected Date & Filter Category
-  const filteredMovies = useMemo(() => {
-    let result = [...nowPlaying, ...upcoming];
-    if(result.length === 0) return [];
-    if (selectedDateIndex !== "ALL" && selectedDateIndex !== "CUSTOM") {
-      return result.filter(
-        (m) => m.releaseDate === dateList[selectedDateIndex].fullFormatted,
-      );
-      console.log("Filtered by date index:", selectedDateIndex, result);
-    } else if (selectedDateIndex === "CUSTOM" && customDate) {
-      return result.filter(
-        (m) => formatReleaseDate(m.releaseDate) === customDate,
-      );
-    }
-    return [...nowPlaying];
-  }, [selectedDateIndex, customDate, upcoming, nowPlaying, dateList]);
 
   if (isLoading) {
     return (
@@ -92,7 +31,7 @@ export default function Schedule() {
     );
   }
 
-  if (isError || !data) {
+  if (isError) {
     return (
       <div className="w-full min-h-screen bg-[#080808] text-white flex flex-col items-center justify-center gap-4 font-mono">
         <h2 className="text-lg font-bold text-amber-400">
@@ -207,7 +146,6 @@ export default function Schedule() {
           <TrailerCard
             filteredMovies={filteredMovies}
             dateList={dateList}
-            formatReleaseDate={formatReleaseDate}
           />
         </div>
       </div>

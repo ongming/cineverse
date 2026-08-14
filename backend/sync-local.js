@@ -13,12 +13,12 @@ async function tmdbFetch(path) {
   const separator = path.includes("?") ? "&" : "?";
 
   const response = await fetch(
-    `${TMDB_BASE_URL}${path}${separator}api_key=${TMDB_API_KEY}`,
+    `${TMDB_BASE_URL}${path}${separator}api_key=${TMDB_API_KEY}`
   );
 
   if (!response.ok) {
     throw new Error(
-      `TMDb API error: ${response.status} ${response.statusText}`,
+      `TMDb API error: ${response.status} ${response.statusText}`
     );
   }
 
@@ -37,7 +37,9 @@ async function getMovieData() {
 
   const results = await Promise.all(requests);
 
-  const trendingList = results.filter((_, idx) => idx % 4 === 3).flatMap((res) => res.results || []);
+  const trendingList = results
+    .filter((_, idx) => idx % 4 === 3)
+    .flatMap((res) => res.results || []);
 
   const ids = results.flatMap((res) => (res.results || []).map((movie) => movie.id));
 
@@ -49,14 +51,14 @@ async function getMovieData() {
 
 async function syncMovie(client, movieId) {
   const movie = await tmdbFetch(
-    `/movie/${movieId}?language=vi-VN&append_to_response=videos,credits,release_dates`,
+    `/movie/${movieId}?language=vi-VN&append_to_response=videos,credits,release_dates`
   );
 
   const images = await tmdbFetch(`/movie/${movieId}/images`);
 
   // Get Vietnamese age rating
   const vnRelease = movie.release_dates?.results?.find(
-    (country) => country.iso_3166_1 === "VN",
+    (country) => country.iso_3166_1 === "VN"
   );
 
   const ageRating =
@@ -65,8 +67,14 @@ async function syncMovie(client, movieId) {
 
   // Get director
   const director = (movie.credits?.crew || []).find(
-    (person) => person.job === "Director",
+    (person) => person.job === "Director"
   );
+
+  const genreIds = (movie.genres || []).map((g) => g.id);
+
+  const releaseDate = movie.release_date
+    ? movie.release_date.split("T")[0]
+    : null;
 
   // =========================
   // MOVIE
@@ -90,11 +98,12 @@ async function syncMovie(client, movieId) {
             release_status,
             director_name,
             imdb_id,
-            popularity
+            popularity,
+            genre_ids
         )
         VALUES (
             $1,$2,$3,$4,$5,$6,$7,$8,
-            $9,$10,$11,$12,$13,$14,$15,$16
+            $9,$10,$11,$12,$13,$14,$15,$16,$17
         )
         ON CONFLICT (id)
         DO UPDATE SET
@@ -112,13 +121,14 @@ async function syncMovie(client, movieId) {
             release_status = EXCLUDED.release_status,
             director_name = EXCLUDED.director_name,
             imdb_id = EXCLUDED.imdb_id,
-            popularity = EXCLUDED.popularity
+            popularity = EXCLUDED.popularity,
+            genre_ids = EXCLUDED.genre_ids
         `,
     [
       movie.id,
       movie.title,
       movie.overview || null,
-      movie.release_date || null,
+      releaseDate,
       movie.runtime || null,
       movie.vote_average || 0,
       movie.vote_count || 0,
@@ -131,6 +141,7 @@ async function syncMovie(client, movieId) {
       director?.name || null,
       movie.imdb_id || null,
       movie.popularity || 0,
+      genreIds,
     ],
   );
 
@@ -146,7 +157,7 @@ async function syncMovie(client, movieId) {
             ON CONFLICT (id)
             DO UPDATE SET name = EXCLUDED.name
             `,
-      [genre.id, genre.name],
+      [genre.id, genre.name]
     );
 
     await client.query(
@@ -155,7 +166,7 @@ async function syncMovie(client, movieId) {
             VALUES ($1, $2)
             ON CONFLICT DO NOTHING
             `,
-      [movie.id, genre.id],
+      [movie.id, genre.id]
     );
   }
 
@@ -170,20 +181,17 @@ async function syncMovie(client, movieId) {
   // Fallback: If no Vietnamese videos found, fetch English trailers from TMDb
   if (videoResults.length === 0) {
     try {
-      const enVideos = await tmdbFetch(
-        `/movie/${movieId}/videos?language=en-US`,
-      );
+      const enVideos = await tmdbFetch(`/movie/${movieId}/videos?language=en-US`);
       videoResults = enVideos.results || [];
     } catch (err) {
-      console.warn(
-        `Failed to fetch fallback en-US videos for movie ${movieId}:`,
-        err.message,
-      );
+      console.warn(`Failed to fetch fallback en-US videos for movie ${movieId}:`, err.message);
     }
   }
 
   const trailers = videoResults.filter(
-    (video) => video.site === "YouTube" && video.type === "Trailer",
+    (video) =>
+      video.site === "YouTube" &&
+      (video.type === "Trailer")
   );
 
   for (const trailer of trailers.slice(0, 5)) {
@@ -204,7 +212,7 @@ async function syncMovie(client, movieId) {
         trailer.name || null,
         trailer.type || null,
         trailer.published_at || null,
-      ],
+      ]
     );
   }
 
@@ -231,16 +239,6 @@ async function syncMovie(client, movieId) {
     .filter((image) => image.file_path !== mainPoster)
     .slice(0, 20);
 
-  if (!mainPoster && imagesMovie.length > 0) {
-    await client.query(
-      `
-    UPDATE movies
-    SET poster_path = $1
-    WHERE id = $2
-    `,
-      [imagesMovie[0]?.file_path || null, movie.id],
-    );
-  }
   for (const [index, image] of imagesMovie.entries()) {
     await client.query(
       `
@@ -263,7 +261,7 @@ async function syncMovie(client, movieId) {
         image.height || null,
         image.vote_average || 0,
         index,
-      ],
+      ]
     );
   }
 
@@ -274,7 +272,7 @@ async function syncMovie(client, movieId) {
       SET poster_path = $1
       WHERE id = $2
       `,
-      [imagesMovie[0]?.file_path || null, movie.id],
+      [imagesMovie[0]?.file_path || null, movie.id]
     );
   }
 
@@ -300,7 +298,7 @@ async function syncMovie(client, movieId) {
                 profile_path = EXCLUDED.profile_path,
                 popularity = EXCLUDED.popularity
             `,
-      [actor.id, actor.name, actor.profile_path || null, actor.popularity || 0],
+      [actor.id, actor.name, actor.profile_path || null, actor.popularity || 0]
     );
 
     await client.query(
@@ -317,7 +315,7 @@ async function syncMovie(client, movieId) {
                 character_name = EXCLUDED.character_name,
                 cast_order = EXCLUDED.cast_order
             `,
-      [movie.id, actor.id, actor.character || null, actor.order || 0],
+      [movie.id, actor.id, actor.character || null, actor.order || 0]
     );
   }
 
@@ -353,13 +351,11 @@ async function main() {
         VALUES ($1, $2)
         ON CONFLICT (movie_id) DO UPDATE SET trending_rank = EXCLUDED.trending_rank
         `,
-        [movie.id, index + 1],
+        [movie.id, index + 1]
       );
     }
 
-    console.log(
-      `Synced ${Math.min(20, trendingList.length)} weekly trending ranks.`,
-    );
+    console.log(`Synced ${Math.min(20, trendingList.length)} weekly trending ranks.`);
 
     await client.query("COMMIT");
 

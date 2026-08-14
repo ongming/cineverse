@@ -1,4 +1,7 @@
-const { Pool } = require("pg");
+const { Pool, types } = require("pg");
+
+// Parse DATE columns (OID 1082) as raw 'YYYY-MM-DD' strings instead of JS Date ISO strings
+types.setTypeParser(1082, (val) => val);
 
 const pool = new Pool({
     host: process.env.DB_HOST,

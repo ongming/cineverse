@@ -11,6 +11,11 @@ export function fetchUpcomingMovies() {
 export function fetchNowPlayingMovies() {
     return axios.get("/api/movies/now-playing")
 }
+
 export function fetchTopRatedMovies() {
     return axios.get("/api/movies/top-rated")
+}
+
+export function fetchMovieDetailsById(id) {
+    return axios.get(`/api/movies/details/${id}`)
 }

@@ -1,11 +1,12 @@
 import { getAgeBadgeStyle } from "../../components/utils/getAgeBadgeStyle.js";
 import { Calendar, Play, Star, Clock, Globe, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
+import { formatReleaseDate } from "../../utils/revenueUtils.js";
+
 
 export default function TrailerCard({
   filteredMovies = [],
   dateList = [],
-  formatReleaseDate,
 }) {
   return filteredMovies.map((movie) => (
     <div
@@ -15,24 +16,15 @@ export default function TrailerCard({
       {/* Poster Column with Interactive Spring Overlay */}
       <div className="relative sm:w-[200px] xl:w-[220px] shrink-0 overflow-hidden bg-[#0a0b0e]">
         <img
-          src={movie.image}
+          src={movie.poster_path}
           alt={movie.name}
           className="w-full h-full min-h-[280px] sm:min-h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
         />
 
-        {/* Age Rating Badge (C18 / T16 / T13 / P) */}
-        <div
-          className={`absolute top-3 left-3 px-2.5 py-1 rounded-md text-xs font-black font-mono border backdrop-blur-md shadow-lg transition-transform duration-300 group-hover:scale-105 ${getAgeBadgeStyle(
-            movie.ageRating,
-          )}`}
-        >
-          {movie.ageRating || "P"}
-        </div>
-
         {/* Rating Badge */}
         <div className="absolute bottom-3 left-3 bg-black/85 backdrop-blur-md px-2.5 py-1 rounded-lg border border-amber-400/40 text-amber-400 text-xs font-bold flex items-center gap-1 shadow-md">
           <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-          <span>{movie.rating}</span>
+          <span>{movie.vote_average|| "N/A"}</span>
         </div>
 
         {/* Spring Animated Play Overlay */}
@@ -57,7 +49,7 @@ export default function TrailerCard({
           <div className="flex flex-wrap items-center gap-3 text-xs text-gray-400 mb-4 font-mono">
             <span className="flex items-center gap-1">
               <Clock className="w-3.5 h-3.5 text-gray-500" />
-              {movie.duration}
+              {movie.runtime ? `${movie.runtime} phút` : "N/A"}
             </span>
             <span>•</span>
             <span className="flex items-center gap-1">
@@ -70,7 +62,7 @@ export default function TrailerCard({
 
           {/* Genres Pills */}
           <div className="flex flex-wrap gap-1.5 mb-4">
-            {movie.genre?.map((g) => (
+            {movie.genres?.map((g) => (
               <span
                 key={g}
                 className="px-2.5 py-0.5 rounded-md bg-[#1d212d] text-gray-300 text-xs font-medium border border-[#2b3042] transition-colors duration-200 group-hover:border-cyan-neon/30"
@@ -83,18 +75,19 @@ export default function TrailerCard({
           {/* Release Status Banner */}
           <div className="bg-[#181c27] border border-[#2a3045] rounded-xl p-3 mb-4 transition-colors duration-300 group-hover:border-cyan-neon/40">
             <div className="flex items-center gap-2 text-xs font-semibold text-cyan-neon">
-              {movie.releaseDate <= dateList[0]?.fullFormatted ? (
+              {movie.release_date <= dateList[0]?.fullFormatted ? (
                 <>
                   <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
                   <span className="text-amber-400">
-                    Đã khởi chiếu ngày {formatReleaseDate(movie.releaseDate)}
+                    Đã khởi chiếu ngày {formatReleaseDate(movie.release_date
+)}
                   </span>
                 </>
               ) : (
                 <>
                   <Calendar className="w-4 h-4 text-cyan-neon shrink-0" />
                   <span>
-                    Khởi chiếu ngày: {formatReleaseDate(movie.releaseDate)}
+                    Khởi chiếu ngày: {formatReleaseDate(movie.release_date)}
                   </span>
                 </>
               )}
@@ -103,7 +96,7 @@ export default function TrailerCard({
 
           {/* Description */}
           <p className="text-xs text-gray-400 line-clamp-2 mb-4 leading-relaxed font-mono">
-            {movie.description}
+            {movie.overview || "Chưa có mô tả cho phim này."}
           </p>
         </div>
 

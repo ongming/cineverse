@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTrailerDetail } from "../../hooks/data/useTrailerDetail.js";
-import { useMovieImages } from "../../hooks/data/useMovieImages.js";
 import { useMovieReviews } from "../../hooks/data/useMovieReviews.js";
 import MovieCard from "../../components/MovieCard/MovieCard.jsx";
 import CastModal from "../../components/CastModal/CastModal.jsx";
 import TrailerVideo from "./trailerVideo.jsx";
+import TrailerImages from "./TrailerImages.jsx";
+import { formatReleaseDate } from "../../utils/revenueUtils.js";
 import {
   Star,
   Play,
@@ -26,41 +27,18 @@ import {
 } from "lucide-react";
 
 export default function TrailerDetail() {
+  const {movieData: movie, isLoading, isError, ...trailerfeatures } = useTrailerDetail();
+
   // Extract state & business logic from custom hooks
   const {
-    id,
-    movie,
-    movieCast,
-    isLoading,
-    isError,
-    roi,
-    formattedBudget,
-    formattedRevenue,
-    relatedMovies,
     isSaved,
     toggleSaveWatchlist,
     isCastModalOpen,
     setIsCastModalOpen,
     navigate,
-  } = useTrailerDetail();
+  } = trailerfeatures;
 
   const [isTrailerVideoOpen, setIsTrailerVideoOpen] = useState(false);
-
-  const {
-    selectedIndex,
-    setSelectedIndex,
-    images,
-    activeImage,
-    isLightboxOpen,
-    setIsLightboxOpen,
-    handleNextImage,
-    handlePrevImage,
-    // Thumbnail Sliding Window Exports
-    handleNextThumbStrip,
-    handlePrevThumbStrip,
-    thumbStripStyle,
-    // Pointer Drag Gesture Export
-  } = useMovieImages(id);
 
   const {
     reviews,
@@ -75,10 +53,10 @@ export default function TrailerDetail() {
     setHoverRating,
     handleSendReview,
     toggleLikeReview,
-  } = useMovieReviews(id);
+  } = useMovieReviews(movie?.id);
 
   // 1. Loading State
-  if (isLoading) {
+  if (isLoading || !movie) {
     return (
       <div className="w-full min-h-screen bg-[#080808] text-white flex flex-col items-center justify-center gap-4 font-mono">
         <div className="w-12 h-12 border-4 border-amber-400/30 border-t-amber-400 rounded-full animate-spin" />
@@ -105,7 +83,6 @@ export default function TrailerDetail() {
       </div>
     );
   }
-
   return (
     <div className="w-full min-h-screen bg-[#080808] text-white py-8 px-4 sm:px-8 xl:px-16 font-mono text-left">
       {/* Navigation Top Bar */}
@@ -124,151 +101,45 @@ export default function TrailerDetail() {
       {/* SECTION 1: TOP SECTION (Left: Image Gallery with Drag Gesture, Right: Movie Metadata) */}
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
         {/* Left Column: Image Gallery Viewer (7 Cols) */}
-        <div className="lg:col-span-7 flex flex-col gap-4">
-          {/* Main Hero Image Viewport with Drag Gesture */}
-          <div className="relative w-full aspect-[16/9] bg-[#12141a] border border-[#222533] rounded-2xl overflow-hidden shadow-2xl group select-none">
-            {activeImage && (
-              <img
-                src={activeImage.file_path}
-                alt={movie.name}
-                className="w-full h-full object-cover pointer-events-none"
-              />
-            )}
-
-            {/* Gradient Overlays */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-transparent to-black/40 pointer-events-none" />
-
-            {/* Top Badges: Type, Rating & Drag Hint */}
-            <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-10 font-mono text-xs pointer-events-none">
-              {/* Lightbox Zoom Button */}
-              <button
-                type="button"
-                onClick={() => setIsLightboxOpen(true)}
-                className="p-2 bg-black/60 backdrop-blur-md border border-white/10 hover:border-amber-400 rounded-xl text-white hover:text-amber-400 transition-all cursor-pointer pointer-events-auto"
-                title="Xem ảnh phóng to"
-              >
-                <Maximize2 className="w-4 h-4" />
-              </button>
-            </div>
-
-            {/* Navigation Arrows */}
-            {images.length > 1 && (
-              <>
-                <button
-                  type="button"
-                  onClick={handlePrevImage}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 p-2.5 bg-black/60 backdrop-blur-md border border-white/10 hover:border-amber-400 rounded-full text-white hover:text-amber-400 transition-all cursor-pointer z-10 opacity-0 group-hover:opacity-100"
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
-                <button
-                  type="button"
-                  onClick={handleNextImage}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-2.5 bg-black/60 backdrop-blur-md border border-white/10 hover:border-amber-400 rounded-full text-white hover:text-amber-400 transition-all cursor-pointer z-10 opacity-0 group-hover:opacity-100"
-                >
-                  <ChevronRight className="w-5 h-5" />
-                </button>
-              </>
-            )}
-
-            {/* Drag Gesture Instruction Hint */}
-            <div className="absolute hidden group-hover:block bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-transparent backdrop-blur-md rounded-full  text-[10px] font-mono text-white pointer-events-none">
-              Vuốt trái / phải để chuyển ảnh
-            </div>
-          </div>
-
-          {/* Gallery Controls & Thumbnails Strip with 1-by-1 Smooth Slide */}
-          <div className="flex justify-center items-center gap-2 p-3">
-            {/* Left Arrow Button (Slide 1 thumbnail left) */}
-            <button
-              type="button"
-              onClick={handlePrevThumbStrip}
-              className="p-2  hover:border-amber-400 text-gray-300 hover:text-amber-400 rounded-xl transition-all cursor-pointer shrink-0 z-10"
-              title="Trượt ảnh trước"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-
-            {/* Viewport Window Container (Clipped Viewport for 6 thumbnails) */}
-            <div className="overflow-hidden w-[248px] sm:w-[390px]">
-              {/* Inner Sliding Track with transform translateX */}
-              <div
-                className="flex items-center gap-2 mx-1.5"
-                style={thumbStripStyle}
-              >
-                {images.map((img, idx) => (
-                  <button
-                    key={img.id}
-                    type="button"
-                    onClick={() => setSelectedIndex(idx)}
-                    className={`relative w-14 h-9 rounded-lg overflow-hidden border-2 transition-all cursor-pointer shrink-0 ${
-                      selectedIndex === idx
-                        ? "border-amber-400 scale-105 shadow-md shadow-amber-400/30"
-                        : "border-white/10 opacity-50 hover:opacity-100"
-                    }`}
-                  >
-                    <img
-                      src={img.file_path}
-                      alt="thumb"
-                      className="w-full h-full object-cover"
-                    />
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Right Arrow Button (Slide 1 thumbnail right) */}
-            <button
-              type="button"
-              onClick={handleNextThumbStrip}
-              className="p-2  hover:border-amber-400 text-gray-300 hover:text-amber-400 rounded-xl transition-all cursor-pointer shrink-0 z-10"
-              title="Trượt ảnh tiếp"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
+        <TrailerImages imageData={movie?.images} />
 
         {/* Right Column: Movie Meta & Action Buttons (5 Cols) */}
         <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
           <div className="flex flex-col gap-4">
             {/* Title & Slogan */}
             <h1 className="text-3xl sm:text-4xl font-black text-white font-mono uppercase tracking-tight mb-1">
-              {movie.name}
+              {movie.title}
             </h1>
 
             {/* Metadata Pills Row */}
             <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
               <span className="px-2.5 py-1 bg-amber-400/10 border border-amber-400/30 text-amber-400 rounded-lg font-bold flex items-center gap-1">
                 <Star className="w-3.5 h-3.5 fill-amber-400" />
-                {movie.rating} TMDb
+                {movie.vote_average} TMDb
               </span>
               <span className="px-2.5 py-1 bg-[#181a24] border border-[#252a3b] text-gray-300 rounded-lg font-bold">
-                Năm {movie.year}
+              {formatReleaseDate(movie.release_date)}
               </span>
-              <span className="px-2.5 py-1 bg-[#181a24] border border-[#252a3b] text-gray-300 rounded-lg font-bold">
-                {movie.duration}
-              </span>
-              <span className="px-2.5 py-1 bg-[#181a24] border border-[#252a3b] text-red-400 rounded-lg font-bold">
-                {movie.ageRating}
+              <span className="px-2.5 py-1 runtimebg-[#181a24] border border-[#252a3b] text-gray-300 rounded-lg font-bold">
+                {movie.runtime} phút
               </span>
             </div>
 
             {/* Specs Tags */}
             <div className="flex flex-wrap items-center gap-2 text-[10px] font-mono uppercase tracking-wider text-gray-400">
-              {movie.genre?.map((g) => (
+              {movie.genres?.map((g) => (
                 <span
-                  key={g}
+                  key={g.id}
                   className="px-3 py-2 bg-[#141 722] border border-cyan-400 rounded-2xl text-cyan-400 font-bold"
                 >
-                  {g}
+                  {g.name}
                 </span>
               ))}
             </div>
 
             {/* Description Synopsis */}
             <p className="text-gray-300 text-xs sm:text-sm leading-relaxed font-mono mb-6">
-              {movie.description}
+              {movie.overview || "Chưa có mô tả chi tiết về bộ phim này."}
             </p>
           </div>
 
@@ -339,7 +210,7 @@ export default function TrailerDetail() {
                 />
               </div>
               <h4 className="text-xs font-bold text-white font-mono line-clamp-1">
-                {movie.director}
+                {movie.director_name}
               </h4>
               <span className="text-[10px] font-mono text-cyan-400 font-bold uppercase mt-0.5">
                 ĐẠO DIỄN
@@ -347,7 +218,7 @@ export default function TrailerDetail() {
             </div>
 
             {/* Cast Avatars */}
-            {movieCast.slice(0, 3).map((act) => (
+            {/* {movie.cast.slice(0, 3).map((act) => (
               <div
                 key={act.id}
                 onClick={() => navigate(`/actor/${act.id}`)}
@@ -368,7 +239,7 @@ export default function TrailerDetail() {
                   {act.character_name || "DIỄN VIÊN CHÍNH"}
                 </span>
               </div>
-            ))}
+            ))} */}
           </div>
         </div>
 
@@ -387,13 +258,13 @@ export default function TrailerDetail() {
               <div className="flex items-center justify-between pb-2 border-b border-[#1f2332]">
                 <span className="text-xs text-gray-400">Kinh Phí Đầu Tư</span>
                 <span className="text-sm font-bold text-white">
-                  {formattedBudget}
+                  {movie.budget ? `${movie.budget.toLocaleString()}` : "N/A"}
                 </span>
               </div>
               <div className="flex items-center justify-between pb-2 border-b border-[#1f2332]">
                 <span className="text-xs text-gray-400">Tổng Doanh Thu</span>
                 <span className="text-sm font-bold text-cyan-400">
-                  {formattedRevenue}
+                  {movie.revenue ? `  ${movie.revenue.toLocaleString()}` : "N/A"}
                 </span>
               </div>
               <div className="flex items-center justify-between pt-1">
@@ -401,9 +272,9 @@ export default function TrailerDetail() {
                   Tỷ Lệ ROI Ước Tính
                 </span>
                 <span
-                  className={`text-base font-black ${roi < 0 ? "text-red-400" : "text-emerald-400 "}`}
-                >           
-                  {roi < 0 ? `${roi}%` : `+${roi}%`}
+                  className={`text-base font-black ${movie.roi < 0 ? "text-red-400" : "text-emerald-400 "}`}
+                >
+                  {movie.roi < 0 ? `${movie.roi}%` : `+${movie.roi}%`}
                 </span>
               </div>
             </div>
@@ -452,11 +323,11 @@ export default function TrailerDetail() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+        {/* <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
           {relatedMovies.map((rec) => (
             <MovieCard key={rec.id} movie={rec} />
           ))}
-        </div>
+        </div> */}
       </div>
 
       {/* SECTION 4: USER REVIEWS & COMMENTS (Clean & Fast) */}
@@ -645,23 +516,7 @@ export default function TrailerDetail() {
       </div>
 
       {/* FULLSCREEN LIGHTBOX MODAL */}
-      {isLightboxOpen && activeImage && (
-        <div className="fixed inset-0 z-[10000] bg-black/90 backdrop-blur-xl flex items-center justify-center p-4">
-          <button
-            type="button"
-            onClick={() => setIsLightboxOpen(false)}
-            className="absolute top-6 right-6 p-3 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors cursor-pointer"
-          >
-            <X className="w-6 h-6" />
-          </button>
-
-          <img
-            src={activeImage.file_path}
-            alt={movie.name}
-            className="max-w-full max-h-[90vh] object-contain rounded-2xl shadow-2xl border border-white/20"
-          />
-        </div>
-      )}
+      
 
       {/* FULL CAST & CREW POPUP MODAL */}
       <CastModal
