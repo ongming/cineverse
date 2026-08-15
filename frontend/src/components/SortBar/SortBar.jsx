@@ -15,12 +15,12 @@ export default function SortBar({
   useClickOutside(sortRef, () => setIsSortOpen(false));
 
   return (
-    <div className="relative w-full sm:w-auto shrink-0 " ref={sortRef}>
+    <div className="relative w-full sm:w-60 shrink-0 " ref={sortRef}>
       
       <button
         type="button"
         onClick={() => setIsSortOpen(!isSortOpen)}
-        className="w-full sm:w-auto px-4 py-2.5 bg-[#0a0b0e] border border-[#232736] hover:border-amber-400/50 rounded-lg text-xs font-mono text-gray-300 hover:text-white flex items-center justify-between gap-3 cursor-pointer transition-all"
+        className="w-full sm:w-60 px-4 py-2.5 bg-[#0a0b0e] border border-[#232736] hover:border-amber-400/50 rounded-lg text-xs font-mono text-gray-300 hover:text-white flex items-center justify-between gap-3 cursor-pointer transition-all"
       >
         {Icon}
         <span className="font-bold text-amber-400">

@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { useHomeData } from "../../hooks/data/useHomeData.js";
+import { formatReleaseDate } from "../../utils/revenueUtils.js";
 
 export default function useScheduleData() {
   const [selectedDateIndex, setSelectedDateIndex] = useState("ALL");
@@ -41,8 +42,7 @@ export default function useScheduleData() {
   }, []);
   // Filter movies by Selected Date & Filter Category
   const filteredMovies = useMemo(() => {
-    let result = [...nowPlaying, ...upcoming];
-    if (result.length === 0) return [];
+    let result = [...upcoming];
     if (selectedDateIndex !== "ALL" && selectedDateIndex !== "CUSTOM") {
       return result.filter(
         (m) => m.release_date === dateList[selectedDateIndex].fullFormatted,
@@ -50,7 +50,7 @@ export default function useScheduleData() {
       console.log("Filtered by date index:", selectedDateIndex, result);
     } else if (selectedDateIndex === "CUSTOM" && customDate) {
       return result.filter(
-        (m) => formatReleaseDate(m.releaseDate) === customDate,
+        (m) => formatReleaseDate(m.release_date) === customDate,
       );
     }
     return [...nowPlaying];

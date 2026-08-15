@@ -63,10 +63,23 @@ const getMovieDetailsById = async (req, res, next) => {
   }
 };
 
+const getMovieOverviewStats = async (req, res, next) => {
+  try {
+    const stats = await movieService.getMovieOverviewStats();
+    res.status(200).json({
+      success: true,
+      data: stats,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getPopularMovies,
   getNowPlayingMovies,
   getUpcomingMovies,
   getTopRatedMovies,
   getMovieDetailsById,
+  getMovieOverviewStats,
 };

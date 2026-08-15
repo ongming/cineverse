@@ -50,9 +50,13 @@ export const formatReleaseDate = (dateStr) => {
   }
   return dateStr;
 };
-  // Format YYYY-MM-DD to DD/MM/YYYY
+// Format YYYY-MM-DD to DD/MM/YYYY
 // Handle custom date selection from CustomDatePicker component
-export const handleSelectCustomDate = (dateFormatted) => {
+export const handleSelectCustomDate = (
+  dateFormatted,
+  setCustomDate,
+  setSelectedDateIndex,
+) => {
   if (dateFormatted) {
     setCustomDate(dateFormatted);
     setSelectedDateIndex("CUSTOM");

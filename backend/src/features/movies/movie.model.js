@@ -75,10 +75,23 @@ const findMovieDetailsById = async (movieId) => {
   return result.rows[0];
 };
 
+const findMovieOverviewStats = async () => {
+  const sql = `
+    SELECT 
+      (SELECT COUNT(*)::int FROM movies) AS total_movies,
+      (SELECT COUNT(*)::int FROM actors) AS total_actors,
+      (SELECT COALESCE(SUM(vote_count), 0)::bigint FROM movies) AS total_user_reviews,
+      (SELECT MAX(created_at) FROM movies) AS last_updated_at;
+  `;
+  const result = await pool.query(sql);
+  return result.rows[0];
+};
+
 module.exports = {
   findPopularMovies,
   findUpcomingMovies,
   findNowPlayingMovies,
   findTopRatedMovies,
   findMovieDetailsById,
+  findMovieOverviewStats,
 };

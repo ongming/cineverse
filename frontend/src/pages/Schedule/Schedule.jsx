@@ -126,6 +126,8 @@ export default function Schedule() {
                 selectedDate={customDate}
                 onSelectDate={handleSelectCustomDate}
                 isActive={selectedDateIndex === "CUSTOM"}
+                setCustomDate={setCustomDate}
+                setSelectedDateIndex={setSelectedDateIndex}
               />
             </div>
           </div>

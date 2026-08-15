@@ -10,8 +10,8 @@ export default function SideMenu({ isMobileMenuOpen, setIsMobileMenuOpen }) {
         isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
       }`}
     >
-      {/* Phần trên Side Menu */}
-      <div>
+      {/* Phần trên Side Menu (Scrollable) */}
+      <div className="flex-1 overflow-y-auto pr-1">
         {/* Header của Side Menu (Logo + Nút Đóng X) */}
         <div className="flex items-center justify-between border-b border-[#222222] pb-4 mb-6">
           <Link

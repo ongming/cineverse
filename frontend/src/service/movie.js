@@ -4,6 +4,7 @@ import {
   fetchUpcomingMovies,
   fetchTopRatedMovies,
   fetchMovieDetailsById,
+  fetchMovieOverviewStats,
 } from "../api/movie";
 
 const handleFetchMovies = async (fetchFunction) => {
@@ -47,4 +48,7 @@ export const getTopRatedMovies = async () => {
 }
 export const getMovieDetailsById = async (id) => {
   return handleFetchMovies(() => fetchMovieDetailsById(id));
-}
+};
+export const getMovieOverviewStats = async () => {
+  return handleFetchMovies(fetchMovieOverviewStats);
+};

@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import useRevenueAnalytics from "../../hooks/analytics/useRevenueAnalytics.js";
-import { useMovies } from "../../hooks/data/useMovies.js";
+import { useRevenueData } from "../../hooks/data/useRevenueData.js";
 import SortBar from "../../components/SortBar/SortBar.jsx";
-import FinancialDataTable from "../Revenue/FinancialDataTable.jsx";
-import StatCard from "../Revenue/StatCard.jsx";
+import FinancialDataTable from "./FinancialDataTable.jsx";
+import StatCard from "./StatCard.jsx";
 import { formatUSDExact, formatUSD } from "../../utils/revenueUtils.js";
 import {
   TrendingUp,
@@ -25,21 +25,25 @@ export default function Revenue() {
 
   const {
     selectedYear,
-    setSelectedYear,
+    handleYearChange,
     selectedGenre,
-    setSelectedGenre,
+    handleGenreChange,
     isLoading,
     isError,
     uniqueYears,
     uniqueGenres,
-    rankedMovies,
+    revenueMovies,
     maxRevenue,
-    avgROI,
+    avg_profit,
     topMovieInFilter,
-    topGenreInDB,
-    profitKings,
-    boxOfficeFlops,
+    top_genre,
+    profit_kings,
+    box_office_flops,
     handleExportCSV,
+    page,
+    setPage,
+    top_5_movies,
+    total_movies,
   } = useRevenueAnalytics();
 
   if (isLoading) {
@@ -80,15 +84,6 @@ export default function Revenue() {
             các tác phẩm điện ảnh.
           </p>
         </div>
-
-        {/* Sync Status Badge */}
-        <div className="flex items-center gap-3 font-mono text-xs text-gray-400 bg-dark-bg px-4 py-2.5 rounded-xl shadow-lg">
-          <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-          <span>
-            Cập nhật lần cuối:{" "}
-            <strong className="text-white">09/08/2026</strong>
-          </span>
-        </div>
       </div>
 
       {/* Filter Toolbar */}
@@ -101,7 +96,7 @@ export default function Revenue() {
             setIsSortOpen={setIsSortYearOpen}
             sortOptions={uniqueYears}
             sortBy={selectedYear}
-            setSortBy={setSelectedYear}
+            setSortBy={handleYearChange}
             Icon={<Calendar className="w-4 h-4 text-amber-400" />}
           />
 
@@ -111,20 +106,10 @@ export default function Revenue() {
             setIsSortOpen={setIsSortGenreOpen}
             sortOptions={uniqueGenres}
             sortBy={selectedGenre}
-            setSortBy={setSelectedGenre}
+            setSortBy={handleGenreChange}
             Icon={<Layers className="w-4 h-4 text-amber-400" />}
           />
         </div>
-
-        {/* Export CSV Action Button */}
-        <button
-          type="button"
-          onClick={handleExportCSV}
-          className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-amber-400/10 hover:bg-amber-400 text-amber-400 hover:text-black font-bold text-xs rounded-xl border border-amber-400/40 transition-all cursor-pointer font-mono shadow-md"
-        >
-          <Download className="w-4 h-4" />
-          <span>XUẤT CSV</span>
-        </button>
       </div>
 
       {/* Main Grid Section: Top Revenue + Summary Cards */}
@@ -143,7 +128,7 @@ export default function Revenue() {
 
             {/* Single Full Color Revenue Bar Chart */}
             <div className="space-y-4">
-              {rankedMovies.slice(0, 5).map((movie, idx) => {
+              {top_5_movies.map((movie, idx) => {
                 const percent = Math.round(
                   ((movie.revenue || 0) / maxRevenue) * 100,
                 );
@@ -165,7 +150,7 @@ export default function Revenue() {
                           to={`/trailer/${movie.id}`}
                           className="text-white group-hover:text-amber-400 font-semibold uppercase tracking-wide transition-colors line-clamp-1 max-w-[200px] sm:max-w-[280px]"
                         >
-                          {movie.name}
+                          {movie.title}
                         </Link>
                       </div>
                       <span className="font-bold text-amber-400">
@@ -187,29 +172,29 @@ export default function Revenue() {
           </div>
 
           <div className="pt-4 mt-6 border-t border-[#1f2332] text-xs font-mono text-gray-400 text-right">
-            Hiển thị Top 5 / Tổng số {rankedMovies.length} bộ phim
+            Hiển thị Top 5 / Tổng số {total_movies} bộ phim
           </div>
         </div>
 
         {/* Right Column: 3 Analytics Summary Cards */}
-        <div className="space-y-4 flex flex-col justify-between">
+        <div className=" gap-6 flex flex-col justify-between">
           {/* Card 1 */}
           <StatCard
             label="THỂ LOẠI HÁI RA TIỀN NHẤT (IN DB)"
             description="Dẫn đầu tổng doanh thu trong kho dữ liệu phim CINEVERSE."
           >
             <div className="text-xl sm:text-2xl font-black text-amber-400 font-mono tracking-tight uppercase">
-              {topGenreInDB}
+              {top_genre}
             </div>
           </StatCard>
 
           {/* Card 2 */}
           <StatCard
-            label="TỶ LỆ SINH LỜI TRUNG BÌNH (AVG ROI)"
+            label="TỶ LỆ SINH LỜI TRUNG BÌNH"
             description="Số liệu trung bình của toàn bộ danh mục phim hiện có."
           >
             <div className="text-3xl font-black text-emerald-400 font-mono">
-              {formatUSDExact(avgROI)}
+              {formatUSDExact(avg_profit)}
             </div>
           </StatCard>
 
@@ -219,13 +204,13 @@ export default function Revenue() {
               selectedYear === "ALL" ? "TOÀN BỘ" : `NĂM ${selectedYear}`
             }`}
           >
-            {topMovieInFilter ? (
+            {top_5_movies[0] ? (
               <div>
                 <div className="text-lg font-black text-white font-mono uppercase line-clamp-1">
-                  {topMovieInFilter.name}
+                  {top_5_movies[0].title}
                 </div>
-                <div className="text-amber-400 font-mono font-bold text-sm mt-0.5">
-                  {formatUSD(topMovieInFilter.revenue)}
+                <div className="text-amber-400 font-mono font-bold text-md mt-0.5">
+                  {formatUSDExact(top_5_movies[0].revenue)}
                 </div>
               </div>
             ) : (
@@ -251,23 +236,24 @@ export default function Revenue() {
           </div>
 
           <div className="space-y-4">
-            {profitKings.map((movie) => (
-              <div
+            {profit_kings.map((movie) => (
+              <Link
+                to={`/trailer/${movie.id}`}
                 key={movie.id}
                 className="bg-[#0e1017] border border-emerald-500/20 rounded-xl p-4 flex items-center justify-between gap-4 hover:border-emerald-500/50 transition-all"
               >
                 <div className="flex items-center gap-3">
                   <img
-                    src={movie.image}
-                    alt={movie.name}
+                    src={movie.poster_path}
+                    alt={movie.title}
                     className="w-10 h-14 object-cover rounded-lg border border-white/10 shrink-0"
                   />
                   <div>
                     <h4 className="text-sm font-bold text-white font-mono uppercase line-clamp-1">
-                      {movie.name}
+                      {movie.title}
                     </h4>
                     <span className="text-xs font-mono text-gray-400">
-                      Kinh phí: {formatUSD(movie.budget)}
+                      Kinh phí: {formatUSDExact(movie.budget)}
                     </span>
                   </div>
                 </div>
@@ -277,10 +263,10 @@ export default function Revenue() {
                     <ArrowUpRight className="w-3 h-3" /> SUPER PROFIT
                   </span>
                   <div className="text-emerald-400 font-mono font-black text-sm">
-                    ROI: +{movie.roi}%
+                    {formatUSDExact(movie.net_profit)}
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -296,43 +282,55 @@ export default function Revenue() {
             </h3>
           </div>
 
-          <div className="space-y-4">
-            {boxOfficeFlops.map((movie) => (
-              <div
-                key={movie.id}
-                className="bg-[#0e1017] border border-red-500/20 rounded-xl p-4 flex items-center justify-between gap-4 hover:border-red-500/50 transition-all"
-              >
-                <div className="flex items-center gap-3">
-                  <img
-                    src={movie.image}
-                    alt={movie.name}
-                    className="w-10 h-14 object-cover rounded-lg border border-white/10 shrink-0"
-                  />
-                  <div>
-                    <h4 className="text-sm font-bold text-white font-mono uppercase line-clamp-1">
-                      {movie.name}
-                    </h4>
-                    <span className="text-xs font-mono text-gray-400">
-                      Kinh phí: {formatUSD(movie.budget)}
-                    </span>
+          {box_office_flops?.length === 0 ? (
+            <div className="text-md md:text-lg text-gray-500 font-m ono">
+              Không có dữ liệu thua lỗ phòng vé trong năm nay.
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {box_office_flops.map((movie) => (
+                <Link
+                  to={`/trailer/${movie.id}`}
+                  key={movie.id}
+                  className="bg-[#0e1017] border border-red-500/20 rounded-xl p-4 flex items-center justify-between gap-4 hover:border-red-500/50 transition-all"
+                >
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={movie.poster_path}
+                      alt={movie.title}
+                      className="w-10 h-14 object-cover rounded-lg border border-white/10 shrink-0"
+                    />
+                    <div>
+                      <h4 className="text-sm font-bold text-white font-mono uppercase line-clamp-1">
+                        {movie.title}
+                      </h4>
+                      <span className="text-xs font-mono text-gray-400">
+                        Kinh phí: {formatUSDExact(movie.budget)}
+                      </span>
+                    </div>
                   </div>
-                </div>
 
-                <div className="text-right shrink-0">
-                  <span className="px-2.5 py-0.5 rounded-md bg-red-500/10 border border-red-500/40 text-red-400 text-[10px] font-mono font-bold uppercase inline-flex items-center gap-1 mb-1">
-                    <ArrowDownRight className="w-3 h-3" /> FLOP / LOSS
-                  </span>
-                  <div className="text-red-400 font-mono font-black text-sm">
-                    Lỗ: -{formatUSD(movie.lossAmount)}
+                  <div className="text-right shrink-0">
+                    <span className="px-2.5 py-0.5 rounded-md bg-red-500/10 border border-red-500/40 text-red-400 text-[10px] font-mono font-bold uppercase inline-flex items-center gap-1 mb-1">
+                      <ArrowDownRight className="w-3 h-3" /> FLOP / LOSS
+                    </span>
+                    <div className="text-red-400 font-mono font-black text-sm">
+                      Lỗ: -{formatUSDExact(movie.loss_amount)}
+                    </div>
                   </div>
-                </div>
-              </div>
-            ))}
-          </div>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       </div>
       {/* Detailed Financial Data Table */}
-      <FinancialDataTable rankedMovies={rankedMovies} />
+      <FinancialDataTable
+        rankedMovies={revenueMovies}
+        page={page}
+        setPage={setPage}
+        total_movies={total_movies}
+      />
     </div>
   );
 }

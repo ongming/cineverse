@@ -8,19 +8,27 @@ import {
   getNowPlayingMovies,
   getUpcomingMovies,
   getTopRatedMovies,
+  getMovieOverviewStats,
 } from "../../service/movie.js";
 
 const fetchHomeData = async () => {
   // 1. Parallel fetch all 3 endpoints concurrently
-  const [heroMovies, nowPlaying, upcoming, topRated] = await Promise.all([
+  const [heroMovies, nowPlaying, upcoming, topRated, overviewStats] = await Promise.all([
     getPopularMovies(),
     getNowPlayingMovies(),
     getUpcomingMovies(),
     getTopRatedMovies(),
+    getMovieOverviewStats(),
   ]);
-  console.log("Fetched home data:", { heroMovies, nowPlaying, upcoming, topRated });
+  console.log("Fetched home data:", {
+    heroMovies,
+    nowPlaying,
+    upcoming,
+    topRated,
+    overviewStats,
+  });
   // 3. Featured Single Movie of the Week
-  const featuredMovie = heroMovies[0];  
+  const featuredMovie = heroMovies[0];
 
   // 4. Popular Actors List
   const popularActors = actors.slice(0, 10);
@@ -40,7 +48,7 @@ const fetchHomeData = async () => {
     upcoming,
     featuredMovie,
     popularActors,
-    stats,
+    overviewStats,
   };
 };
 

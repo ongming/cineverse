@@ -19,3 +19,7 @@ export function fetchTopRatedMovies() {
 export function fetchMovieDetailsById(id) {
     return axios.get(`/api/movies/details/${id}`)
 }
+
+export function fetchMovieOverviewStats() {
+    return axios.get("/api/movies/overview-stats")
+}

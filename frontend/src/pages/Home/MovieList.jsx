@@ -1,31 +1,36 @@
 // pages/Home/MovieList.jsx
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { movies } from "../../data/movies.js";
+import { useHomeData } from "../../hooks/data/useHomeData.js";
 import MovieGrid from "../../components/MovieList/MovieList.jsx";
 import { ArrowLeft, Film } from "lucide-react";
+import PaginationControls from "../../components/PaginationControls/PaginationControls.jsx";
 
 export default function MovieListCategoryPage() {
+  const { page, setPage } = useState(1);
   const { type } = useParams();
-
+  const { data, loading, error } = useHomeData();
+  const { nowPlaying, topRated, upcoming } = data || {};
   // Determine title and filter movies array based on URL parameter :type
   const { pageTitle, displayMovies } = useMemo(() => {
     if (type === "now-playing") {
       return {
         pageTitle: "DANH SÁCH PHIM ĐANG CHIẾU",
-        displayMovies: movies,
+        displayMovies: nowPlaying,
       };
     }
     if (type === "upcoming") {
       return {
         pageTitle: "DANH SÁCH PHIM SẮP CHIẾU",
-        displayMovies: movies.slice(2, 8),
+        displayMovies: upcoming,
       };
     }
     if (type === "top-rated") {
       return {
         pageTitle: "DANH SÁCH PHIM ĐÁNH GIÁ CAO NHẤT",
-        displayMovies: [...movies].sort((a, b) => b.rating - a.rating),
+        displayMovies: [...topRated].sort(
+          (a, b) => b.vote_average - a.vote_average,
+        ),
       };
     }
     return {
@@ -34,7 +39,7 @@ export default function MovieListCategoryPage() {
     };
   }, [type]);
 
-  if(!displayMovies || displayMovies.length === 0) {
+  if (!displayMovies || displayMovies.length === 0) {
     return (
       <div className="px-[clamp(10px,5vw,100px)] pt-8 pb-[50px] bg-[#080808] text-white min-h-screen box-border font-mono text-left">
         <div className="mb-6 flex items-center justify-between">
@@ -50,6 +55,29 @@ export default function MovieListCategoryPage() {
         </h1>
         <p className="text-xs text-gray-400 font-mono m-0 mt-1">
           Không có phim nào trong danh sách này.
+        </p>
+      </div>
+    );
+  }
+  if (loading) {
+    return (
+      <div className="w-full min-h-screen bg-[#080808] text-white flex flex-col items-center justify-center gap-4 font-mono">
+        <div className="w-12 h-12 border-4 border-amber-400/30 border-t-amber-400 rounded-full animate-spin" />
+        <p className="text-xs text-gray-400 uppercase tracking-widest animate-pulse">
+          ĐANG TẢI DANH SÁCH PHIM...
+        </p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="w-full min-h-screen bg-[#080808] text-white flex flex-col items-center justify-center gap-4 font-mono">
+        <h2 className="text-lg font-bold text-amber-400">
+          Không thể tải dữ liệu danh sách phim!
+        </h2>
+        <p className="text-xs text-gray-400">
+          Vui lòng kiểm tra kết nối và thử lại sau.
         </p>
       </div>
     );
@@ -76,13 +104,14 @@ export default function MovieListCategoryPage() {
             {pageTitle}
           </h1>
           <p className="text-xs text-gray-400 font-mono m-0 mt-1">
-            Hiển thị {displayMovies.length} bộ phim trong hệ thống CINEVERSE
+            Hiển thị {displayMovies.length} bộ phim
           </p>
         </div>
       </div>
 
       {/* Render full grid catalog using MovieList component */}
       <MovieGrid movies={displayMovies} />
+      <PaginationControls page={page} setPage={setPage}  />
     </div>
   );
 }

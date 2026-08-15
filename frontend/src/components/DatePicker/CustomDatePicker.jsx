@@ -5,6 +5,8 @@ export default function CustomDatePicker({
   selectedDate,
   onSelectDate,
   isActive,
+  setCustomDate,
+  setSelectedDateIndex,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
@@ -69,7 +71,7 @@ export default function CustomDatePicker({
     const dayStr = String(day).padStart(2, "0");
     const monthStr = String(currentMonth + 1).padStart(2, "0");
     const formatted = `${dayStr}/${monthStr}/${currentYear}`;
-    onSelectDate(formatted);
+    onSelectDate(formatted, setCustomDate, setSelectedDateIndex);
     setIsOpen(false);
   };
 
@@ -99,7 +101,7 @@ export default function CustomDatePicker({
           {selectedDate ? selectedDate.slice(0, 5) : "Chọn ngày"}
         </span>
       </button>
-
+        {console.log("CustomDatePicker selectedDate:", selectedDate)}
       {/* Cyberpunk Dark Theme Calendar Modal Dropdown */}
       {isOpen && (
         <div className="absolute top-full right-0 mt-3 w-[300px] bg-[#12141a]/95 backdrop-blur-md border border-[#2b3042] rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.8)] p-4 z-[1000] animate-in fade-in zoom-in-95 duration-200">
@@ -174,7 +176,7 @@ export default function CustomDatePicker({
             <button
               type="button"
               onClick={() => {
-                onSelectDate("");
+                onSelectDate("", setCustomDate, setSelectedDateIndex);
                 setIsOpen(false);
               }}
               className="text-gray-400 hover:text-red-400 cursor-pointer transition-colors"

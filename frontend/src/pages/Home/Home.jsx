@@ -39,7 +39,7 @@ export default function Home() {
     upcoming,
     featuredMovie,
     popularActors,
-    stats,
+    overviewStats,
   } = data;
 
   return (
@@ -48,7 +48,7 @@ export default function Home() {
       <HeroBanner movies={heroMovies} />
 
       {/* 2. Platform Statistics Bar (Count-up Animation) */}
-      <StatsBar stats={stats} />
+      <StatsBar stats={overviewStats} />
 
       {/* 3. Now Playing Movie Carousel (Swiper) */}
       <MovieRow

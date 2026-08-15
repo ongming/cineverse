@@ -74,6 +74,9 @@ ON movies(vote_average DESC);
 CREATE INDEX idx_movies_popularity
 ON movies(popularity DESC);
 
+CREATE INDEX idx_movies_revenue
+ON movies(revenue DESC, budget) WHERE budget > 0;
+
 
 -- =========================================================
 -- 3. MOVIE IMAGES

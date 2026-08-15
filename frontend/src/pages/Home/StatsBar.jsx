@@ -2,6 +2,7 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import { Film, Users, Award, Clock } from "lucide-react";
+import { formatTimeAgo } from "../../utils/dateUtils.js";
 
 function CounterItem({ icon: Icon, label, targetValue, suffix = "" }) {
   const ref = useRef(null);
@@ -36,7 +37,9 @@ function CounterItem({ icon: Icon, label, targetValue, suffix = "" }) {
       </div>
       <div className="text-left font-mono">
         <div className="text-lg sm:text-xl font-extrabold text-white">
-          {typeof targetValue === "number" ? count.toLocaleString() : targetValue}
+          {typeof targetValue === "number"
+            ? count.toLocaleString()
+            : targetValue}
           {suffix}
         </div>
         <div className="text-[10px] text-gray-400 uppercase tracking-wider">
@@ -60,25 +63,22 @@ export default function StatsBar({ stats }) {
         <CounterItem
           icon={Film}
           label="TỔNG SỐ PHIM"
-          targetValue={stats?.totalMovies || 1240}
-          suffix="+"
+          targetValue={stats?.total_movies || "NA"}
         />
         <CounterItem
           icon={Users}
           label="TỔNG DIỄN VIÊN"
-          targetValue={stats?.totalActors || 8500}
-          suffix="+"
+          targetValue={stats?.total_actors || "NA"}
         />
         <CounterItem
           icon={Award}
           label="ĐÁNH GIÁ TỪ USER"
-          targetValue={stats?.userReviews || 45200}
-          suffix="+"
+          targetValue={parseInt(stats?.total_user_reviews) || "NA"}
         />
         <CounterItem
           icon={Clock}
           label="CẬP NHẬT MỚI NHẤT"
-          targetValue={stats?.lastUpdated || "Vừa xong"}
+          targetValue={formatTimeAgo(stats?.last_updated_at) || "Vừa xong"}
         />
       </div>
     </motion.div>

@@ -112,10 +112,15 @@ const getMovieDetailsById = async (movieId) => {
   };
 };
 
+const getMovieOverviewStats = async () => {
+  return await movieModel.findMovieOverviewStats();
+};
+
 module.exports = {
   getPopularMovies,
   getNowPlayingMovies,
   getUpcomingMovies,
   getTopRatedMovies,
   getMovieDetailsById,
+  getMovieOverviewStats,
 };
