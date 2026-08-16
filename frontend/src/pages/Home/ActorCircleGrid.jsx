@@ -19,16 +19,8 @@ export default function ActorCircleGrid({ actors = [] }) {
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-lg sm:text-xl font-extrabold text-white font-mono uppercase tracking-wide flex items-center gap-2 m-0">
           <Users className="w-5 h-5 text-cyan-400" />
-          GƯƠNG MẶT NỔI BẬT (POPULAR PEOPLE)
+          TOP 20 GƯƠNG MẶT NỔI BẬT{" "}
         </h2>
-
-        <Link
-          to="/person/1320"
-          className="inline-flex items-center gap-1 text-xs font-mono text-cyan-400 hover:underline uppercase font-bold no-underline"
-        >
-          <span>XEM TẤT CẢ</span>
-          <ChevronRight className="w-4 h-4" />
-        </Link>
       </div>
 
       {/* Grid of Circular Photo Avatars */}
@@ -36,11 +28,11 @@ export default function ActorCircleGrid({ actors = [] }) {
         {actors.map((person) => (
           <div
             key={person.id}
-            onClick={() => navigate(`/person/${person.id}`)}
+            onClick={() => navigate(`/actors/${person.id}`)}
             className="flex flex-col items-center text-center group cursor-pointer"
             title={`Xem hồ sơ của ${person.name}`}
           >
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border-2 border-white/10 group-hover:border-amber-400 transition-all p-1 mb-2 bg-[#12141a] shadow-lg group-hover:scale-105">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-2 border-white/10 group-hover:border-amber-400 transition-all p-1 mb-2 bg-[#12141a] shadow-lg group-hover:scale-105">
               <img
                 src={person.profile_path}
                 alt={person.name}

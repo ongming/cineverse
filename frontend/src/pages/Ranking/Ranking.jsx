@@ -1,126 +1,266 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
-import { movies } from "../../data/movies.js";
-import { Clock, Star, Bookmark, Info, Grid } from "lucide-react";
+import { useRankingData } from "../../hooks/data/useRankingData.js";
+import { Star } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: [0.25, 1, 0.5, 1] },
+  },
+};
 
 export default function Ranking() {
-  const [activeGenre, setActiveGenre] = useState("");
+  const {
+    topRatedMovies,
+    categoryData,
+    isLoading,
+    isError,
+    activeGenre,
+    setactiveGenre,
+    handleGenreId,
+  } = useRankingData();
 
-  const uniqueGenres = [...new Set(movies.map((movie) => movie.genre).flat())];
+  if (isLoading) {
+    return (
+      <div className="w-full min-h-screen bg-[#080808] text-white flex flex-col items-center justify-center gap-4 font-mono">
+        <div className="w-12 h-12 border-4 border-amber-400/30 border-t-amber-400 rounded-full animate-spin" />
+        <p className="text-xs text-gray-400 uppercase tracking-widest animate-pulse">
+          LOADING CINEMATIC INDEX...
+        </p>
+      </div>
+    );
+  }
 
-  const filteredMovies =
-    activeGenre === ""
-      ? movies
-      : movies.filter((movie) => movie.genre.includes(activeGenre));
-
-  const rankedMovies = [...filteredMovies].sort((a, b) => b.rating - a.rating);
+  if (isError) {
+    return (
+      <div className="w-full min-h-screen bg-[#080808] text-white flex flex-col items-center justify-center gap-4 font-mono">
+        <p className="text-xs text-gray-400 uppercase tracking-widest">
+          ERROR LOADING CINEMATIC INDEX. PLEASE TRY AGAIN LATER.
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <div className="max-w-[1200px] mx-auto px-5 py-10 text-white font-mono text-left">
-      <div className="flex flex-col lg:flex-row gap-10">
-        <div className="flex-1">
-          <h1 className="text-3xl font-extrabold text-white mb-2">Bảng xếp hạng chung</h1>
-          <p className="text-[#8a90a2] text-sm mb-8 flex items-center gap-2">
-            Danh sách các phim được đánh giá cao nhất
-            <span className="text-amber-400 font-semibold flex items-center gap-1 ml-2">
-              <Clock className="w-3.5 h-3.5 inline" /> Updated: 24m ago
-            </span>
-          </p>
-
-          <div className="flex flex-col gap-4">
-            {rankedMovies.map((movie, index) => {
-              const rank = index + 1;
-              return (
-                <div key={movie.id} className="block">
-                  <Link
-                    to={`/trailer/${movie.id}`}
-                    className="flex items-center gap-4 bg-[#12141a] border border-white/10 rounded-xl p-4 no-underline text-inherit transition-all hover:border-amber-400 hover:-translate-y-0.5 shadow-lg group"
-                  >
-                    {/* Rank Badge */}
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg shrink-0 ${
-                      rank === 1 ? "bg-amber-400 text-black shadow-lg shadow-amber-400/40" :
-                      rank === 2 ? "bg-zinc-300 text-black" :
-                      rank === 3 ? "bg-amber-700 text-white" : "bg-zinc-800 text-zinc-400"
-                    }`}>
-                      #{rank}
-                    </div>
-
-                    {/* Poster */}
-                    <div className="w-16 h-24 rounded-lg overflow-hidden shrink-0 border border-white/10">
-                      <img src={movie.image} alt={movie.name} className="w-full h-full object-cover" />
-                    </div>
-
-                    {/* Info */}
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-base font-bold text-white m-0 truncate group-hover:text-amber-400 transition-colors">{movie.name}</h3>
-                      <div className="flex items-center gap-2 text-xs text-[#8c8c8c] mt-1">
-                        <span>{movie.year}</span>
-                        <span>•</span>
-                        <span>{movie.duration}</span>
-                        <span>•</span>
-                        <span className="px-1.5 py-0.5 bg-zinc-800 border border-zinc-700 text-white rounded text-[10px] font-bold">{movie.ageRating}</span>
-                      </div>
-                      <div className="text-amber-400 font-bold text-sm mt-2 flex items-center gap-1">
-                        <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400 inline" />
-                        {movie.rating} <span className="text-zinc-600 text-xs font-normal">/ 10</span>
-                      </div>
-                    </div>
-
-                    {/* Watched Action */}
-                    <div
-                      className="hidden md:flex items-center gap-1.5 px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-xs text-white hover:bg-amber-400 hover:text-black transition-colors"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        alert(`Đã đánh dấu đã xem phim: ${movie.name}`);
-                      }}
-                    >
-                      <Bookmark className="w-3.5 h-3.5" /> Lưu
-                    </div>
-
-                    <div className="text-zinc-500">
-                      <Info className="w-4 h-4" />
-                    </div>
-                  </Link>
-                </div>
-              );
-            })}
+    <div className="w-full min-h-screen bg-[#080808] text-white font-mono text-left py-12 px-4 sm:px-8 xl:px-16 selection:bg-amber-400 selection:text-black">
+      <div className="max-w-7xl mx-auto">
+        {/* HEADER AREA WITH ANIMATION */}
+        <motion.header
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="border-b border-white/10 pb-8 mb-12 flex flex-col md:flex-row items-start md:items-end justify-between gap-6"
+        >
+          <div>
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight text-white m-0 leading-none">
+              BẢNG XẾP HẠNG
+            </h1>
+            <p className="text-xs sm:text-sm text-gray-500 font-mono tracking-widest uppercase mt-3 m-0">
+              DỮ LIỆU ĐƯỢC THU THẬP TỪ TMDB
+            </p>
           </div>
+        </motion.header>
 
-          <button className="w-full mt-6 py-3 bg-white/5 border border-white/10 text-white font-bold rounded-xl cursor-pointer hover:bg-white/10 transition-colors">
-            Tải thêm xếp hạng
-          </button>
-        </div>
-
-        {/* SIDEBAR */}
-        <div className="w-full lg:w-[320px] shrink-0">
-          <div className="bg-[#12141a] border border-white/10 rounded-xl p-5">
-            <div className="flex items-center gap-2 mb-4 text-amber-400 font-bold text-sm">
-              <Grid className="w-4 h-4" />
-              <h3 className="m-0 text-white text-base">Thể loại</h3>
+        {/* MAIN LAYOUT WITH SIDEBAR */}
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-start">
+          {/* GENRE FILTER SIDEBAR */}
+          <motion.aside
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="w-full lg:w-64 shrink-0 lg:sticky lg:top-24 border-b lg:border-b-0 lg:border-r border-white/10 pb-8 lg:pb-0 lg:pr-8"
+          >
+            <div className="text-xs font-mono uppercase tracking-widest text-gray-500 mb-6 font-bold flex items-center gap-2">
+              <span className="w-1.5 h-1.5 bg-amber-400 rounded-full animate-ping" />
+              BỘ LỌC THỂ LOẠI
             </div>
 
-            <div className="flex flex-wrap gap-2">
+            <nav className="flex flex-row lg:flex-col flex-wrap gap-y-3 gap-x-6 text-xs font-mono uppercase tracking-wider">
               <button
-                className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all cursor-pointer ${
-                  activeGenre === "" ? "bg-amber-400 border-amber-400 text-black" : "bg-white/5 border-white/10 text-white hover:border-amber-400"
+                type="button"
+                onClick={() => handleGenreId(null, setactiveGenre)}
+                className={`text-left transition-all duration-300 cursor-pointer flex items-center gap-2 bg-transparent border-none p-0 ${
+                  activeGenre === null
+                    ? "text-amber-400 font-extrabold border-l-2 border-amber-400 pl-2 -ml-2"
+                    : "text-gray-400 hover:text-amber-400"
                 }`}
-                onClick={() => setActiveGenre("")}
               >
-                Tất Cả
+                <span>ALL GENRES</span>
               </button>
-              {uniqueGenres.map((g) => (
-                <button
-                  key={g}
-                  className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all cursor-pointer ${
-                    activeGenre === g ? "bg-amber-400 border-amber-400 text-black" : "bg-white/5 border-white/10 text-white hover:border-amber-400"
-                  }`}
-                  onClick={() => setActiveGenre(g)}
+
+              {categoryData.map((genre) => {
+                const isActive = activeGenre === genre.id;
+                return (
+                  <button
+                    key={genre.id}
+                    type="button"
+                    onClick={() => handleGenreId(genre.id, setactiveGenre)}
+                    className={`text-left transition-all duration-300 cursor-pointer flex items-center gap-2 bg-transparent border-none p-0 ${
+                      isActive
+                        ? "text-amber-400 font-extrabold border-l-2 border-amber-400 pl-2 -ml-2"
+                        : "text-gray-400 hover:text-amber-400"
+                    }`}
+                  >
+                    <span className="truncate">{genre.name}</span>
+                  </button>
+                );
+              })}
+            </nav>
+          </motion.aside>
+
+          {/* EDITORIAL MAGAZINE RANKING LIST WITH STAGGERED ANIMATIONS */}
+          <main className="flex-1 w-full space-y-0 min-h-[500px]">
+            <AnimatePresence mode="wait">
+              {topRatedMovies.length === 0 ? (
+                <motion.div
+                  key="empty"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="py-20 text-center font-mono text-gray-500 uppercase tracking-widest"
                 >
-                  {g}
-                </button>
-              ))}
-            </div>
-          </div>
+                  KHÔNG CÓ DỮ LIỆU PHIM ĐỂ HIỂN THỊ CHO THỂ LOẠI NÀY. VUI LÒNG
+                  CHỌN THỂ LOẠI KHÁC.
+                </motion.div>
+              ) : (
+                <motion.div
+                  key={activeGenre || "all"}
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="hidden"
+                  className="space-y-0"
+                >
+                  {topRatedMovies.map((movie, index) => {
+                    const rank = index + 1;
+                    const isOdd = rank % 2 !== 0;
+
+                    return (
+                      <motion.article
+                        key={movie.id}
+                        variants={itemVariants}
+                        layout
+                        className="relative border-b border-white/10 py-12 lg:py-16 first:pt-0 last:border-b-0 group overflow-hidden"
+                      >
+                        {/* OVERSIZED BACKGROUND NUMERAL */}
+                        <div
+                          className={`aria-hidden:true absolute select-none pointer-events-none font-mono font-black text-[100px] sm:text-[140px] lg:text-[180px] leading-none transition-all duration-500 ${
+                            rank === 1
+                              ? "text-amber-400/20 top-0 left-0 sm:left-4"
+                              : isOdd
+                              ? "text-white/5 top-5 left-4"
+                              : "text-white/5 top-10 left-4 lg:left-75"
+                          }`}
+                        >
+                          {rank}
+                        </div>
+
+                        {/* ALTERNATING FLEX ROW LAYOUT (DESKTOP) */}
+                        <div
+                          className={`relative z-10 flex flex-col gap-8 items-center ${
+                            isOdd ? "lg:flex-row" : "lg:flex-row-reverse"
+                          }`}
+                        >
+                          {/* TEXT CONTENT BLOCK */}
+                          <div className="flex-1 w-full space-y-4 text-left">
+                            {/* RANK TAG */}
+                            <div className="inline-flex items-center gap-2">
+                              <span
+                                className={`text-xs font-mono font-black uppercase tracking-widest px-2.5 py-0.5 border ${
+                                  rank === 1
+                                    ? "bg-amber-400 text-black border-amber-400 font-extrabold"
+                                    : "bg-white/5 border-white/10 text-gray-400"
+                                }`}
+                              >
+                                {rank === 1 ? "★ TOP RATED #1" : `RANKING #${rank}`}
+                              </span>
+                            </div>
+
+                            {/* TITLE */}
+                            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black uppercase tracking-wider leading-tight text-white m-0 transition-colors duration-300 group-hover:text-amber-400">
+                              <Link
+                                to={`/trailer/${movie.id}`}
+                                className="no-underline text-inherit"
+                              >
+                                {movie.title}
+                              </Link>
+                            </h2>
+
+                            {/* METADATA CAPTION LINE */}
+                            <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs font-mono text-gray-400 tracking-wider">
+                              <span>{movie.release_date || "N/A"}</span>
+                              <span className="text-gray-600">|</span>
+                              <span>{movie.runtime || "N/A"} phút</span>
+                              <span className="text-gray-600">|</span>
+
+                              <span className="text-gray-300 font-bold uppercase">
+                                DIR: {movie.director_name || "N/A"}
+                              </span>
+                              <span className="text-gray-600">|</span>
+                              <span className="flex items-center gap-1 font-bold text-white">
+                                <Star
+                                  className={`w-3.5 h-3.5 ${
+                                    rank === 1
+                                      ? "fill-amber-400 text-amber-400"
+                                      : "fill-gray-400 text-gray-400"
+                                  }`}
+                                />
+                                {movie.vote_average || "N/A"}{" "}
+                                <span className="text-gray-500 font-normal">
+                                  / 10
+                                </span>
+                              </span>
+                            </div>
+
+                            {/* EDITORIAL DESCRIPTION */}
+                            <p className="text-xs sm:text-sm text-gray-400 leading-relaxed font-mono line-clamp-3 max-w-2xl">
+                              {movie.overview || "KHÔNG CÓ MÔ TẢ CHO PHIM NÀY."}
+                            </p>
+                          </div>
+
+                          {/* POSTER IMAGE CONTAINER WITH ROTATE & HOVER MOTION */}
+                          <motion.div
+                            whileHover={{ scale: 1.04, rotate: isOdd ? 1.5 : -1.5 }}
+                            transition={{ duration: 0.3, ease: "easeOut" }}
+                            className="shrink-0 w-full sm:w-[220px] lg:w-[260px]"
+                          >
+                            <Link
+                              to={`/trailer/${movie.id}`}
+                              className="block relative group/poster overflow-hidden rounded-md border border-white/10 shadow-2xl transition-all duration-500 hover:border-amber-400/50"
+                            >
+                              <img
+                                src={movie.poster_path}
+                                alt={movie.title}
+                                className="w-full aspect-[2/3] object-cover transition-transform duration-700 group-hover/poster:scale-105"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover/poster:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                                <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest">
+                                  VIEW DETAILS →
+                                </span>
+                              </div>
+                            </Link>
+                          </motion.div>
+                        </div>
+                      </motion.article>
+                    );
+                  })}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </main>
         </div>
       </div>
     </div>

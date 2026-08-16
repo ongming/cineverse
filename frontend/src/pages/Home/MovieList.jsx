@@ -7,10 +7,9 @@ import { ArrowLeft, Film } from "lucide-react";
 import PaginationControls from "../../components/PaginationControls/PaginationControls.jsx";
 
 export default function MovieListCategoryPage() {
-  const { page, setPage } = useState(1);
   const { type } = useParams();
-  const { data, loading, error } = useHomeData();
-  const { nowPlaying, topRated, upcoming } = data || {};
+  const { data, isLoading, isError, page, setPage } = useHomeData();
+  const { nowPlaying, upcoming } = data || {};
   // Determine title and filter movies array based on URL parameter :type
   const { pageTitle, displayMovies } = useMemo(() => {
     if (type === "now-playing") {
@@ -25,19 +24,11 @@ export default function MovieListCategoryPage() {
         displayMovies: upcoming,
       };
     }
-    if (type === "top-rated") {
-      return {
-        pageTitle: "DANH SÁCH PHIM ĐÁNH GIÁ CAO NHẤT",
-        displayMovies: [...topRated].sort(
-          (a, b) => b.vote_average - a.vote_average,
-        ),
-      };
-    }
     return {
       pageTitle: "KHÔNG TÌM THẤY DANH SÁCH PHIM",
       displayMovies: null,
     };
-  }, [type]);
+  }, [type, nowPlaying, upcoming]);
 
   if (!displayMovies || displayMovies.length === 0) {
     return (
@@ -59,7 +50,7 @@ export default function MovieListCategoryPage() {
       </div>
     );
   }
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="w-full min-h-screen bg-[#080808] text-white flex flex-col items-center justify-center gap-4 font-mono">
         <div className="w-12 h-12 border-4 border-amber-400/30 border-t-amber-400 rounded-full animate-spin" />
@@ -70,7 +61,7 @@ export default function MovieListCategoryPage() {
     );
   }
 
-  if (error) {
+  if (isError) {
     return (
       <div className="w-full min-h-screen bg-[#080808] text-white flex flex-col items-center justify-center gap-4 font-mono">
         <h2 className="text-lg font-bold text-amber-400">
@@ -111,7 +102,11 @@ export default function MovieListCategoryPage() {
 
       {/* Render full grid catalog using MovieList component */}
       <MovieGrid movies={displayMovies} />
-      <PaginationControls page={page} setPage={setPage}  />
+      <PaginationControls
+        page={page}
+        setPage={setPage}
+        hasMore={displayMovies.length < 18}
+      />
     </div>
   );
 }

@@ -9,16 +9,18 @@ if (!TMDB_API_KEY) {
   throw new Error("Missing TMDB_API_KEY in .env");
 }
 
+const syncedActorIds = new Set();
+
 async function tmdbFetch(path) {
   const separator = path.includes("?") ? "&" : "?";
 
   const response = await fetch(
-    `${TMDB_BASE_URL}${path}${separator}api_key=${TMDB_API_KEY}`
+    `${TMDB_BASE_URL}${path}${separator}api_key=${TMDB_API_KEY}`,
   );
 
   if (!response.ok) {
     throw new Error(
-      `TMDb API error: ${response.status} ${response.statusText}`
+      `TMDb API error: ${response.status} ${response.statusText}`,
     );
   }
 
@@ -41,7 +43,9 @@ async function getMovieData() {
     .filter((_, idx) => idx % 4 === 3)
     .flatMap((res) => res.results || []);
 
-  const ids = results.flatMap((res) => (res.results || []).map((movie) => movie.id));
+  const ids = results.flatMap((res) =>
+    (res.results || []).map((movie) => movie.id),
+  );
 
   return {
     movieIds: [...new Set(ids)],
@@ -49,16 +53,71 @@ async function getMovieData() {
   };
 }
 
+async function fetchActorDetails(personId) {
+  try {
+    let person = await tmdbFetch(`/person/${personId}?language=vi-VN`);
+
+    // Fallback: If no Vietnamese biography found, fetch English biography
+    if (!person.biography) {
+      const enPerson = await tmdbFetch(`/person/${personId}?language=en-US`);
+      person.biography = enPerson.biography || null;
+    }
+
+    return person;
+  } catch (err) {
+    console.warn(
+      `Failed to fetch details for actor ${personId}:`,
+      err.message,
+    );
+    return null;
+  }
+}
+
+async function syncActorImages(client, actorId) {
+  try {
+    const imagesData = await tmdbFetch(`/person/${actorId}/images`);
+    const profiles = (imagesData?.profiles || []).slice(0, 10);
+
+    await client.query("DELETE FROM actor_images WHERE actor_id = $1", [actorId]);
+
+    for (const [index, img] of profiles.entries()) {
+      await client.query(
+        `
+        INSERT INTO actor_images (
+          actor_id,
+          file_path,
+          width,
+          height,
+          vote_average,
+          display_order
+        )
+        VALUES ($1, $2, $3, $4, $5, $6)
+        `,
+        [
+          actorId,
+          img.file_path,
+          img.width || null,
+          img.height || null,
+          img.vote_average || 0,
+          index,
+        ],
+      );
+    }
+  } catch (err) {
+    console.warn(`Failed to fetch images for actor ${actorId}:`, err.message);
+  }
+}
+
 async function syncMovie(client, movieId) {
   const movie = await tmdbFetch(
-    `/movie/${movieId}?language=vi-VN&append_to_response=videos,credits,release_dates`
+    `/movie/${movieId}?language=vi-VN&append_to_response=videos,credits,release_dates`,
   );
 
   const images = await tmdbFetch(`/movie/${movieId}/images`);
 
   // Get Vietnamese age rating
   const vnRelease = movie.release_dates?.results?.find(
-    (country) => country.iso_3166_1 === "VN"
+    (country) => country.iso_3166_1 === "VN",
   );
 
   const ageRating =
@@ -67,7 +126,7 @@ async function syncMovie(client, movieId) {
 
   // Get director
   const director = (movie.credits?.crew || []).find(
-    (person) => person.job === "Director"
+    (person) => person.job === "Director",
   );
 
   const genreIds = (movie.genres || []).map((g) => g.id);
@@ -157,7 +216,7 @@ async function syncMovie(client, movieId) {
             ON CONFLICT (id)
             DO UPDATE SET name = EXCLUDED.name
             `,
-      [genre.id, genre.name]
+      [genre.id, genre.name],
     );
 
     await client.query(
@@ -166,7 +225,7 @@ async function syncMovie(client, movieId) {
             VALUES ($1, $2)
             ON CONFLICT DO NOTHING
             `,
-      [movie.id, genre.id]
+      [movie.id, genre.id],
     );
   }
 
@@ -181,17 +240,20 @@ async function syncMovie(client, movieId) {
   // Fallback: If no Vietnamese videos found, fetch English trailers from TMDb
   if (videoResults.length === 0) {
     try {
-      const enVideos = await tmdbFetch(`/movie/${movieId}/videos?language=en-US`);
+      const enVideos = await tmdbFetch(
+        `/movie/${movieId}/videos?language=en-US`,
+      );
       videoResults = enVideos.results || [];
     } catch (err) {
-      console.warn(`Failed to fetch fallback en-US videos for movie ${movieId}:`, err.message);
+      console.warn(
+        `Failed to fetch fallback en-US videos for movie ${movieId}:`,
+        err.message,
+      );
     }
   }
 
   const trailers = videoResults.filter(
-    (video) =>
-      video.site === "YouTube" &&
-      (video.type === "Trailer")
+    (video) => video.site === "YouTube" && video.type === "Trailer",
   );
 
   for (const trailer of trailers.slice(0, 5)) {
@@ -212,7 +274,7 @@ async function syncMovie(client, movieId) {
         trailer.name || null,
         trailer.type || null,
         trailer.published_at || null,
-      ]
+      ],
     );
   }
 
@@ -261,7 +323,7 @@ async function syncMovie(client, movieId) {
         image.height || null,
         image.vote_average || 0,
         index,
-      ]
+      ],
     );
   }
 
@@ -272,34 +334,74 @@ async function syncMovie(client, movieId) {
       SET poster_path = $1
       WHERE id = $2
       `,
-      [imagesMovie[0]?.file_path || null, movie.id]
+      [imagesMovie[0]?.file_path || null, movie.id],
     );
   }
 
   // =========================
-  // ACTORS
+  // ACTORS & CAST (Deduplicated Speed Optimization)
   // =========================
 
-  const cast = (movie.credits?.cast || []).slice(0, 20);
+  const cast = (movie.credits?.cast || []).slice(0, 15);
 
   for (const actor of cast) {
-    await client.query(
-      `
-            INSERT INTO actors (
-                id,
-                name,
-                profile_path,
-                popularity
-            )
-            VALUES ($1,$2,$3,$4)
-            ON CONFLICT (id)
-            DO UPDATE SET
-                name = EXCLUDED.name,
-                profile_path = EXCLUDED.profile_path,
-                popularity = EXCLUDED.popularity
-            `,
-      [actor.id, actor.name, actor.profile_path || null, actor.popularity || 0]
-    );
+    // ⚡ Fast Deduplication: Skip extra HTTP API calls if actor was already synced!
+    if (!syncedActorIds.has(actor.id)) {
+      syncedActorIds.add(actor.id);
+
+      const details = await fetchActorDetails(actor.id);
+
+      const biography = details?.biography || null;
+      const birthday = details?.birthday || null;
+      const deathday = details?.deathday || null;
+      const placeOfBirth = details?.place_of_birth || null;
+      const gender = details?.gender ?? actor.gender ?? 0;
+      const imdbId = details?.imdb_id || null;
+
+      await client.query(
+        `
+              INSERT INTO actors (
+                  id,
+                  name,
+                  profile_path,
+                  popularity,
+                  biography,
+                  birthday,
+                  deathday,
+                  place_of_birth,
+                  gender,
+                  imdb_id
+              )
+              VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+              ON CONFLICT (id)
+              DO UPDATE SET
+                  name = EXCLUDED.name,
+                  profile_path = EXCLUDED.profile_path,
+                  popularity = EXCLUDED.popularity,
+                  biography = COALESCE(EXCLUDED.biography, actors.biography),
+                  birthday = COALESCE(EXCLUDED.birthday, actors.birthday),
+                  deathday = COALESCE(EXCLUDED.deathday, actors.deathday),
+                  place_of_birth = COALESCE(EXCLUDED.place_of_birth, actors.place_of_birth),
+                  gender = EXCLUDED.gender,
+                  imdb_id = COALESCE(EXCLUDED.imdb_id, actors.imdb_id)
+              `,
+        [
+          actor.id,
+          actor.name,
+          actor.profile_path || null,
+          actor.popularity || 0,
+          biography,
+          birthday,
+          deathday,
+          placeOfBirth,
+          gender,
+          imdbId,
+        ],
+      );
+
+      // Sync up to 10 actor gallery images from TMDb!
+      await syncActorImages(client, actor.id);
+    }
 
     await client.query(
       `
@@ -315,11 +417,82 @@ async function syncMovie(client, movieId) {
                 character_name = EXCLUDED.character_name,
                 cast_order = EXCLUDED.cast_order
             `,
-      [movie.id, actor.id, actor.character || null, actor.order || 0]
+      [movie.id, actor.id, actor.character || null, actor.order || 0],
     );
   }
 
   console.log(`Synced: ${movie.title} (${movie.id})`);
+}
+
+async function syncPopularActors(client) {
+  console.log("--- Syncing Popular Celebrities & Actor Gallery Images ---");
+  try {
+    const popularPages = [1, 2];
+    const popularRequests = popularPages.map((p) =>
+      tmdbFetch(`/person/popular?language=vi-VN&page=${p}`),
+    );
+
+    const popularResults = await Promise.all(popularRequests);
+    const popularActors = popularResults.flatMap((r) => r.results || []);
+
+    let rank = 1;
+    for (const actor of popularActors) {
+      if (!syncedActorIds.has(actor.id)) {
+        syncedActorIds.add(actor.id);
+        const details = await fetchActorDetails(actor.id);
+
+        await client.query(
+          `
+          INSERT INTO actors (
+              id,
+              name,
+              profile_path,
+              popularity,
+              biography,
+              birthday,
+              deathday,
+              place_of_birth,
+              gender,
+              imdb_id,
+              popular_rank
+          )
+          VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
+          ON CONFLICT (id)
+          DO UPDATE SET
+              name = EXCLUDED.name,
+              profile_path = EXCLUDED.profile_path,
+              popularity = EXCLUDED.popularity,
+              biography = COALESCE(EXCLUDED.biography, actors.biography),
+              birthday = COALESCE(EXCLUDED.birthday, actors.birthday),
+              deathday = COALESCE(EXCLUDED.deathday, actors.deathday),
+              place_of_birth = COALESCE(EXCLUDED.place_of_birth, actors.place_of_birth),
+              gender = EXCLUDED.gender,
+              imdb_id = COALESCE(EXCLUDED.imdb_id, actors.imdb_id),
+              popular_rank = EXCLUDED.popular_rank
+          `,
+          [
+            actor.id,
+            actor.name,
+            actor.profile_path || null,
+            actor.popularity || 0,
+            details?.biography || null,
+            details?.birthday || null,
+            details?.deathday || null,
+            details?.place_of_birth || null,
+            details?.gender ?? actor.gender ?? 0,
+            details?.imdb_id || null,
+            rank++,
+          ],
+        );
+
+        // Sync up to 10 actor gallery images from TMDb!
+        await syncActorImages(client, actor.id);
+      }
+    }
+    console.log(`Synced ${popularActors.length} popular celebrities and their gallery images.`);
+  } catch (err) {
+    console.warn("Failed to sync popular actors:", err.message);
+  }
 }
 
 async function main() {
@@ -351,11 +524,18 @@ async function main() {
         VALUES ($1, $2)
         ON CONFLICT (movie_id) DO UPDATE SET trending_rank = EXCLUDED.trending_rank
         `,
-        [movie.id, index + 1]
+        [movie.id, index + 1],
       );
     }
 
-    console.log(`Synced ${Math.min(20, trendingList.length)} weekly trending ranks.`);
+    console.log(
+      `Synced ${Math.min(20, trendingList.length)} weekly trending ranks.`,
+    );
+
+    // =========================
+    // POPULAR ACTORS
+    // =========================
+    await syncPopularActors(client);
 
     await client.query("COMMIT");
 

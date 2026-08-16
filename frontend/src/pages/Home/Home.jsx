@@ -1,5 +1,6 @@
 // pages/Home/Home.jsx
 import { useHomeData } from "../../hooks/data/useHomeData.js";
+import { useTopRateMovies } from "../../hooks/data/useTopRateMovies.js";
 import HeroBanner from "./HeroBanner.jsx";
 import StatsBar from "./StatsBar.jsx";
 import MovieRow from "./MovieRow.jsx";
@@ -9,8 +10,8 @@ import ActorCircleGrid from "./ActorCircleGrid.jsx";
 
 export default function Home() {
   const { data, isLoading, isError } = useHomeData();
-
-  if (isLoading) {
+  const { data: topRated, isLoading: isTopRatedLoading, isError: isTopRatedError } = useTopRateMovies();
+  if (isLoading || isTopRatedLoading) {
     return (
       <div className="w-full min-h-screen bg-[#080808] text-white flex flex-col items-center justify-center gap-4 font-mono">
         <div className="w-12 h-12 border-4 border-amber-400/30 border-t-amber-400 rounded-full animate-spin" />
@@ -21,13 +22,15 @@ export default function Home() {
     );
   }
 
-  if (isError || !data) {
+  if (isError || isTopRatedError || !data) {
     return (
       <div className="w-full min-h-screen bg-[#080808] text-white flex flex-col items-center justify-center gap-4 font-mono">
         <h2 className="text-lg font-bold text-amber-400">
           Không thể tải dữ liệu Trang Chủ!
         </h2>
-        <p className="text-xs text-gray-400">Vui lòng kiểm tra kết nối và thử lại sau.</p>
+        <p className="text-xs text-gray-400">
+          Vui lòng kiểm tra kết nối và thử lại sau.
+        </p>
       </div>
     );
   }
@@ -35,12 +38,12 @@ export default function Home() {
   const {
     heroMovies,
     nowPlaying,
-    topRated,
     upcoming,
     featuredMovie,
     popularActors,
     overviewStats,
-  } = data;
+    topActors,
+  } = data || {};
 
   return (
     <div className="w-full min-h-screen bg-dar-bg text-white font-mono overflow-x-hidden pb-16">
@@ -71,7 +74,7 @@ export default function Home() {
       />
 
       {/* 7. Popular People & Directors Circle Grid */}
-      <ActorCircleGrid actors={popularActors} />
+      <ActorCircleGrid actors={topActors} />
     </div>
   );
 }

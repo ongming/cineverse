@@ -173,8 +173,40 @@ CREATE TABLE actors (
 
     popularity NUMERIC(10,3) DEFAULT 0,
 
-    biography TEXT
+    biography TEXT,
+
+    birthday DATE,
+
+    deathday DATE,
+
+    place_of_birth VARCHAR(255),
+
+    gender SMALLINT,
+
+    imdb_id VARCHAR(50),
+
+    popular_rank INTEGER
 );
+
+CREATE TABLE actor_images (
+    id SERIAL PRIMARY KEY,
+
+    actor_id INTEGER NOT NULL
+        REFERENCES actors(id)
+        ON DELETE CASCADE,
+
+    file_path VARCHAR(255) NOT NULL,
+
+    width INTEGER,
+    height INTEGER,
+    vote_average NUMERIC(3,1) DEFAULT 0,
+    display_order INTEGER DEFAULT 0,
+
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_actor_images_actor_id
+ON actor_images(actor_id);
 
 CREATE TABLE movie_cast (
     id SERIAL PRIMARY KEY,

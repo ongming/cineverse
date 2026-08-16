@@ -1,5 +1,6 @@
 // hooks/data/useHomeData.js
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { movies } from "../../data/movies.js";
 import { actors } from "../../data/actors.js";
 import { movie_images } from "../../data/movieImages.js";
@@ -10,36 +11,38 @@ import {
   getTopRatedMovies,
   getMovieOverviewStats,
 } from "../../service/movie.js";
+import { getTopActors } from "../../service/actor.js";
 
-const fetchHomeData = async () => {
-  // 1. Parallel fetch all 3 endpoints concurrently
-  const [heroMovies, nowPlaying, upcoming, topRated, overviewStats] = await Promise.all([
-    getPopularMovies(),
-    getNowPlayingMovies(),
-    getUpcomingMovies(),
-    getTopRatedMovies(),
-    getMovieOverviewStats(),
-  ]);
+const fetchHomeData = async (page) => {
+  // 1. Parallel fetch all 5 endpoints concurrently
+  const [heroMovies, nowPlaying, upcoming, topRated, overviewStats, topActors] =
+    await Promise.all([
+      getPopularMovies(),
+      getNowPlayingMovies({
+        page: page,
+      }),
+      getUpcomingMovies({
+        page: page,
+      }),
+      getTopRatedMovies(),
+      getMovieOverviewStats(),
+      getTopActors(),
+    ]);
+
   console.log("Fetched home data:", {
     heroMovies,
     nowPlaying,
     upcoming,
     topRated,
     overviewStats,
+    topActors,
   });
+
   // 3. Featured Single Movie of the Week
-  const featuredMovie = heroMovies[0];
+  const featuredMovie = heroMovies ? heroMovies[0] : null;
 
   // 4. Popular Actors List
-  const popularActors = actors.slice(0, 10);
-
-  // 5. Platform Key Stats
-  const stats = {
-    totalMovies: 1240,
-    totalActors: 8500,
-    userReviews: 45200,
-    lastUpdated: "Vừa xong",
-  };
+  const popularActors = actors ? actors.slice(0, 10) : [];
 
   return {
     heroMovies,
@@ -49,14 +52,25 @@ const fetchHomeData = async () => {
     featuredMovie,
     popularActors,
     overviewStats,
+    topActors,
   };
 };
 
 export function useHomeData() {
-  return useQuery({
-    queryKey: ["home-data"],
-    queryFn: fetchHomeData,
+  const [page, setPage] = useState(1);
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["home-data", page],
+    queryFn: () => fetchHomeData(page),
     staleTime: 5 * 60 * 1000, // 5 minutes cache
     gcTime: 10 * 60 * 1000, // 10 minutes garbage collection
   });
+
+  return {
+    data,
+    isLoading,
+    isError,
+    page,
+    setPage,
+  };
 }

@@ -7,6 +7,7 @@ const movieRoutes = require("../features/movies/movie.routes");
 const userRoutes = require("../features/users/user.routes");
 const genreRoutes = require("../features/Genres/genre.routes"); // Import route cho Genres
 const revenueRoutes = require("../features/revenue/revenue.routes");
+const actorRoutes = require("../features/actors/actor.route");
 
 // Khai báo các endpoint theo từng Feature
 router.use("/auth", authRoutes);
@@ -14,5 +15,6 @@ router.use("/movies", movieRoutes);
 router.use("/users", userRoutes);
 router.use("/genres", genreRoutes); // Thêm route cho Genres
 router.use("/revenue", revenueRoutes); // Thêm route cho Revenue
+router.use("/actors", actorRoutes); // Thêm route cho Actors
 
 module.exports = router;

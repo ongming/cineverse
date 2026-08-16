@@ -16,9 +16,8 @@ import {
 
 export default function ActorDetail() {
   const {
-    actor,
+    actorData,
     age,
-    filmography,
     isLightboxOpen,
     setIsLightboxOpen,
     selectedPhotoIndex,
@@ -28,7 +27,7 @@ export default function ActorDetail() {
     navigate,
   } = useActorDetail();
 
-  if (!actor) {
+  if (!actorData) {
     return (
       <div className="w-full min-h-screen bg-[#080808] text-white flex flex-col items-center justify-center gap-4 font-mono">
         <h2 className="text-lg font-bold text-amber-400">
@@ -45,7 +44,7 @@ export default function ActorDetail() {
   }
 
   // Calculate remaining photos count for 1-row limit (5 thumbnails + 1 count card)
-  const galleryList = actor.gallery || [];
+  const galleryList = actorData.images || [];
   const maxVisiblePhotos = 5;
   const visiblePhotos = galleryList.slice(0, maxVisiblePhotos);
   const remainingCount = Math.max(0, galleryList.length - maxVisiblePhotos);
@@ -71,8 +70,8 @@ export default function ActorDetail() {
           <div className="relative w-full aspect-[2/3] bg-[#12141a] border border-[#222533] rounded-2xl overflow-hidden shadow-2xl p-2 group">
             <div className="w-full h-full rounded-xl overflow-hidden relative">
               <img
-                src={actor.profile_path}
-                alt={actor.name}
+                src={actorData.profile_path}
+                alt={actorData.name}
                 className="w-full h-full object-cover"
               />
             </div>
@@ -85,7 +84,7 @@ export default function ActorDetail() {
             {/* Name & Popularity Badge */}
             <div className="flex flex-wrap items-center gap-3 mb-6">
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white font-mono uppercase tracking-tight">
-                {actor.name}
+                {actorData.name}
               </h1>
             </div>
 
@@ -96,7 +95,7 @@ export default function ActorDetail() {
                   Vai Trò
                 </span>
                 <span className="text-white font-bold font-mono text-sm">
-                  {actor.known_for_department || "Acting"}
+                  {actorData.known_for_department || "Acting"}
                 </span>
               </div>
 
@@ -105,7 +104,7 @@ export default function ActorDetail() {
                   Ngày Sinh
                 </span>
                 <span className="text-white font-bold font-mono text-sm">
-                  {actor.birthday || "N/A"}{" "}
+                  {actorData.birthday || "N/A"}{" "}
                   {age !== null && (
                     <span className="text-gray-400 font-normal">
                       ({age} tuổi)
@@ -119,7 +118,7 @@ export default function ActorDetail() {
                   Nơi Sinh
                 </span>
                 <span className="text-white font-bold font-mono text-sm">
-                  {actor.place_of_birth || "N/A"}
+                  {actorData.place_of_birth || "N/A"}
                 </span>
               </div>
 
@@ -128,9 +127,9 @@ export default function ActorDetail() {
                   Được Biết Đến Như
                 </span>
                 <span className="text-white font-bold font-mono text-sm">
-                  {actor.also_known_as?.length > 0
-                    ? actor.also_known_as.join(", ")
-                    : actor.name}
+                  {actorData.also_known_as?.length > 0
+                    ? actorData.also_known_as.join(", ")
+                    : actorData.name}
                 </span>
               </div>
             </div>
@@ -138,15 +137,15 @@ export default function ActorDetail() {
             {/* Biography Paragraph */}
             <div className="mb-6">
               <p className="text-gray-300 text-xs sm:text-sm leading-relaxed font-mono">
-                {actor.biography}
+                {actorData.biography}
               </p>
             </div>
 
             {/* Primary Action Button: XEM TRÊN IMDb */}
-            {actor.imdb_id && (
+            {actorData.imdb_id && (
               <div>
                 <a
-                  href={`https://www.imdb.com/name/${actor.imdb_id}`}
+                  href={`https://www.imdb.com/name/${actorData.imdb_id}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 py-3 px-6 bg-amber-400 hover:bg-yellow-400 text-black font-extrabold text-xs sm:text-sm font-mono uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-amber-400/20 active:scale-95 no-underline"
@@ -237,7 +236,7 @@ export default function ActorDetail() {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
-          {filmography.map((movieItem) => (
+          {actorData.movies?.map((movieItem) => (
             <MovieCard
               className="realtive"
               key={movieItem.id}
@@ -309,7 +308,7 @@ export default function ActorDetail() {
           <div className="w-full backdrop-blur-md p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 z-30">
             <div>
               <h4 className="text-sm font-bold text-amber-400 font-mono uppercase m-0">
-                {actor.name}
+                {actorData.name}
               </h4>
               <p className="text-xs text-gray-300 font-mono m-0 mt-1 line-clamp-1">
                 Bộ ảnh thảm đỏ & hậu trường độc quyền trên CINEVERSE (
@@ -321,7 +320,7 @@ export default function ActorDetail() {
               <span>
                 Nghệ danh:{" "}
                 <strong className="text-white">
-                  {actor.also_known_as?.[0] || actor.name}
+                  {actorData.also_known_as?.[0] || actorData.name}
                 </strong>
               </span>
             </div>

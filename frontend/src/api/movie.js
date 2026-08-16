@@ -1,25 +1,31 @@
 import axios from "axios";
 
 export function fetchPopularMovies() {
-    return axios.get("/api/movies/popular")
+  return axios.get("/api/movies/popular");
 }
 
-export function fetchUpcomingMovies() {
-    return axios.get("/api/movies/upcoming")
+export function fetchUpcomingMovies(params) {
+  return axios.get(`/api/movies/upcoming`, { params: params });
 }
 
-export function fetchNowPlayingMovies() {
-    return axios.get("/api/movies/now-playing")
+export function fetchNowPlayingMovies(params) {
+  return axios.get(`/api/movies/now-playing`, {
+    params: params,
+  });
 }
 
-export function fetchTopRatedMovies() {
-    return axios.get("/api/movies/top-rated")
+export function fetchTopRatedMovies(genreId) {
+  return axios.get("/api/movies/top-rated", { params: { genreId } });
 }
 
 export function fetchMovieDetailsById(id) {
-    return axios.get(`/api/movies/details/${id}`)
+  return axios.get(`/api/movies/details/${id}`);
 }
 
 export function fetchMovieOverviewStats() {
-    return axios.get("/api/movies/overview-stats")
+  return axios.get("/api/movies/overview-stats");
+}
+
+export function fetchSearchMovies(query) {
+  return axios.get("/api/movies/search", { params: { q: query } });
 }

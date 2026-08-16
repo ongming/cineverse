@@ -8,7 +8,7 @@ import "swiper/css/navigation";
 import MovieCardHover from "./MovieCardHover.jsx";
 import { ChevronRight } from "lucide-react";
 
-export default function MovieRow({ title, movies = [], viewAllLink = null }) {
+export default function MovieRow({ title, movies = [], viewAllLink = null}) {
   if (!movies || movies.length === 0) return null;
 
   return (

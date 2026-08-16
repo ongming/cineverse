@@ -5,50 +5,28 @@ import {
   fetchTopRatedMovies,
   fetchMovieDetailsById,
   fetchMovieOverviewStats,
+  fetchSearchMovies,
 } from "../api/movie";
-
-const handleFetchMovies = async (fetchFunction) => {
-  try {
-    const res = await fetchFunction();
-
-    if (!res.data.success) {
-      throw new Error(res.data.message);
-    }
-    return res.data.data;
-  } catch (error) {
-    if (error.response) {
-      console.error(
-        `Server error (${error.response.status}):`,
-        error.response.data?.message,
-      );
-      throw new Error(error.response.data?.message);
-    } else if (error.request) {
-      console.error("No response from server:", error.message);
-      throw new Error(
-        "Cannot connect to server. Check your internet connection.",
-      );
-    } else {
-      console.error("Request setup error:", error.message);
-      throw error;
-    }
-  }
-};
+import { handleFetch } from "../utils/serviceUtils.js";
 
 export const getPopularMovies = async () => {
-  return handleFetchMovies(fetchPopularMovies);
+  return handleFetch(fetchPopularMovies);
 };
-export const getNowPlayingMovies = async () => {
-  return handleFetchMovies(fetchNowPlayingMovies);
+export const getNowPlayingMovies = async (params) => {
+  return handleFetch(() => fetchNowPlayingMovies(params));
 };
-export const getUpcomingMovies = async () => {
-  return handleFetchMovies(fetchUpcomingMovies);
+export const getUpcomingMovies = async (params) => {
+  return handleFetch(() => fetchUpcomingMovies(params));
 };
-export const getTopRatedMovies = async () => {
-  return handleFetchMovies(fetchTopRatedMovies);
-}
+export const getTopRatedMovies = async (genreId) => {
+  return handleFetch(() => fetchTopRatedMovies(genreId));
+};
 export const getMovieDetailsById = async (id) => {
-  return handleFetchMovies(() => fetchMovieDetailsById(id));
+  return handleFetch(() => fetchMovieDetailsById(id));
 };
 export const getMovieOverviewStats = async () => {
-  return handleFetchMovies(fetchMovieOverviewStats);
+  return handleFetch(fetchMovieOverviewStats);
+};
+export const searchMovies = async (query) => {
+  return handleFetch(() => fetchSearchMovies(query));
 };

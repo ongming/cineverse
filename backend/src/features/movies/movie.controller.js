@@ -15,7 +15,8 @@ const getPopularMovies = async (req, res, next) => {
 
 const getNowPlayingMovies = async (req, res, next) => {
   try {
-    const nowPlayingMovies = await movieService.getNowPlayingMovies();
+    const { page } = req.query;
+    const nowPlayingMovies = await movieService.getNowPlayingMovies(page);
     res.status(200).json({
       success: true,
       data: nowPlayingMovies,
@@ -27,7 +28,8 @@ const getNowPlayingMovies = async (req, res, next) => {
 
 const getUpcomingMovies = async (req, res, next) => {
   try {
-    const upcomingMovies = await movieService.getUpcomingMovies();
+    const { page } = req.query;
+    const upcomingMovies = await movieService.getUpcomingMovies(page);
     res.status(200).json({
       success: true,
       data: upcomingMovies,
@@ -40,7 +42,8 @@ const getUpcomingMovies = async (req, res, next) => {
 
 const getTopRatedMovies = async (req, res, next) => {
   try {
-    const topRatedMovies = await movieService.getTopRatedMovies();
+    const { genreId } = req.query;
+    const topRatedMovies = await movieService.getTopRatedMovies(genreId);
     res.status(200).json({
       success: true,
       data: topRatedMovies,
@@ -75,6 +78,19 @@ const getMovieOverviewStats = async (req, res, next) => {
   }
 };
 
+const searchMovies = async (req, res, next) => {
+  try {
+    const { q } = req.query;
+    const movies = await movieService.searchMovies(q);
+    res.status(200).json({
+      success: true,
+      data: movies,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getPopularMovies,
   getNowPlayingMovies,
@@ -82,4 +98,5 @@ module.exports = {
   getTopRatedMovies,
   getMovieDetailsById,
   getMovieOverviewStats,
+  searchMovies,
 };

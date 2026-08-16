@@ -3,23 +3,20 @@ import { useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { actors } from "../../data/actors.js";
 import { getActorFilmography } from "../../utils/movieRelationUtils.js";
+import { useActorData } from "../../hooks/data/useActorData.js";
 
 export const useActorDetail = () => {
   const { id } = useParams();
+  console.log("Actor ID from useParams:", id); // Debugging line
   const navigate = useNavigate();
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
-
-  // Find actor by ID
-  const actor = useMemo(() => {
-    const numericId = parseInt(id, 10);
-    return actors.find((a) => a.id === numericId);
-  }, [id]);
+  const { data: actorData, isLoading, error } = useActorData(id);
 
   // Compute age from birthday
   const age = useMemo(() => {
-    if (!actor?.birthday) return null;
-    const birthDate = new Date(actor.birthday);
+    if (!actorData?.birthday) return null;
+    const birthDate = new Date(actorData.birthday);
     const today = new Date();
     let ageCalc = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
@@ -30,13 +27,7 @@ export const useActorDetail = () => {
       ageCalc--;
     }
     return ageCalc;
-  }, [actor]);
-
-  // Retrieve filmography joined with character_name using decoupled helper
-  const filmography = useMemo(() => {
-    if (!actor) return [];
-    return getActorFilmography(actor.id);
-  }, [actor]);
+  }, [actorData]);
 
   // Gallery Photo Controls
   const handleOpenPhoto = (index) => {
@@ -45,22 +36,20 @@ export const useActorDetail = () => {
   };
 
   const handleNextPhoto = () => {
-    if (!actor?.gallery || actor.gallery.length === 0) return;
-    setSelectedPhotoIndex((prev) => (prev + 1) % actor.gallery.length);
+    if (!actorData?.images || actorData.images.length === 0) return;
+    setSelectedPhotoIndex((prev) => (prev + 1) % actorData.images.length);
   };
 
   const handlePrevPhoto = () => {
-    if (!actor?.gallery || actor.gallery.length === 0) return;
+    if (!actorData?.images || actorData.images.length === 0) return;
     setSelectedPhotoIndex((prev) =>
-      prev === 0 ? actor.gallery.length - 1 : prev - 1
+      prev === 0 ? actorData.images.length - 1 : prev - 1,
     );
   };
 
   return {
-    id,
-    actor,
+    actorData,
     age,
-    filmography,
     isLightboxOpen,
     setIsLightboxOpen,
     selectedPhotoIndex,

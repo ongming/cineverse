@@ -29,28 +29,46 @@ const findPopularMovies = async () => {
   return result.rows;
 };
 
-const findUpcomingMovies = async () => {
-  const result = await pool.query(`
+const findUpcomingMovies = async ({ page }) => {
+  const currentPage = Math.max(1, parseInt(page, 10) || 1);
+  const LIMIT = 18;
+  const OFFSET = (currentPage - 1) * LIMIT;
+  const result = await pool.query(
+    `
     SELECT * FROM movies
     WHERE release_date > NOW()
     ORDER BY release_date ASC
-  `);
+    LIMIT $1 OFFSET $2;
+  `,
+    [LIMIT, OFFSET],
+  );
   return result.rows;
 };
 
-const findNowPlayingMovies = async () => {
-  const result = await pool.query(`
+const findNowPlayingMovies = async ({ page = 1 } = {}) => {
+  const currentPage = Math.max(1, parseInt(page, 10) || 1);
+  const LIMIT = 18;
+  const OFFSET = (currentPage - 1) * LIMIT;
+  const result = await pool.query(
+    `
     SELECT * FROM movies
     WHERE release_date <= NOW()
     AND (release_date + INTERVAL '3 months') >= NOW()
     ORDER BY release_date DESC
-  `);
+    LIMIT $1 OFFSET $2;
+  `,
+    [LIMIT, OFFSET],
+  );
   return result.rows;
 };
 
-const findTopRatedMovies = async () => {
-  const result = await pool.query(`
-    SELECT * FROM movies m
+const findTopRatedMovies = async (genreId) => {
+  const result = await pool.query(
+    `
+    SELECT 
+      m.*, 
+      COALESCE(mi.banner, m.poster_path) AS banner
+    FROM movies m
     LEFT JOIN LATERAL (
         SELECT file_path AS banner
         FROM movie_images
@@ -59,9 +77,12 @@ const findTopRatedMovies = async () => {
         ORDER BY display_order ASC, vote_average DESC
         LIMIT 1
     ) mi ON true
-    ORDER BY vote_average DESC
-    LIMIT 5
-  `);
+    WHERE ($1::int IS NULL OR $1::int = ANY(m.genre_ids))
+    ORDER BY (m.vote_average * m.vote_count) DESC
+    LIMIT 10;
+  `,
+    [genreId || null],
+  );
   return result.rows;
 };
 
@@ -87,6 +108,24 @@ const findMovieOverviewStats = async () => {
   return result.rows[0];
 };
 
+const findMoviesBySearch = async (query) => {
+  if (!query || typeof query !== "string" || !query.trim()) return [];
+
+  const searchPattern = `%${query.trim()}%`;
+  const result = await pool.query(
+    `
+    SELECT * FROM movies
+    WHERE title ILIKE $1
+       OR overview ILIKE $1
+       OR director_name ILIKE $1
+    ORDER BY popularity DESC
+    LIMIT 20;
+  `,
+    [searchPattern],
+  );
+  return result.rows;
+};
+
 module.exports = {
   findPopularMovies,
   findUpcomingMovies,
@@ -94,4 +133,5 @@ module.exports = {
   findTopRatedMovies,
   findMovieDetailsById,
   findMovieOverviewStats,
+  findMoviesBySearch,
 };

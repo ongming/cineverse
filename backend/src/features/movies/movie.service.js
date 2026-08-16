@@ -31,8 +31,8 @@ const getPopularMovies = async () => {
   });
 };
 
-const getNowPlayingMovies = async () => {
-  const nowPlayingMovies = await movieModel.findNowPlayingMovies();
+const getNowPlayingMovies = async (page) => {
+  const nowPlayingMovies = await movieModel.findNowPlayingMovies({ page });
   if (!nowPlayingMovies) {
     throw new NotFoundError("No now playing movies found");
   }
@@ -50,8 +50,8 @@ const getNowPlayingMovies = async () => {
   });
 };
 
-const getUpcomingMovies = async (id) => {
-  const upcomingMovies = await movieModel.findUpcomingMovies();
+const getUpcomingMovies = async (page) => {
+  const upcomingMovies = await movieModel.findUpcomingMovies({ page });
   if (!upcomingMovies) {
     throw new NotFoundError(`No upcoming movies found`);
   }
@@ -69,19 +69,20 @@ const getUpcomingMovies = async (id) => {
   });
 };
 
-const getTopRatedMovies = async () => {
-  const topRatedMovies = await movieModel.findTopRatedMovies();
+const getTopRatedMovies = async (genreId) => {
+  const topRatedMovies = await movieModel.findTopRatedMovies(genreId);
   if (!topRatedMovies) {
     throw new NotFoundError(`No top rated movies found`);
   }
 
   return topRatedMovies.map((movie) => {
     const fullBanner = formatUrl(movie.banner, IMAGE_BASE_W1280);
-
+    const fullPoster = formatUrl(movie.poster_path, IMAGE_BASE_W500);
     return {
       ...movie,
       name: movie.title,
       banner: fullBanner,
+      poster_path: fullPoster,
       trailerKey: movie.youtube_key
         ? movie.youtube_key.replace(YOUTUBE_WATCH_BASE, "")
         : null,
@@ -116,6 +117,18 @@ const getMovieOverviewStats = async () => {
   return await movieModel.findMovieOverviewStats();
 };
 
+const searchMovies = async (query) => {
+  const movies = await movieModel.findMoviesBySearch(query);
+  return movies.map((movie) => {
+    const fullPoster = formatUrl(movie.poster_path, IMAGE_BASE_W500);
+    return {
+      ...movie,
+      name: movie.title,
+      poster_path: fullPoster,
+    };
+  });
+};
+
 module.exports = {
   getPopularMovies,
   getNowPlayingMovies,
@@ -123,4 +136,5 @@ module.exports = {
   getTopRatedMovies,
   getMovieDetailsById,
   getMovieOverviewStats,
+  searchMovies,
 };

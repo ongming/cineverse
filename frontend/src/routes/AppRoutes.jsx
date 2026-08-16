@@ -19,7 +19,7 @@ function AppRoutes() {
       <Route element={<MainLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/trailer/:id" element={<TrailerDetail />} />
-        <Route path="/actor/:id" element={<ActorDetail />} />
+        <Route path="/actors/:id" element={<ActorDetail />} />
         <Route path="/person/:id" element={<ActorDetail />} />
         <Route path="/search" element={<Search />} />
         <Route path="/category/:name" element={<Category />} />
