@@ -66,7 +66,7 @@ async function fetchActorDetails(personId) {
     return person;
   } catch (err) {
     console.warn(
-      `Failed to fetch details for actor ${personId}:`,
+      `Failed to fetch details for person ${personId}:`,
       err.message,
     );
     return null;
@@ -104,7 +104,7 @@ async function syncActorImages(client, actorId) {
       );
     }
   } catch (err) {
-    console.warn(`Failed to fetch images for actor ${actorId}:`, err.message);
+    console.warn(`Failed to fetch images for person ${actorId}:`, err.message);
   }
 }
 
@@ -203,6 +203,59 @@ async function syncMovie(client, movieId) {
       genreIds,
     ],
   );
+
+  // =========================
+  // DIRECTOR SYNC (Sync Director into actors table!)
+  // =========================
+  if (director && director.id) {
+    if (!syncedActorIds.has(director.id)) {
+      syncedActorIds.add(director.id);
+      const directorDetails = await fetchActorDetails(director.id);
+
+      await client.query(
+        `
+        INSERT INTO actors (
+            id,
+            name,
+            profile_path,
+            popularity,
+            biography,
+            birthday,
+            deathday,
+            place_of_birth,
+            gender,
+            imdb_id
+        )
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+        ON CONFLICT (id)
+        DO UPDATE SET
+            name = EXCLUDED.name,
+            profile_path = EXCLUDED.profile_path,
+            popularity = EXCLUDED.popularity,
+            biography = COALESCE(EXCLUDED.biography, actors.biography),
+            birthday = COALESCE(EXCLUDED.birthday, actors.birthday),
+            deathday = COALESCE(EXCLUDED.deathday, actors.deathday),
+            place_of_birth = COALESCE(EXCLUDED.place_of_birth, actors.place_of_birth),
+            gender = EXCLUDED.gender,
+            imdb_id = COALESCE(EXCLUDED.imdb_id, actors.imdb_id)
+        `,
+        [
+          director.id,
+          director.name,
+          director.profile_path || null,
+          director.popularity || 0,
+          directorDetails?.biography || null,
+          directorDetails?.birthday || null,
+          directorDetails?.deathday || null,
+          directorDetails?.place_of_birth || null,
+          directorDetails?.gender ?? director.gender ?? 0,
+          directorDetails?.imdb_id || null,
+        ],
+      );
+
+      await syncActorImages(client, director.id);
+    }
+  }
 
   // =========================
   // GENRES

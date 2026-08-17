@@ -7,7 +7,6 @@ import { useActorData } from "../../hooks/data/useActorData.js";
 
 export const useActorDetail = () => {
   const { id } = useParams();
-  console.log("Actor ID from useParams:", id); // Debugging line
   const navigate = useNavigate();
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);

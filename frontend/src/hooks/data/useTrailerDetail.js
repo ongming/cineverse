@@ -4,16 +4,20 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams, useNavigate } from "react-router-dom";
 import { useMovies } from "./useMovies.js";
 import { getMovieDetailsById } from "../../service/movie.js";
+import { getActorTrailerById } from "../../service/actor.js";
 import { calculateROI, formatUSDExact } from "../../utils/revenueUtils.js";
-import {
-  getMovieCast,
-  getRelatedMovies,
-} from "../../utils/movieRelationUtils.js";
+import { getRelatedMovies } from "../../utils/movieRelationUtils.js";
 
 const fetchTrailerDetail = async (id) => {
-  const movie = await getMovieDetailsById(id);
+  const [movie, cast] = await Promise.all([
+    getMovieDetailsById(id),
+    getActorTrailerById(id),
+  ]);
   console.log("Fetched movie details:", movie);
-  return movie;
+  return {
+    ...movie,
+    cast: cast ? [cast] : [],
+  };
 };
 
 export function useTrailerDetail() {

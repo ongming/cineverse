@@ -107,6 +107,7 @@ const getMovieDetailsById = async (movieId) => {
     name: movieDetails.title,
     images: TrailerImage,
     cast_members: actorImages,
+    director_path: formatUrl(movieDetails.director_path, IMAGE_BASE_W500),
     trailerKey: movieDetails.trailers[0]?.youtube_key
       ? movieDetails.trailers[0].youtube_key
       : null,

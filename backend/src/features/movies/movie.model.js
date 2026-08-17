@@ -89,7 +89,11 @@ const findTopRatedMovies = async (genreId) => {
 const findMovieDetailsById = async (movieId) => {
   const result = await pool.query(
     `
-    SELECT * FROM get_movie_details_by_id($1)
+    SELECT 
+      gmd.*,
+      da.profile_path AS director_path
+    FROM get_movie_details_by_id($1) gmd
+    LEFT JOIN actors da ON da.name = gmd.director_name
   `,
     [movieId],
   );

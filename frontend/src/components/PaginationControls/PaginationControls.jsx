@@ -1,6 +1,9 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-export default function PaginationControls({ page, setPage, hasMore }) {
+export default function PaginationControls({ page, setPage, hasMore, isPaged = 1 }) {
+  if (isPaged === 0) {
+    return null; // Hide pagination controls if there are no more items
+  }
   return (
     <div className="flex items-center justify-center gap-3 my-10 font-mono text-xs">
       {/* ⬅️ PREVIOUS PAGE BUTTON */}

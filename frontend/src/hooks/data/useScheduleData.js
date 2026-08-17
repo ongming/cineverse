@@ -5,14 +5,14 @@ import { formatReleaseDate } from "../../utils/revenueUtils.js";
 export default function useScheduleData() {
   const [selectedDateIndex, setSelectedDateIndex] = useState("ALL");
   const [customDate, setCustomDate] = useState("");
-  const { data, isLoading, isError } = useHomeData();
+  const { data, isLoading, isError, page, setPage } = useHomeData();
 
   const { nowPlaying, upcoming } = data || { nowPlaying: [], upcoming: [] };
 
   // Dynamic Date List (Hôm nay, Ngày mai, T6, T7, CN, T2, T3)
   const dateList = useMemo(() => {
     const days = [];
-    const dayNames = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
+    const dayNames = ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"];
     const today = new Date();
 
     for (let i = 0; i < 7; i++) {
@@ -67,5 +67,7 @@ export default function useScheduleData() {
     isError,
     nowPlaying,
     upcoming,
+    page,
+    setPage,
   }
 }

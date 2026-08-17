@@ -4,4 +4,5 @@ const actorsController = require("./actors.controller.js");
 
 router.get("/top", actorsController.getTopActors);
 router.get("/:id", actorsController.getActorById);
+router.get("/trailer/:trailerId", actorsController.findActorTrailerById);
 module.exports = router;

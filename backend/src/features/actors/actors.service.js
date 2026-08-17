@@ -40,7 +40,21 @@ const getActorById = async (id) => {
   };
 };
 
+const getActorTrailerById = async (trailerId) => {
+  const actor = await actorModel.findActorTrailerById(trailerId);
+
+  if (!actor) {
+    throw new NotFoundError(`Actor for trailer ID ${trailerId} not found`);
+  }
+
+  return {
+    ...actor,
+    profile_path: formatUrl(actor.profile_path, IMAGE_BASE_W500),
+  };
+};
+
 module.exports = {
   getTopActors,
   getActorById,
+  getActorTrailerById,
 };

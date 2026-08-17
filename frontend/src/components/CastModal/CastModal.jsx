@@ -13,33 +13,17 @@ export default function CastModal({
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Map movie cast names to full actor objects from actors.js
-  const fullCastList = useMemo(() => {
-    if (!movieCastNames || movieCastNames.length === 0) return actors;
-
-    // Filter actors matching the movie's cast names, plus default fallback actors
-    const matched = actors.filter((act) =>
-      movieCastNames.some(
-        (name) => name.toLowerCase() === act.name.toLowerCase(),
-      ),
-    );
-
-    // Combine matched actors with remaining actors list to form a full 30+ cast view
-    const remaining = actors.filter((act) => !matched.includes(act));
-    return [...matched, ...remaining];
-  }, [movieCastNames]);
-
   // Filter cast list by search query
   const filteredCast = useMemo(() => {
-    if (!searchTerm.trim()) return fullCastList;
-    return fullCastList.filter(
+    if (!searchTerm.trim()) return movieCastNames;
+    return movieCastNames.filter(
       (act) =>
         act.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         act.also_known_as?.some((aka) =>
           aka.toLowerCase().includes(searchTerm.toLowerCase()),
         ),
     );
-  }, [fullCastList, searchTerm]);
+  }, [movieCastNames, searchTerm]);
 
   // Handle actor click -> navigate directly to standalone /actor/:id page
   const handleActorClick = (actorId) => {

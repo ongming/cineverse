@@ -127,7 +127,7 @@ export default function Ranking() {
               {topRatedMovies.length === 0 ? (
                 <motion.div
                   key="empty"
-                  initial={{ opacity: 0 }}
+                  initial={{ opacity: 0 }}  
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   className="py-20 text-center font-mono text-gray-500 uppercase tracking-widest"
@@ -235,7 +235,7 @@ export default function Ranking() {
                           <motion.div
                             whileHover={{ scale: 1.04, rotate: isOdd ? 1.5 : -1.5 }}
                             transition={{ duration: 0.3, ease: "easeOut" }}
-                            className="shrink-0 w-full sm:w-[220px] lg:w-[260px]"
+                            className="shrink-0 w-full p-15 sm:p-0 sm:w-[220px] lg:w-[260px]"
                           >
                             <Link
                               to={`/trailer/${movie.id}`}

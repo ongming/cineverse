@@ -1,4 +1,8 @@
-import { fetchTopActors, fetchActorById } from "../api/actor.js";
+import {
+  fetchTopActors,
+  fetchActorById,
+  fetchActorTrailerById,
+} from "../api/actor.js";
 import { handleFetch } from "../utils/serviceUtils.js";
 
 export const getTopActors = async () => {
@@ -7,4 +11,8 @@ export const getTopActors = async () => {
 
 export const getActorById = async (id) => {
   return handleFetch(() => fetchActorById(id));
+};
+
+export const getActorTrailerById = async (trailerId) => {
+  return handleFetch(() => fetchActorTrailerById(trailerId));
 };

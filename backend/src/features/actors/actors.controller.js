@@ -26,7 +26,21 @@ const getActorById = async (req, res, next) => {
   }
 };
 
+const findActorTrailerById = async (req, res, next) => {
+  try {
+    const trailerId = req.params.trailerId;
+    const actor = await actorService.getActorTrailerById(trailerId);
+    res.status(200).json({
+      success: true,
+      data: actor,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getTopActors,
   getActorById,
+  findActorTrailerById,
 };

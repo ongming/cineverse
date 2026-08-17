@@ -62,11 +62,6 @@ export default function TrailerImages({ imageData = [] }) {
             </button>
           </>
         )}
-
-        {/* Drag Gesture Instruction Hint */}
-        <div className="absolute hidden group-hover:block bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-transparent backdrop-blur-md rounded-full  text-[10px] font-mono text-white pointer-events-none">
-          Vuốt trái / phải để chuyển ảnh
-        </div>
       </div>
 
       {/* Gallery Controls & Thumbnails Strip with 1-by-1 Smooth Slide */}
@@ -133,9 +128,8 @@ export default function TrailerImages({ imageData = [] }) {
           </button>
 
           <img
-            src={activeImage.file_path}
-            alt={movie.name}
-            className="max-w-full max-h-[90vh] object-contain rounded-2xl shadow-2xl border border-white/20"
+            src={activeImage}
+            className="max-w-full max-h-[90vh] object-contain rounded-sm shadow-2xl border border-white/20"
           />
         </div>
       )}

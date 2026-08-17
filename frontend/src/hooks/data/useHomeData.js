@@ -3,19 +3,17 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { movies } from "../../data/movies.js";
 import { actors } from "../../data/actors.js";
-import { movie_images } from "../../data/movieImages.js";
 import {
   getPopularMovies,
   getNowPlayingMovies,
   getUpcomingMovies,
-  getTopRatedMovies,
   getMovieOverviewStats,
 } from "../../service/movie.js";
 import { getTopActors } from "../../service/actor.js";
 
 const fetchHomeData = async (page) => {
-  // 1. Parallel fetch all 5 endpoints concurrently
-  const [heroMovies, nowPlaying, upcoming, topRated, overviewStats, topActors] =
+  // 1. Parallel fetch 5 endpoints concurrently
+  const [heroMovies, nowPlaying, upcoming, overviewStats, topActors] =
     await Promise.all([
       getPopularMovies(),
       getNowPlayingMovies({
@@ -24,19 +22,9 @@ const fetchHomeData = async (page) => {
       getUpcomingMovies({
         page: page,
       }),
-      getTopRatedMovies(),
       getMovieOverviewStats(),
       getTopActors(),
     ]);
-
-  console.log("Fetched home data:", {
-    heroMovies,
-    nowPlaying,
-    upcoming,
-    topRated,
-    overviewStats,
-    topActors,
-  });
 
   // 3. Featured Single Movie of the Week
   const featuredMovie = heroMovies ? heroMovies[0] : null;
@@ -47,7 +35,6 @@ const fetchHomeData = async (page) => {
   return {
     heroMovies,
     nowPlaying,
-    topRated,
     upcoming,
     featuredMovie,
     popularActors,

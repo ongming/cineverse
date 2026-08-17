@@ -87,24 +87,24 @@ export default function CustomDatePicker({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full h-full py-3 px-2 rounded-xl flex flex-col items-center justify-center border cursor-pointer transition-all duration-300 ${
+        className={`w-full h-full py-3 px-2 rounded-xl flex items-center justify-center cursor-pointer transition-all duration-300 ${
           isActive
-            ? "bg-cyan-neon/15 border-cyan-neon text-cyan-neon shadow-[0_0_15px_rgba(0,229,229,0.3)] scale-105"
-            : "bg-[#181a22] border-[#292d3e] text-gray-300 hover:bg-[#222533] hover:text-white hover:border-cyan-neon/50"
+            ? " border-cyan-neon text-cyan-neon scale-105"
+            : " text-gray-300  hover:text-white hover:border-cyan-neon/50 hover:scale-110 transition-transform duration-300"
         }`}
       >
-        <span className="text-[11px] font-semibold text-cyan-neon mb-0.5 flex items-center gap-1">
-          <Calendar className="w-3.5 h-3.5 text-cyan-neon" />
-          <span>{selectedDate ? "Đã chọn" : "Ngày khác"}</span>
+        <span className="text-[11px] font-semibold text-white mb-0.5 flex items-center gap-1">
+          <Calendar className={`w-3.5 h-3.5 ${isActive ? "text-cyan-400 drop-shadow-[0_0_8px_rgba(0,229,229,0.9)]" : "text-white"}`} />
+          <span>{selectedDate ? "" : "Ngày khác"}</span>
         </span>
-        <span className="text-sm font-black font-mono tracking-tight text-white">
-          {selectedDate ? selectedDate.slice(0, 5) : "Chọn ngày"}
+        <span className="text-sm font-black font-mono tracking-tight text-cyan-400 drop-shadow-[0_0_8px_rgba(0,229,229,0.9)]">
+          {selectedDate ? selectedDate.slice(0, 5) : ""}
         </span>
       </button>
-        {console.log("CustomDatePicker selectedDate:", selectedDate)}
+      {console.log("CustomDatePicker selectedDate:", selectedDate)}
       {/* Cyberpunk Dark Theme Calendar Modal Dropdown */}
       {isOpen && (
-        <div className="absolute top-full right-0 mt-3 w-[300px] bg-[#12141a]/95 backdrop-blur-md border border-[#2b3042] rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.8)] p-4 z-[1000] animate-in fade-in zoom-in-95 duration-200">
+        <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-3 w-[300px] bg-[#12141a]/95 backdrop-blur-md border border-[#2b3042] rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.8)] p-4 z-[1000] animate-in fade-in zoom-in-95 duration-200">
           {/* Calendar Header */}
           <div className="flex items-center justify-between border-b border-[#222736] pb-3 mb-3">
             <button

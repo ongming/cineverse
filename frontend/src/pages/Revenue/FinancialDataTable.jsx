@@ -5,7 +5,7 @@ import PaginationControls from "../../components/PaginationControls/PaginationCo
 
 export default function FinancialDataTable({ rankedMovies, page, setPage , total_movies}) {
   return (
-    <div className="max-w-7xl mx-auto bg-[#12141a] border border-[#222533] rounded-2xl p-2 sm:p-6 shadow-2xl py-4">
+    <div className="max-w-7xl mx-auto bg-[#12141a] border border-[#222533] rounded-lg p-2 sm:p-6 shadow-2xl py-4">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
           <Layers className="w-5 h-5 text-amber-400" />

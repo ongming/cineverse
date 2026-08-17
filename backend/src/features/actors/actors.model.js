@@ -12,6 +12,7 @@ const findTopActors = async (limit = 20) => {
 };
 
 const findActorById = async (id) => {
+  const actorId = Math.max(1, parseInt(id, 10) || 1);
   const result = await pool.query(
     `
     SELECT 
@@ -39,12 +40,28 @@ const findActorById = async (id) => {
     FROM actors a
     WHERE a.id = $1;
   `,
-    [id],
+    [actorId],
   );
   return result.rows[0];
+};
+
+const findActorTrailerById = async (trailerId) => {
+  const trailerid = Math.max(1, parseInt(trailerId, 10) || 1);
+  const result = await pool.query(
+    `
+    SELECT mc.*, a.name, a.profile_path
+    FROM movie_cast mc
+    JOIN actors a ON mc.actor_id = a.id
+    WHERE mc.movie_id = $1
+    ORDER BY mc.cast_order ASC
+    `,
+    [trailerid],
+  );
+  return result.rows;
 };
 
 module.exports = {
   findTopActors,
   findActorById,
+  findActorTrailerById,
 };
