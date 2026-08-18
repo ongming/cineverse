@@ -10,5 +10,6 @@ router.get("/now-playing", movieController.getNowPlayingMovies);
 router.get("/upcoming", movieController.getUpcomingMovies);
 router.get("/top-rated", movieController.getTopRatedMovies);
 router.get("/details/:id", movieController.getMovieDetailsById);
+router.get("/similar/:id", movieController.getSimilarMovies);
 
 module.exports = router;

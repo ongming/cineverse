@@ -12,7 +12,6 @@ const getPopularMovies = async (req, res, next) => {
   }
 };
 
-
 const getNowPlayingMovies = async (req, res, next) => {
   try {
     const { page } = req.query;
@@ -39,7 +38,6 @@ const getUpcomingMovies = async (req, res, next) => {
   }
 };
 
-
 const getTopRatedMovies = async (req, res, next) => {
   try {
     const { genreId } = req.query;
@@ -54,7 +52,7 @@ const getTopRatedMovies = async (req, res, next) => {
 };
 
 const getMovieDetailsById = async (req, res, next) => {
-  try{
+  try {
     const { id } = req.params;
     const movieDetails = await movieService.getMovieDetailsById(id);
     res.status(200).json({
@@ -91,6 +89,19 @@ const searchMovies = async (req, res, next) => {
   }
 };
 
+const getSimilarMovies = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const similarMovies = await movieService.getSimilarMovies(id);
+    res.status(200).json({
+      success: true,
+      data: similarMovies,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getPopularMovies,
   getNowPlayingMovies,
@@ -99,4 +110,5 @@ module.exports = {
   getMovieDetailsById,
   getMovieOverviewStats,
   searchMovies,
+  getSimilarMovies,
 };

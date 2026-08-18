@@ -130,6 +130,22 @@ const findMoviesBySearch = async (query) => {
   return result.rows;
 };
 
+const findSimilarMovies = async (movieId) => {
+  const result = await pool.query(
+    `
+    SELECT * FROM movies
+    WHERE id != $1
+      AND genre_ids && (  
+        SELECT genre_ids FROM movies WHERE id = $1
+      )
+    ORDER BY popularity DESC
+    LIMIT 10;
+  `,
+    [movieId],
+  );
+  return result.rows;
+}
+
 module.exports = {
   findPopularMovies,
   findUpcomingMovies,
@@ -138,4 +154,5 @@ module.exports = {
   findMovieDetailsById,
   findMovieOverviewStats,
   findMoviesBySearch,
+  findSimilarMovies,
 };

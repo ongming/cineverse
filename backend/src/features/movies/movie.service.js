@@ -130,6 +130,21 @@ const searchMovies = async (query) => {
   });
 };
 
+const getSimilarMovies = async (movieId) => {
+  const similarMovies = await movieModel.findSimilarMovies(movieId);
+  if (!similarMovies) {
+    throw new NotFoundError(`No similar movies found for movie ID ${movieId}`);
+  }
+
+  return similarMovies.map((movie) => {
+    const fullPoster = formatUrl(movie.poster_path, IMAGE_BASE_W500);
+    return {
+      ...movie,
+      poster_path: fullPoster,
+    };
+  });
+}
+
 module.exports = {
   getPopularMovies,
   getNowPlayingMovies,
@@ -138,4 +153,5 @@ module.exports = {
   getMovieDetailsById,
   getMovieOverviewStats,
   searchMovies,
+  getSimilarMovies,
 };
