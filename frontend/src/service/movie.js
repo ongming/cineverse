@@ -6,6 +6,7 @@ import {
   fetchMovieDetailsById,
   fetchMovieOverviewStats,
   fetchSearchMovies,
+  fetchSimilarMovies,
 } from "../api/movie";
 import { handleFetch } from "../utils/serviceUtils.js";
 
@@ -29,4 +30,7 @@ export const getMovieOverviewStats = async () => {
 };
 export const searchMovies = async (query) => {
   return handleFetch(() => fetchSearchMovies(query));
+};
+export const getSimilarMovies = async (id) => {
+  return handleFetch(() => fetchSimilarMovies(id));
 };

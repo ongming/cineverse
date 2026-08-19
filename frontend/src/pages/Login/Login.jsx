@@ -1,122 +1,115 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { login as loginService } from "../../service/authService.js";
-import { useAuth } from "../../context/AuthContext.jsx";
-import { Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, Film } from "lucide-react";
+import CineverseLogo from "../../components/Header/CineverseLogo.jsx";
+import useLogin from "../../hooks/auth/useLogin.js";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, EffectFade } from "swiper/modules";
+import LoginPanel from "./LoginPanel.jsx";
+import RegisterPanel from "./RegisterPanel.jsx";
+import { useHomeData } from "../../hooks/data/useHomeData.js";
+
+import "swiper/css";
+import "swiper/css/effect-fade";
 
 export default function Login() {
-  const navigate = useNavigate();
-  const { login } = useAuth();
-  const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [activePanel, setActivePanel] = useState("login"); // "login" | "register"
+  const { data: homeData, isLoading, isError } = useHomeData();
+  const { heroMovies } = homeData || {};
+  const movieBackgroundImage = heroMovies?.map((movie) => movie.banner);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const user = loginService(email, password);
-    if (!user) {
-      alert("Email hoặc mật khẩu không đúng. Vui lòng thử lại.");
-      return;
-    }
-    login(user);
-    alert("Đăng nhập thành công! Chào mừng bạn.");
-    navigate("/");
-  };
+  const {
+    navigate,
+    email,
+    setEmail,
+    password,
+    setPassword,
+    handleSubmit,
+    showPassword,
+    setShowPassword,
+  } = useLogin();
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-black text-white font-mono">
+        <p className="text-lg">Đang tải dữ liệu...</p>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-black text-white font-mono">
+        <p className="text-lg">Đã xảy ra lỗi khi tải dữ liệu.</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="relative min-h-[calc(100vh-160px)] flex justify-center items-center bg-[#0d0d0d] p-[40px_20px] z-10">
-      {/* Background layer */}
-      <div className="absolute inset-0 bg-[#0d0d0d]/80 pointer-events-none"></div>
+    <div className="relative min-h-screen grid grid-cols-1 lg:grid-cols-12 bg-transparent text-white overflow-hidden">
+      <div className="absolute inset-0 z-0">
+        <Swiper
+          modules={[Autoplay, EffectFade]}
+          effect="fade"
+          autoplay={{
+            delay: 3000,
+            disableOnInteraction: false,
+          }}
+          className="inset-0 top-0 w-full h-full z-0 overflow-hidden"
+        >
+          {movieBackgroundImage?.map((image, index) => (
+            <SwiperSlide key={index}>
+              <img
+                src={image}
+                alt={`Cineverse Backdrop ${index + 1}`}
+                className="w-full h-full object-cover scale-105"
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
+      {/* Multi-stage Dark Gradient Overlays */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#0b0c10] via-black/30 to-black/60 z-10 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#0b0c10]/90 lg:via-[#0b0c10]/70 to-[#0b0c10] z-10 pointer-events-none" />
 
-      {/* Login Card */}
-      <div className="relative z-10 w-full max-w-[440px] bg-[#12141a]/90 border border-white/10 rounded-2xl shadow-2xl backdrop-blur-xl overflow-hidden">
-        <div className="p-10">
-          <h2 className="text-white text-2xl font-bold text-center mb-7 tracking-tight">Chào mừng quay lại!</h2>
+      {/* LEFT PANEL: Cinematic Full-Bleed Movie Backdrop (~60% Desktop) */}
+      <div className="hidden lg:block lg:col-span-7 xl:col-span-8 relative z-20">
+        {/* Top-Left Overlaid Logo */}
+        <Link
+          to="/"
+          className="absolute top-10 left-10 shrink-0 flex items-center gap-2.5 no-underline group mr-4 xl:mr-8"
+        >
+          <CineverseLogo className="w-[36px] xl:w-[42px] h-[36px] xl:h-[42px] transition-all duration-400" />
+          <span className="font-extrabold text-lg sm:text-xl tracking-wider font-mono">
+            <span className="text-white">CINE</span>
+            <span className="text-amber-400">VERSE</span>
+          </span>
+        </Link>
 
-          <form onSubmit={handleSubmit}>
-            <div className="mb-5 text-left">
-              <label className="block text-[11px] font-bold text-[#8a90a2] tracking-wider mb-2 uppercase">EMAIL</label>
-              <div className="relative flex items-center bg-[#0a0c10]/70 border border-white/12 rounded-lg transition-all focus-within:border-amber-400 focus-within:shadow-[0_0_10px_rgba(255,184,0,0.25)] focus-within:bg-[#0c0e14]/90">
-                <span className="px-3.5 text-[#6c7284] flex items-center justify-center">
-                  <Mail className="w-4 h-4" />
-                </span>
-                <input
-                  className="flex-1 py-3.5 pr-3.5 bg-transparent border-none outline-none text-white text-sm placeholder:text-[#4a4f5f]"
-                  type="email"
-                  placeholder="Nhập email của bạn"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-            </div>
+        {/* Bottom Cinematic Tagline */}
+        <div className="absolute bottom-12 left-10 z-20 max-w-3xl space-y-2 font-mono">
+          <h1 className="text-xl font-black tracking-tight text-white leading-tight">
+            Đây là sản phẩm được hoàn thiện bằng dữ liệu từ TMDB API, không có
+            mục đích thương mại.
+          </h1>
+        </div>
+      </div>
 
-            <div className="mb-5 text-left">
-              <label className="block text-[11px] font-bold text-[#8a90a2] tracking-wider mb-2 uppercase">MẬT KHẨU</label>
-              <div className="relative flex items-center bg-[#0a0c10]/70 border border-white/12 rounded-lg transition-all focus-within:border-amber-400 focus-within:shadow-[0_0_10px_rgba(255,184,0,0.25)] focus-within:bg-[#0c0e14]/90">
-                <span className="px-3.5 text-[#6c7284] flex items-center justify-center">
-                  <Lock className="w-4 h-4" />
-                </span>
-                <input
-                  className="flex-1 py-3.5 pr-3.5 bg-transparent border-none outline-none text-white text-sm placeholder:text-[#4a4f5f]"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Nhập mật khẩu"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-                <button
-                  type="button"
-                  className="bg-transparent border-none text-[#6c7284] text-base px-3.5 cursor-pointer transition-colors hover:text-white"
-                  onClick={() => setShowPassword(!showPassword)}
-                  title={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
-                >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
-              </div>
-            </div>
-
-            <div className="text-right -mt-1.5 mb-6">
-              <a
-                href="#forgot"
-                onClick={(e) => e.preventDefault()}
-                className="text-[#00e5ff] text-xs font-semibold no-underline hover:underline hover:opacity-80 transition-all"
-              >
-                Quên mật khẩu?
-              </a>
-            </div>
-
-            <button
-              type="submit"
-              className="w-full py-3.5 bg-gradient-to-r from-amber-400 to-yellow-400 border-none rounded-lg text-black text-sm font-extrabold tracking-widest cursor-pointer transition-all shadow-[0_4px_20px_rgba(255,184,0,0.4)] font-mono hover:-translate-y-0.5 hover:shadow-[0_6px_25px_rgba(255,184,0,0.6)] active:translate-y-0"
-            >
-              ĐẮNG NHẬP
-            </button>
-          </form>
-
-          {/* Social Login Divider */}
-          <div className="relative text-center my-7 before:content-[''] before:absolute before:top-1/2 before:left-0 before:w-full before:h-[1px] before:bg-white/10">
-            <span className="relative bg-[#12141a] px-3 text-[#6c7284] text-[11px] font-bold tracking-wider">HOẶC TIẾP TỤC VỚI</span>
+      {/* RIGHT PANEL: 200% GPU Sliding Track Frame (~40% Desktop) */}
+      <div className="lg:col-span-5 xl:col-span-4 h-full relative overflow-hidden border-l border-white/5 z-20">
+        <div
+          className={`flex w-[200%] h-full transition-transform duration-500 ease-in-out ${
+            activePanel === "login" ? "translate-x-0" : "-translate-x-1/2"
+          }`}
+        >
+          {/* Panel 1: Login Form (1/2 Width = 100% Column) */}
+          <div className="w-1/2 h-full flex flex-col justify-center px-6 sm:px-14 py-8 overflow-y-auto">
+            <LoginPanel onSwitchToRegister={() => setActivePanel("register")} />
           </div>
 
-          {/* Social Buttons */}
-          <div className="flex gap-4 justify-center mb-6">
-            <button className="flex-1 flex items-center justify-center p-3 bg-white/5 border border-white/10 rounded-lg cursor-pointer transition-all hover:bg-white/10 hover:border-white/20 hover:-translate-y-0.5" title="Đăng nhập với Google">
-              <svg width="20" height="20" viewBox="0 0 24 24">
-                <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z" />
-                <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.7-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z" />
-                <path fill="#FBBC05" d="M5.6 14.8c-.3-.8-.4-1.8-.4-2.8s.1-2 .4-2.8L1.9 6.3C.7 8.7 0 10.3 0 12s.7 3.3 1.9 5.7l3.7-2.9z" />
-                <path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.4-6.4-5.2L1.9 16C3.7 19.7 7.5 23 12 23z" />
-              </svg>
-            </button>
-          </div>
-
-          {/* Registration Footer Link */}
-          <div className="text-center text-xs text-[#8a90a2] mt-4 pt-4 border-t border-white/6">
-            <span>Chưa có tài khoản? </span>
-            <Link to="/register" className="text-[#00e5ff] font-bold no-underline ml-1 hover:text-amber-400 hover:underline transition-colors">
-              Đăng ký ngay
-            </Link>
+          {/* Panel 2: Register Form (1/2 Width = 100% Column) */}
+          <div className="w-1/2 h-full flex flex-col justify-center px-6 sm:px-14 py-8 overflow-y-auto">
+            <RegisterPanel onSwitchToLogin={() => setActivePanel("login")} />
           </div>
         </div>
       </div>

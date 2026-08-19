@@ -5,6 +5,7 @@ import { useMovieReviews } from "../../hooks/data/useMovieReviews.js";
 import MovieCard from "../../components/MovieCard/MovieCard.jsx";
 import CastModal from "../../components/CastModal/CastModal.jsx";
 import TrailerVideo from "./trailerVideo.jsx";
+import YouMightAlsoLike from "./YouMightAlsoLike.jsx";
 import TrailerImages from "./TrailerImages.jsx";
 import { formatReleaseDate } from "../../utils/revenueUtils.js";
 import {
@@ -320,41 +321,16 @@ export default function TrailerDetail() {
       {/* DIVIDER LINE */}
       <hr className="max-w-7xl mx-auto border-white/10 mb-12" />
 
-      {/* SECTION 3: MORE LIKE THIS (Fix #4: Accent bar changed to amber matching site hierarchy) */}
-      <div className="max-w-7xl mx-auto mb-12">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg sm:text-xl font-bold text-white font-mono uppercase tracking-wide flex items-center gap-2">
-            <span className="w-1.5 h-5 bg-amber-400 rounded-sm" />
-            PHIM TƯƠNG TỰ ĐỀ XUẤT
-          </h2>
-          <div className="flex items-center gap-2 font-mono">
-            <button
-              type="button"
-              className="p-2 border border-white/10 hover:border-amber-400 rounded-xl text-gray-300 hover:text-white transition-all cursor-pointer"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            <button
-              type="button"
-              className="p-2 border border-white/10 hover:border-amber-400 rounded-xl text-gray-300 hover:text-white transition-all cursor-pointer"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-      </div>
+      <YouMightAlsoLike trailers={movie.similarMovies} />
 
-      {/* DIVIDER LINE */}
-      <hr className="max-w-7xl mx-auto border-white/10 mb-12" />
-
-      {/* SECTION 4: USER REVIEWS & COMMENTS (Fix #1: Borderless split with vertical divider line) */}
+      {/* REVIEWS & COMMENTS SECTION */}
       <div className="max-w-7xl mx-auto space-y-8">
         <h2 className="text-lg sm:text-xl font-bold text-white font-mono uppercase tracking-wide flex items-center gap-2">
           <Award className="w-5 h-5 text-amber-400" />
           ĐÁNH GIÁ & BÌNH LUẬN NGUỜI XEM
         </h2>
 
-        {/* Top Split: Left Review Stats, Right Add Comment Form (Borderless with vertical divider) */}
+        {/* Top Split: Left Review Stats, Right Add Comment Form */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8 pb-8 border-b border-white/10 relative">
           {/* Left Column: Review Score Overview (4 Cols) */}
           <div className="lg:col-span-4 flex flex-col justify-between text-center sm:text-left pr-0 lg:pr-6">

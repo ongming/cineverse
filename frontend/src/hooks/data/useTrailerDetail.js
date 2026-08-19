@@ -2,21 +2,18 @@
 import { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, useNavigate } from "react-router-dom";
-import { useMovies } from "./useMovies.js";
-import { getMovieDetailsById } from "../../service/movie.js";
-import { getActorTrailerById } from "../../service/actor.js";
+import { getMovieDetailsById, getSimilarMovies } from "../../service/movie.js";
 import { calculateROI, formatUSDExact } from "../../utils/revenueUtils.js";
 import { getRelatedMovies } from "../../utils/movieRelationUtils.js";
 
 const fetchTrailerDetail = async (id) => {
-  const [movie, cast] = await Promise.all([
+  const [movie, similarMovies] = await Promise.all([
     getMovieDetailsById(id),
-    getActorTrailerById(id),
+    getSimilarMovies(id),
   ]);
-  console.log("Fetched movie details:", movie);
   return {
     ...movie,
-    cast: cast ? [cast] : [],
+    similarMovies: similarMovies || [],
   };
 };
 
@@ -37,7 +34,7 @@ export function useTrailerDetail() {
     staleTime: 5 * 60 * 1000, // 5 minutes cache
     gcTime: 10 * 60 * 1000, // 10 minutes garbage collection
   });
-
+    console.log("Fetched movie details:", movie);
   const movieData = useMemo(() => {
     if (!movie) return null;
     return {

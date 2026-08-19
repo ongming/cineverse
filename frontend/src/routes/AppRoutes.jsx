@@ -4,7 +4,8 @@ import TrailerDetail from "../pages/TrailerDetail/TrailerDetail.jsx";
 import ActorDetail from "../pages/ActorDetail/ActorDetail.jsx";
 import MovieListCategoryPage from "../pages/Home/MovieList.jsx";
 import Search from "../pages/SearchPage/Search.jsx";
-import MainLayout from "../layouts/MainLayout/MainLayout.jsx";
+import MainLayout from "../layouts/MainLayout.jsx";
+import AuthLayout from "../layouts/AuthLayout.jsx";
 import Category from "../pages/Category/Category.jsx";
 import Ranking from "../pages/Ranking/Ranking.jsx";
 import Revenue from "../pages/Revenue/Revenue.jsx";
@@ -27,7 +28,6 @@ function AppRoutes() {
         <Route path="/ranking" element={<Ranking />} />
         <Route path="/revenue" element={<Revenue />} />
         <Route path="/schedule" element={<Schedule />} />
-        <Route path="/login" element={<Login />} />
 
         <Route
           path="/watchlist"
@@ -37,6 +37,9 @@ function AppRoutes() {
             </ProtectedRoute>
           }
         />
+      </Route>
+      <Route element={<AuthLayout />}>
+        <Route path="/login" element={<Login />} />
       </Route>
     </Routes>
   );

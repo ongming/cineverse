@@ -2,7 +2,7 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
+import { Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import MovieCardHover from "./MovieCardHover.jsx";
@@ -40,9 +40,16 @@ export default function MovieRow({ title, movies = [], viewAllLink = null }) {
       {/* Swiper Horizontal Carousel */}
       <div className="relative">
         <Swiper
-          modules={[Navigation]}
+          modules={[Navigation, Autoplay]}
           slidesPerView={2.2}
           spaceBetween={16}
+          autoplay={{
+            delay: 1, // 🟢 3000ms = slides every 3 seconds
+            disableOnInteraction: false, // 🟢 Keeps autoplay running even after user swipes!
+            pauseOnMouseEnter: true, // 🟢 Pauses sliding when mouse hovers over a movie card!
+          }}
+          loop={true}
+          speed={3000}                    // 🟢 6000ms = 6-second ultra-slow gliding speed!
           breakpoints={{
             640: { slidesPerView: 3.2, spaceBetween: 20 },
             1024: { slidesPerView: 5.2, spaceBetween: 24 },

@@ -29,3 +29,7 @@ export function fetchMovieOverviewStats() {
 export function fetchSearchMovies(query) {
   return axios.get("/api/movies/search", { params: { q: query } });
 }
+
+export function fetchSimilarMovies(id) {
+  return axios.get(`/api/movies/similar/${id}`);
+}
