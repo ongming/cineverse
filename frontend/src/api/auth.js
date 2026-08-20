@@ -11,3 +11,15 @@ export const fetchRegister = async (data) => {
 export const fetchCurrentUser = async () => {
   return axios.get("/api/auth/me");
 };
+
+export const fetchSendOTP = async (data) => {
+  return axios.post("/api/auth/send-otp", data);
+};
+
+export const fetchResetPassword = async (data) => {
+  return axios.post("/api/auth/reset-password", data);
+};
+
+export const fetchGoogleLogin = async (credential) => {
+  return axios.post("/api/auth/google", { credential });
+};

@@ -19,8 +19,8 @@ export function AuthProvider({ children }) {
         return;
       }
       try {
-        const { userData } = await getCurrentUser();
-        setUser(userData);
+        const { user } = await getCurrentUser();
+        setUser(user);
       } catch (error) {
         localStorage.removeItem("token");
         setToken(null);

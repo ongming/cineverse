@@ -483,3 +483,16 @@ CREATE TRIGGER trg_ratings_updated_at
 BEFORE UPDATE ON ratings
 FOR EACH ROW
 EXECUTE FUNCTION set_updated_at();
+
+
+-- =========================================================
+-- 12. otp_verifications
+-- =========================================================
+
+CREATE TABLE IF NOT EXISTS otp_verifications (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) NOT NULL,
+  otp_code VARCHAR(6) NOT NULL,
+  expires_at TIMESTAMP NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

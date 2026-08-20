@@ -1,33 +1,22 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Mail, Lock, Eye, EyeOff, Film } from "lucide-react";
+import { Link } from "react-router-dom";
 import CineverseLogo from "../../components/Header/CineverseLogo.jsx";
-import useLogin from "../../hooks/auth/useLogin.js";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade } from "swiper/modules";
 import LoginPanel from "./LoginPanel.jsx";
 import RegisterPanel from "./RegisterPanel.jsx";
+import ForgotPasswordPanel from "./ForgotPasswordPanel.jsx";
 import { useHomeData } from "../../hooks/data/useHomeData.js";
+import { motion } from "framer-motion";
 
 import "swiper/css";
 import "swiper/css/effect-fade";
 
-export default function Login() {
-  const [activePanel, setActivePanel] = useState("login"); // "login" | "register"
+export default function Login() { 
+  const [activePanel, setActivePanel] = useState("login"); // "login" | "register" | "forgot"
   const { data: homeData, isLoading, isError } = useHomeData();
   const { heroMovies } = homeData || {};
   const movieBackgroundImage = heroMovies?.map((movie) => movie.banner);
-
-  const {
-    navigate,
-    email,
-    setEmail,
-    password,
-    setPassword,
-    handleSubmit,
-    showPassword,
-    setShowPassword,
-  } = useLogin();
 
   if (isLoading) {
     return (
@@ -95,24 +84,43 @@ export default function Login() {
         </div>
       </div>
 
-      {/* RIGHT PANEL: 200% GPU Sliding Track Frame (~40% Desktop) */}
-      <div className="lg:col-span-5 xl:col-span-4 h-full relative overflow-hidden border-l border-white/5 z-20">
+      {/* RIGHT PANEL: 300% GPU Sliding Track Frame (~40% Desktop) */}
+      <motion.div
+        className="lg:col-span-5 xl:col-span-4 h-full relative overflow-hidden border-l border-white/5 z-20"
+        initial={{ x: 300 }}
+        animate={{ x: 0 }}
+        transition={{ duration: 0.5, ease: "easeInOut" }}
+      >
         <div
-          className={`flex w-[200%] h-full transition-transform duration-500 ease-in-out ${
-            activePanel === "login" ? "translate-x-0" : "-translate-x-1/2"
+          className={`flex w-[300%] h-full transition-transform duration-500 ease-in-out ${
+            activePanel === "login"
+              ? "translate-x-0"
+              : activePanel === "register"
+                ? "-translate-x-1/3"
+                : "-translate-x-2/3"
           }`}
         >
-          {/* Panel 1: Login Form (1/2 Width = 100% Column) */}
-          <div className="w-1/2 h-full flex flex-col justify-center px-6 sm:px-14 py-8 overflow-y-auto">
-            <LoginPanel onSwitchToRegister={() => setActivePanel("register")} />
+          {/* Panel 1: Login Form (1/3 Width = 100% Column) */}
+          <div className="w-1/3 h-full flex flex-col justify-center px-6 sm:px-14 py-8 overflow-y-auto">
+            <LoginPanel
+              onSwitchToRegister={() => setActivePanel("register")}
+              onSwitchToForgot={() => setActivePanel("forgot")}
+            />
           </div>
 
-          {/* Panel 2: Register Form (1/2 Width = 100% Column) */}
-          <div className="w-1/2 h-full flex flex-col justify-center px-6 sm:px-14 py-8 overflow-y-auto">
+          {/* Panel 2: Register Form (1/3 Width = 100% Column) */}
+          <div className="w-1/3 h-full flex flex-col justify-center px-6 sm:px-14 py-8 overflow-y-auto">
             <RegisterPanel onSwitchToLogin={() => setActivePanel("login")} />
           </div>
+
+          {/* Panel 3: Forgot Password Form (1/3 Width = 100% Column) */}
+          <div className="w-1/3 h-full flex flex-col justify-center px-6 sm:px-14 py-8 overflow-y-auto">
+            <ForgotPasswordPanel
+              onSwitchToLogin={() => setActivePanel("login")}
+            />
+          </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

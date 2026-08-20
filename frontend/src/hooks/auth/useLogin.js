@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext.jsx";
+import useGoogleAuth from "./useGoogleAuth.js";
 
 export default function useLogin() {
   const { login } = useAuth();
@@ -10,6 +11,8 @@ export default function useLogin() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const loginWithGoogle = useGoogleAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,6 +30,7 @@ export default function useLogin() {
   };
 
   return {
+    login,
     navigate,
     email,
     setEmail,
@@ -37,5 +41,6 @@ export default function useLogin() {
     setShowPassword,
     isLoading,
     errorMessage,
+    loginWithGoogle,
   };
 }

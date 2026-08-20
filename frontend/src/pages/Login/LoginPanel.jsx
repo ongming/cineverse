@@ -3,7 +3,7 @@ import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import CineverseLogo from "../../components/Header/CineverseLogo.jsx";
 import useLogin from "../../hooks/auth/useLogin.js";
 
-export default function LoginPanel({ onSwitchToRegister }) {
+export default function LoginPanel({ onSwitchToRegister, onSwitchToForgot }) {
   const {
     email,
     setEmail,
@@ -14,6 +14,7 @@ export default function LoginPanel({ onSwitchToRegister }) {
     setShowPassword,
     isLoading,
     errorMessage,
+    loginWithGoogle,
   } = useLogin();
 
   return (
@@ -94,13 +95,13 @@ export default function LoginPanel({ onSwitchToRegister }) {
 
         {/* Forgot Password Link */}
         <div className="text-right pt-1">
-          <a
-            href="#forgot"
-            onClick={(e) => e.preventDefault()}
-            className="text-xs font-mono text-cyan-400 hover:underline transition-all"
+          <button
+            type="button"
+            onClick={onSwitchToForgot}
+            className="text-xs font-mono text-cyan-400 hover:underline transition-all cursor-pointer"
           >
             Quên mật khẩu?
-          </a>
+          </button>
         </div>
 
         {/* Error Message Feedback Banner */}
@@ -130,11 +131,14 @@ export default function LoginPanel({ onSwitchToRegister }) {
       </div>
 
       {/* Google Social Button */}
+
+      {/* Google Social Button */}
       <button
         type="button"
-        className="w-full flex items-center justify-center gap-3 py-3.5 bg-white/5 border border-white/10 hover:border-white/20 hover:bg-white/10 rounded-lg text-xs text-white transition-all"
+        onClick={loginWithGoogle}
+        className="w-full flex items-center justify-center gap-3 py-3 bg-white/5 border border-white/10 hover:border-white/20 hover:bg-white/10 rounded-lg text-xs text-white transition-all"
       >
-        <svg width="18" height="18" viewBox="0 0 24 24">
+        <svg width="16" height="16" viewBox="0 0 24 24">
           <path
             fill="#EA4335"
             d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"
@@ -152,7 +156,7 @@ export default function LoginPanel({ onSwitchToRegister }) {
             d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.4-6.4-5.2L1.9 16C3.7 19.7 7.5 23 12 23z"
           />
         </svg>
-        ĐẮNG NHẬP BẰNG GOOGLE
+        ĐĂNG KÝ BẰNG GOOGLE
       </button>
 
       {/* Registration Mirror Footer Link */}

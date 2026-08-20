@@ -22,6 +22,7 @@ export default function RegisterPanel({ onSwitchToLogin }) {
     handleSubmit,
     isLoading,
     errorMessage,
+    registerWithGoogle,
   } = useRegister();
 
   return (
@@ -213,6 +214,7 @@ export default function RegisterPanel({ onSwitchToLogin }) {
 
       {/* Google Social Button */}
       <button
+        onClick={registerWithGoogle}
         type="button"
         className="w-full flex items-center justify-center gap-3 py-3 bg-white/5 border border-white/10 hover:border-white/20 hover:bg-white/10 rounded-lg text-xs text-white transition-all"
       >
@@ -234,7 +236,7 @@ export default function RegisterPanel({ onSwitchToLogin }) {
             d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.4-6.4-5.2L1.9 16C3.7 19.7 7.5 23 12 23z"
           />
         </svg>
-        ĐĂNG KÝ BẰNG GOOGLE
+        ĐĂNG NHẬP BẰNG GOOGLE
       </button>
 
       {/* Login Mirror Footer Link */}
