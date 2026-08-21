@@ -1,120 +1,109 @@
 import { Link } from "react-router-dom";
-import { X, Star, Film, Play, Clock } from "lucide-react";
+import { X, Star, Play, Clock, Clapperboard } from "lucide-react";
 import { getAgeBadgeStyle } from "../../components/utils/getAgeBadgeStyle.js";
+import MovieCard from "../../components/MovieCard/MovieCard.jsx";
 
 export default function TrailerWatchList({
-  processedMovies,
+  processedMovies = [],
   handleRemoveMovie,
-  searchQuery,
+  searchQuery = "",
   onClearSearch,
+  suggestedMovies = [],
 }) {
+  console.log(
+    "TrailerWatchList rendered with processedMovies:",
+    processedMovies,
+  );
   return (
     <div className="max-w-7xl mx-auto">
       {processedMovies.length > 0 ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
+        /* Grid View */
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
           {processedMovies.map((movie) => (
-            <div key={movie.id} className="flex flex-col group">
-              {/* Poster Card Container */}
-              <div className="relative w-full aspect-[2/3] rounded-2xl overflow-hidden bg-[#0d0e12] border border-[#222533] hover:border-amber-400/60 shadow-xl transition-all duration-300 group-hover:-translate-y-1.5 group-hover:shadow-[0_12px_30px_rgba(255,184,0,0.2)]">
-                <img
-                  src={movie.image}
-                  alt={movie.name}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-
-                {/* Age Rating Badge (Top-Left) */}
-                <div
-                  className={`absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md text-[10px] font-black font-mono border backdrop-blur-md shadow-md ${getAgeBadgeStyle(
-                    movie.ageRating,
-                  )}`}
-                >
-                  {movie.ageRating || "P"}
-                </div>
-
-                {/* Delete X Button (Top-Right) */}
-                <button
-                  type="button"
-                  onClick={(e) => handleRemoveMovie(movie.id, e)}
-                  className="absolute top-2.5 right-2.5 p-1.5 rounded-full bg-black/70 hover:bg-red-600 text-gray-300 hover:text-white border border-white/10 hover:border-red-500 backdrop-blur-md transition-all duration-200 cursor-pointer shadow-lg hover:scale-110 z-10"
-                  title="Xóa khỏi danh sách"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-
-                {/* IMDb Rating Badge (Bottom-Right) */}
-                <div className="absolute bottom-2.5 right-2.5 bg-black/85 backdrop-blur-md px-2 py-0.5 rounded-lg border border-amber-400/40 text-amber-400 text-[11px] font-black font-mono flex items-center gap-1 shadow-md">
-                  <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                  <span>{movie.rating}</span>
-                </div>
-
-                {/* Play Overlay Button */}
-                <Link
-                  to={`/trailer/${movie.id}`}
-                  className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
-                >
-                  <div className="w-12 h-12 rounded-full bg-amber-400 text-black flex items-center justify-center shadow-[0_0_20px_rgba(255,184,0,0.6)] transform scale-75 group-hover:scale-100 transition-transform duration-300">
-                    <Play className="w-5 h-5 fill-current ml-0.5" />
-                  </div>
-                </Link>
-              </div>
-
-              {/* Movie Details Info */}
-              <div className="mt-3 text-left">
-                <h3 className="text-sm font-bold text-white group-hover:text-amber-400 transition-colors duration-200 line-clamp-1 uppercase font-mono tracking-wide">
-                  {movie.name}
-                </h3>
-
-                <div className="flex items-center gap-2 text-[11px] text-gray-400 font-mono mt-1">
-                  <span>{movie.year}</span>
-                  <span>•</span>
-                  <span className="flex items-center gap-1">
-                    <Clock className="w-3 h-3 text-gray-500" />
-                    {movie.duration}
-                  </span>
-                </div>
-
-                {/* Category Pills */}
-                <div className="flex flex-wrap gap-1 mt-2">
-                  {movie.genre?.slice(0, 2).map((g) => (
-                    <span
-                      key={g}
-                      className="px-2 py-0.5 rounded bg-[#181b26] text-gray-300 text-[10px] font-mono border border-[#272c3d]"
-                    >
-                      {g}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
+            <MovieCard
+              movie={movie}
+              onRemove={() => handleRemoveMovie(movie.id)}
+            />
           ))}
         </div>
       ) : (
-        /* Empty State Section */
-        <div className="text-center py-20 px-4 ">
-          <h3 className="text-xl font-bold text-white mb-2">
-            Danh sách theo dõi trống!
-          </h3>
-          <p className="text-gray-400 text-sm max-w-md mx-auto mb-6">
-            {searchQuery
-              ? `Không tìm thấy phim nào khớp với từ khóa "${searchQuery}".`
-              : "Bạn chưa lưu bộ phim nào. Hãy khám phá kho phim bom tấn phong phú tại CINEVERSE và nhấn lưu để xem sau."}
-          </p>
-          {searchQuery ? (
-            <button
-              type="button"
-              onClick={() => onClearSearch()}
-              className="px-5 py-2.5 bg-[#1e2230] hover:bg-[#282d40] text-amber-400 font-bold text-xs rounded-xl border border-amber-400/40 transition-colors"
-            >
-              Xóa từ khóa tìm kiếm
-            </button>
-          ) : (
-            <Link
-              to="/"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-amber-400 hover:bg-yellow-400 text-black font-black text-xs rounded-xl transition-all shadow-[0_0_20px_rgba(255,184,0,0.3)] hover:scale-105"
-            >
-              <Film className="w-4 h-4" />
-              <span>Khám Phá Phim Ngay</span>
-            </Link>
+        /* Empty State Section - Exactly Matching Screenshot */
+        <div className="space-y-12 py-2">
+          {/* Main Empty Box with 3D Slanted Card Background Tiles */}
+          <div className="relative overflow-hidden py-20 px-6 text-center">
+            {/* Background 3D Angled Movie Card Tiles Pattern (Matching Picture!) */}
+            <div className="absolute inset-0 pointer-events-none opacity-20 overflow-hidden select-none flex items-center justify-center">
+              <div className="flex gap-3 rotate-6 scale-140 -translate-y-4">
+                {[1, 2, 3, 4, 5].map((idx) => (
+                  <div
+                    key={idx}
+                    className="w-44 h-64 rounded-lg   bg-gradient-to-b from-white/10 to-white/2 shadow-2xl backdrop-blur-sm"
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Center Motif Emblem (Clapperboard with pencil icon) */}
+            <div className="relative z-10 mb-5 flex justify-center">
+              <div className="relative">
+                <Clapperboard className="w-24 h-24 text-gray-400/30 stroke-[1.2]" />
+              </div>
+            </div>
+
+            {/* Empty State Text */}
+            <div className="relative z-10 max-w-md mx-auto space-y-3">
+              <h3 className="text-xl sm:text-2xl font-bold text-white tracking-wide font-sans">
+                {searchQuery
+                  ? "Không tìm thấy phim phù hợp!"
+                  : "Danh sách của bạn đang trống"}
+              </h3>
+              <p className="text-xs sm:text-sm text-gray-400 leading-relaxed font-sans font-normal">
+                {searchQuery
+                  ? `Không tìm thấy bộ phim nào matching với từ khóa "${searchQuery}".`
+                  : "Bắt đầu xây dựng bộ sưu tập điện ảnh của riêng bạn bằng cách thêm những bộ phim yêu thích."}
+              </p>
+
+              {/* Cyan Rounded Pill Button (Matching Picture) */}
+              <div className="pt-4">
+                {searchQuery ? (
+                  <button
+                    type="button"
+                    onClick={() => onClearSearch()}
+                    className="px-6 py-2.5 bg-[#171a26] hover:bg-[#202536] text-cyan-400 font-bold text-xs rounded-full border border-cyan-400/40 transition-all cursor-pointer shadow-lg active:scale-95 font-sans"
+                  >
+                    Xóa từ khóa tìm kiếm
+                  </button>
+                ) : (
+                  <Link
+                    to="/"
+                    className="inline-flex items-center justify-center px-8 py-3 bg-[#38e8d8] hover:bg-[#2dd4c4] text-black font-extrabold text-sm rounded-full transition-all shadow-[0_0_25px_rgba(56,232,216,0.4)] hover:scale-105 active:scale-95 no-underline font-sans"
+                  >
+                    Khám Phá Phim Ngay
+                  </Link>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Suggested Movies Section (Matching Picture Exactly!) */}
+          {!searchQuery && (
+            <div className="space-y-6 pt-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold text-white tracking-wide font-sans">
+                  Gợi Ý Cho Bạn
+                </h3>
+              </div>
+
+              {/* 4 Vertical Movie Cards Grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+                {suggestedMovies?.slice(0, 4).map((movie) => (
+                  <MovieCard
+                    movie={movie}
+                    onRemove={null} // No remove button for suggested movies
+                  />
+                ))}
+              </div>
+            </div>
           )}
         </div>
       )}

@@ -58,7 +58,9 @@ export default function TrailerComments({ movieId }) {
 
               return (
                 <div key={starNum} className="flex items-center gap-2">
-                  <span className="w-3 text-gray-400 text-right">{starNum}</span>
+                  <span className="w-3 text-gray-400 text-right">
+                    {starNum}
+                  </span>
                   <div className="flex-1 bg-white/5 border border-white/10 h-1.5 rounded-full overflow-hidden">
                     <div
                       className={`h-full rounded-full transition-all duration-500 ${
@@ -91,7 +93,7 @@ export default function TrailerComments({ movieId }) {
               placeholder={`Chia sẻ cảm nghĩ của bạn về bộ phim ...`}
               rows="3"
               required
-              className="w-full bg-[#12141a] border border-white/10 focus:border-amber-400 rounded-xl p-3.5 text-xs sm:text-sm text-white placeholder-gray-500 focus:outline-none transition-all resize-none font-mono"
+              className="w-full bg-[#12141a] border border-white/10 focus:border-amber-400 rounded-md p-3.5 text-xs sm:text-sm text-white placeholder-gray-500 focus:outline-none transition-all resize-none font-mono"
             />
 
             {/* Form Actions Toolbar */}
@@ -150,7 +152,7 @@ export default function TrailerComments({ movieId }) {
           Đang tải bình luận...
         </div>
       ) : reviews.length === 0 ? (
-        <div className="text-center py-8 text-xs font-mono text-gray-500 border border-dashed border-white/10 rounded-xl">
+        <div className="text-center py-8 text-xs font-mono text-gray-500 border border-dashed border-white/10 rounded-md">
           Chưa có bình luận nào cho bộ phim này. Hãy là người đầu tiên đánh giá!
         </div>
       ) : (
@@ -170,7 +172,7 @@ export default function TrailerComments({ movieId }) {
             return (
               <div
                 key={rev.id}
-                className="bg-[#0a0b0e] border border-[#1e2230] hover:border-[#2b3145] rounded-2xl p-5 transition-all space-y-3"
+                className="bg-[#0a0b0e] border border-[#1e2230] hover:border-[#2b3145] rounded-md p-5 transition-all space-y-3"
               >
                 {/* Comment Header */}
                 <div className="flex items-center justify-between gap-4">
@@ -203,26 +205,6 @@ export default function TrailerComments({ movieId }) {
                 <p className="text-gray-300 text-xs sm:text-sm leading-relaxed font-mono">
                   {textContent}
                 </p>
-
-                {/* Comment Footer Controls (Reply, Report) */}
-                <div className="flex items-center gap-5 pt-2 font-mono text-xs text-gray-400">
-                  <button
-                    type="button"
-                    onClick={() => alert(`Phản hồi bình luận của ${author}`)}
-                    className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer"
-                  >
-                    <MessageSquare className="w-3.5 h-3.5" />
-                    <span>Trả lời</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => alert("Đã gửi báo cáo vi phạm!")}
-                    className="ml-auto hover:text-red-400 transition-colors cursor-pointer"
-                    title="Báo cáo bình luận"
-                  >
-                    <Flag className="w-3.5 h-3.5" />
-                  </button>
-                </div>
               </div>
             );
           })}

@@ -64,14 +64,12 @@ export default function Ranking() {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="border-b border-white/10 pb-8 mb-12 flex flex-col md:flex-row items-start md:items-end justify-between gap-6"
         >
-          <div>
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight text-white m-0 leading-none">
-              BẢNG XẾP HẠNG
-            </h1>
-            <p className="text-xs sm:text-sm text-gray-500 font-mono tracking-widest uppercase mt-3 m-0">
-              DỮ LIỆU ĐƯỢC THU THẬP TỪ TMDB
-            </p>
-          </div>
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight text-white m-0 leading-none">
+            BẢNG XẾP HẠNG
+          </h1>
+          <p className="text-xs sm:text-sm text-gray-500 font-mono tracking-widest uppercase mt-3 m-0">
+            DỮ LIỆU ĐƯỢC THU THẬP TỪ TMDB
+          </p>
         </motion.header>
 
         {/* MAIN LAYOUT WITH SIDEBAR */}
@@ -127,7 +125,7 @@ export default function Ranking() {
               {topRatedMovies.length === 0 ? (
                 <motion.div
                   key="empty"
-                  initial={{ opacity: 0 }}  
+                  initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   className="py-20 text-center font-mono text-gray-500 uppercase tracking-widest"
@@ -161,8 +159,8 @@ export default function Ranking() {
                             rank === 1
                               ? "text-amber-400/20 top-0 left-0 sm:left-4"
                               : isOdd
-                              ? "text-white/5 top-5 left-4"
-                              : "text-white/5 top-10 left-4 lg:left-75"
+                                ? "text-white/5 top-5 left-4"
+                                : "text-white/5 top-10 left-4 lg:left-75"
                           }`}
                         >
                           {rank}
@@ -185,7 +183,9 @@ export default function Ranking() {
                                     : "bg-white/5 border-white/10 text-gray-400"
                                 }`}
                               >
-                                {rank === 1 ? "★ TOP RATED #1" : `RANKING #${rank}`}
+                                {rank === 1
+                                  ? "★ TOP RATED #1"
+                                  : `RANKING #${rank}`}
                               </span>
                             </div>
 
@@ -233,7 +233,10 @@ export default function Ranking() {
 
                           {/* POSTER IMAGE CONTAINER WITH ROTATE & HOVER MOTION */}
                           <motion.div
-                            whileHover={{ scale: 1.04, rotate: isOdd ? 1.5 : -1.5 }}
+                            whileHover={{
+                              scale: 1.04,
+                              rotate: isOdd ? 1.5 : -1.5,
+                            }}
                             transition={{ duration: 0.3, ease: "easeOut" }}
                             className="shrink-0 w-full p-15 sm:p-0 sm:w-[220px] lg:w-[260px]"
                           >

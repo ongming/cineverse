@@ -2,9 +2,11 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Play, Star, Flame, Bookmark } from "lucide-react";
+import { useToggleWatchlist } from "../../hooks/data/useToggleWatchlist.js";
 
 export default function FeaturedBanner({ movie }) {
   if (!movie) return null;
+  const { handleToggle, isBookmarked } = useToggleWatchlist();
 
   return (
     <motion.section
@@ -58,10 +60,12 @@ export default function FeaturedBanner({ movie }) {
 
             <button
               type="button"
-              onClick={() => alert("Đã thêm vào Danh sách theo dõi!")}
-              className="py-4 px-4 bg-black/60 hover:bg-black/80 border border-white/20 hover:border-amber-400 text-white hover:text-amber-400 text-xs sm:text-sm font-mono font-bold rounded-xl flex items-center gap-2 transition-all cursor-pointer"
+              onClick={(e) => handleToggle(movie, e)}
+              className={`py-4 px-4 ${isBookmarked(movie.id) ? " bg-amber-400" : " bg-black/60 hover:bg-black/80"}  border border-white/20 hover:border-amber-400 text-white hover:text-amber-400 text-xs sm:text-sm font-mono font-bold rounded-xl flex items-center gap-2 transition-all cursor-pointer`}
             >
-              <Bookmark className="w-5 h-5" />
+              <Bookmark
+                className={`w-5 h-5 ${isBookmarked(movie.id) ? "fill-black text-black" : ""}`}
+              />
             </button>
 
             {/* Sound Toggle Mute/Unmute Button */}

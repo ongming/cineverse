@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTrailerDetail } from "../../hooks/data/useTrailerDetail.js";
-import MovieCard from "../../components/MovieCard/MovieCard.jsx";
 import CastModal from "../../components/CastModal/CastModal.jsx";
 import TrailerVideo from "./trailerVideo.jsx";
 import YouMightAlsoLike from "./YouMightAlsoLike.jsx";
@@ -29,10 +28,11 @@ export default function TrailerDetail() {
   // Extract state & business logic from custom hooks
   const {
     isSaved,
-    toggleSaveWatchlist,
     isCastModalOpen,
     setIsCastModalOpen,
     navigate,
+    handleToggle,
+    isBookmarked,
   } = trailerfeatures;
 
   const [isTrailerVideoOpen, setIsTrailerVideoOpen] = useState(false);
@@ -142,9 +142,9 @@ export default function TrailerDetail() {
             {/* Watchlist Bookmark Button */}
             <button
               type="button"
-              onClick={toggleSaveWatchlist}
+              onClick={(e) => handleToggle(movie, e)}
               className={`p-3.5 border rounded-xl transition-all cursor-pointer active:scale-95 ${
-                isSaved
+                isBookmarked(movie.id)
                   ? "bg-amber-400 border-amber-400 text-black shadow-md"
                   : "bg-[#141722] border-[#23283a] text-gray-300 hover:text-white hover:border-amber-400"
               }`}

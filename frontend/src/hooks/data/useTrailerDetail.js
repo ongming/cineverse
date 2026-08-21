@@ -5,6 +5,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getMovieDetailsById, getSimilarMovies } from "../../service/movie.js";
 import { calculateROI, formatUSDExact } from "../../utils/revenueUtils.js";
 import { getRelatedMovies } from "../../utils/movieRelationUtils.js";
+import { useToggleWatchlist } from "./useToggleWatchlist.js";
 
 const fetchTrailerDetail = async (id) => {
   const [movie, similarMovies] = await Promise.all([
@@ -20,7 +21,7 @@ const fetchTrailerDetail = async (id) => {
 export function useTrailerDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const { handleToggle, isBookmarked } = useToggleWatchlist();
   const [isSaved, setIsSaved] = useState(false);
   const [isCastModalOpen, setIsCastModalOpen] = useState(false);
 
@@ -34,7 +35,6 @@ export function useTrailerDetail() {
     staleTime: 5 * 60 * 1000, // 5 minutes cache
     gcTime: 10 * 60 * 1000, // 10 minutes garbage collection
   });
-    console.log("Fetched movie details:", movie);
   const movieData = useMemo(() => {
     if (!movie) return null;
     return {
@@ -58,5 +58,7 @@ export function useTrailerDetail() {
     isCastModalOpen,
     setIsCastModalOpen,
     navigate,
+    handleToggle,
+    isBookmarked,
   };
 }

@@ -1,50 +1,25 @@
 // pages/Home/HeroBanner.jsx
-import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Play, Star, Bookmark, Volume2, VolumeX } from "lucide-react";
+import { useHeroBanner } from "../../hooks/ui/useHeroBanner.js";
 
 export default function HeroBanner({ movies = [] }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPlayingTrailer, setIsPlayingTrailer] = useState(false);
-  const [isMouseOver, setIsMouseOver] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
-  const hoverTimerRef = useRef(null);
+  const {
+    currentIndex,
+    setCurrentIndex,
+    isPlayingTrailer,
+    isMuted,
+    setIsMuted,
+    currentMovie,
+    startSeconds,
+    handleMouseEnter,
+    handleMouseLeave,
+    handleToggle,
+    isBookmarked,
+  } = useHeroBanner(movies);
 
-  // Auto switch banner slide every 7 seconds (if not actively playing trailer on hover)
-  useEffect(() => {
-    if (!movies || movies.length === 0 || isPlayingTrailer) return;
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % movies.length);
-    }, 7000);
-    return () => clearInterval(interval);
-  }, [movies, isPlayingTrailer]);
-
-  // Restart trailer autoplay when slide changes IF the mouse is currently resting over the banner
-  useEffect(() => {
-    setIsPlayingTrailer(false);
-    if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
-
-    if (isMouseOver) {
-      hoverTimerRef.current = setTimeout(() => {
-        setIsPlayingTrailer(true);
-      }, 300);
-    }
-  }, [currentIndex, isMouseOver]);
-
-  const handleMouseEnter = () => {
-      setIsMouseOver(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsMouseOver(false);
-    setIsPlayingTrailer(false);
-    if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
-  };
-
-  if (!movies || movies.length === 0) return null;
-  const currentMovie = movies[currentIndex];
-  const startSeconds = 5;
+  if (!movies || movies.length === 0 || !currentMovie) return null;
 
   return (
     <div
@@ -92,7 +67,10 @@ export default function HeroBanner({ movies = [] }) {
             <div className="flex items-center gap-2 mb-4 font-mono text-xs">
               <span className="px-3 py-1 bg-amber-400 text-black font-extrabold rounded-full flex items-center gap-1 shadow-lg shadow-amber-400/20">
                 <Star className="w-3.5 h-3.5 fill-black" />
-                {currentMovie.vote_average ? currentMovie.vote_average   : "N/A"} TMDb
+                {currentMovie.vote_average
+                  ? currentMovie.vote_average
+                  : "N/A"}{" "}
+                TMDb
               </span>
 
               <span className="px-3 py-1 text-cyan-400 font-bold rounded-full uppercase">
@@ -107,7 +85,8 @@ export default function HeroBanner({ movies = [] }) {
 
             {/* Description */}
             <p className="text-xs sm:text-sm text-gray-300 font-mono leading-relaxed line-clamp-3 max-w-2xl mb-6 text-shadow">
-              {currentMovie.overview || "Không có mô tả chi tiết cho bộ phim này. Hãy xem trailer để biết thêm thông tin!"}
+              {currentMovie.overview ||
+                "Không có mô tả chi tiết cho bộ phim này. Hãy xem trailer để biết thêm thông tin!"}
             </p>
 
             {/* Action CTA Buttons Bar */}
@@ -122,14 +101,18 @@ export default function HeroBanner({ movies = [] }) {
 
               <button
                 type="button"
-                onClick={() => alert("Đã thêm vào Danh sách theo dõi!")}
-                className="py-3.5 px-5 bg-black/60 hover:bg-black/80 border border-white/20 hover:border-amber-400 text-white hover:text-amber-400 text-xs sm:text-sm font-mono font-bold rounded-xl flex items-center gap-2 transition-all cursor-pointer"
+                onClick={(e) => handleToggle(currentMovie, e)}
+                className={`py-3.5 px-5 border text-xs sm:text-sm font-mono font-bold rounded-xl flex items-center gap-2 transition-all cursor-pointer ${
+                  isBookmarked(currentMovie.id)
+                    ? "bg-amber-400 border-amber-400 text-black shadow-lg shadow-amber-400/20"
+                    : "bg-black/60 hover:bg-black/80 border-white/20 hover:border-amber-400 text-white hover:text-amber-400"
+                }`}
               >
-                <Bookmark className="w-4 h-4" />
+                <Bookmark
+                  className={`w-4 h-4 ${isBookmarked(currentMovie.id) ? "fill-black" : ""}`}
+                />
                 <span className="hidden sm:inline">WATCHLIST</span>
               </button>
-
-              {/* Sound Toggle Mute/Unmute Button */}
             </div>
           </div>
         </motion.div>
@@ -162,13 +145,9 @@ export default function HeroBanner({ movies = [] }) {
         title={isMuted ? "Bật âm thanh" : "Tắt âm thanh"}
       >
         {!isMuted ? (
-          <>
-            <Volume2 className="w-4 h-4 text-cyan-neon" />
-          </>
+          <Volume2 className="w-4 h-4 text-cyan-neon" />
         ) : (
-          <>
-            <VolumeX className="w-4 h-4 text-gray-400" />
-          </>
+          <VolumeX className="w-4 h-4 text-gray-400" />
         )}
       </button>
     </div>
