@@ -4,14 +4,13 @@ import {
   addToWatchlist,
   removeFromWatchlist,
 } from "../../service/watchlistService.js";
-import { useWatchList } from "./useWatchList.js";
+import { useWatchListIds } from "./useWatchListIds.js";
 import { formatMovieForWatchlist } from "../../utils/formatTrailerUtils.js";
 
 export function useToggleWatchlist() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
-  const { watchlistData = [] } = useWatchList();
-  const queryKey = ["watchlist", user?.id];
+  const { data: watchlistIds = [] } = useWatchListIds();
 
   const mutation = useMutation({
     // A. API Call (Passes movie.id to server)
@@ -20,36 +19,64 @@ export function useToggleWatchlist() {
 
     // ⚡ STEP 1: Runs INSTANTLY (0ms)
     onMutate: async ({ movie, isBookmarked }) => {
-      await queryClient.cancelQueries({ queryKey });
-      const previousWatchlist = queryClient.getQueryData(queryKey) || [];
-      // 2. Compute new watchlist array
-      const updatedWatchlist = isBookmarked
-        ? previousWatchlist.filter((item) => item.id !== movie.id)
-        : [movie, ...previousWatchlist];
-      // 3. Set new watchlist directly!
-      queryClient.setQueryData(queryKey, updatedWatchlist);
-      return { previousWatchlist };
+      await queryClient.cancelQueries({
+        queryKey: ["watchlist-ids", user?.id],
+      });
+      await queryClient.cancelQueries({ queryKey: ["watchlist"] });
+
+      const previousIds =
+        queryClient.getQueryData(["watchlist-ids", user?.id]) || [];
+
+      // ⚡ 1. Update lightweight ID array (Powers yellow/white icons globally in 0ms!)
+      queryClient.setQueryData(
+        ["watchlist-ids", user?.id],
+        isBookmarked
+          ? previousIds.filter((id) => id !== movie.id)
+          : [movie.id, ...previousIds]
+      );
+
+      // ⚡ 2. Update main Watchlist Page grid cache directly (0ms!)
+      queryClient.setQueriesData(
+        { queryKey: ["watchlist"] },
+        (oldList = []) => {
+          if (isBookmarked) {
+            return oldList.filter((item) => item.id !== movie.id);
+          } else {
+            return [movie, ...oldList].slice(0, 18);
+          }
+        }
+      );
+
+      return { previousIds };
     },
 
     onError: (err, variables, context) => {
-      if (context?.previousWatchlist) {
-        queryClient.setQueryData(queryKey, context.previousWatchlist);
+      if (context?.previousIds) {
+        queryClient.setQueryData(
+          ["watchlist-ids", user?.id],
+          context.previousIds
+        );
       }
-      throw err; // Re-throw the error to be caught in the component
+    },
+
+    // 🟢 200ms Background Sync Phase after POST/DELETE HTTP request completes:
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["watchlist"] });
+      queryClient.invalidateQueries({ queryKey: ["watchlist-ids"] });
     },
   });
-  const isBookmarked = (movieId) =>
-    watchlistData.some((item) => item.id === movieId);
-  console.log("Current watchlist:", watchlistData);
+
+  const isBookmarked = (movieId) => watchlistIds.includes(movieId);
 
   const handleToggle = (movie, e) => {
-    if (e) {
+    if (e && typeof e.preventDefault === "function") {
       e.preventDefault();
       e.stopPropagation();
     }
+    const formattedMovie = formatMovieForWatchlist(movie);
     mutation.mutate({
-      movie: formatMovieForWatchlist(movie),
-      isBookmarked: isBookmarked(movie.id),
+      movie: formattedMovie,
+      isBookmarked: isBookmarked(formattedMovie.id),
     });
   };
 

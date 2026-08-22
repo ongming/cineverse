@@ -1,19 +1,18 @@
+import { memo } from "react";
 import { Link } from "react-router-dom";
-import { X, Star, Play, Clock, Clapperboard } from "lucide-react";
-import { getAgeBadgeStyle } from "../../components/utils/getAgeBadgeStyle.js";
+import { Clapperboard } from "lucide-react";
 import MovieCard from "../../components/MovieCard/MovieCard.jsx";
+import PaginationControls from "../../components/PaginationControls/PaginationControls.jsx";
 
-export default function TrailerWatchList({
+function TrailerWatchList({
   processedMovies = [],
   handleRemoveMovie,
   searchQuery = "",
   onClearSearch,
   suggestedMovies = [],
+  page,
+  setPage,
 }) {
-  console.log(
-    "TrailerWatchList rendered with processedMovies:",
-    processedMovies,
-  );
   return (
     <div className="max-w-7xl mx-auto">
       {processedMovies.length > 0 ? (
@@ -21,8 +20,9 @@ export default function TrailerWatchList({
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
           {processedMovies.map((movie) => (
             <MovieCard
+              key={movie.id}
               movie={movie}
-              onRemove={() => handleRemoveMovie(movie.id)}
+              onRemove={(movieItem, e) => handleRemoveMovie(movieItem, e)}
             />
           ))}
         </div>
@@ -37,7 +37,7 @@ export default function TrailerWatchList({
                 {[1, 2, 3, 4, 5].map((idx) => (
                   <div
                     key={idx}
-                    className="w-44 h-64 rounded-lg   bg-gradient-to-b from-white/10 to-white/2 shadow-2xl backdrop-blur-sm"
+                    className="w-44 h-64 rounded-lg bg-gradient-to-b from-white/10 to-white/2 shadow-2xl backdrop-blur-sm"
                   />
                 ))}
               </div>
@@ -98,6 +98,7 @@ export default function TrailerWatchList({
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
                 {suggestedMovies?.slice(0, 4).map((movie) => (
                   <MovieCard
+                    key={movie.id}
                     movie={movie}
                     onRemove={null} // No remove button for suggested movies
                   />
@@ -107,6 +108,14 @@ export default function TrailerWatchList({
           )}
         </div>
       )}
+      <PaginationControls
+        page={page}
+        setPage={setPage}
+        hasMore={processedMovies.length < 18}
+        isPaged={processedMovies.length}
+      />
     </div>
   );
 }
+
+export default memo(TrailerWatchList);

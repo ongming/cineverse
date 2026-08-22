@@ -3,11 +3,32 @@ const watchlistService = require("./watchlist.service.js");
 const getWatchlist = async (req, res, next) => {
   try {
     const userId = req.user.id;
-    const watchlist = await watchlistService.getUserWatchlistService(userId);
+    const { sortType, page, q } = req.query;
+
+    const watchlist = await watchlistService.getUserWatchlistService(
+      userId,
+      sortType,
+      page,
+      q
+    );
 
     res.status(200).json({
       success: true,
       data: watchlist,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getWatchlistIds = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    const ids = await watchlistService.getUserWatchlistIdsService(userId);
+
+    res.status(200).json({
+      success: true,
+      data: ids,
     });
   } catch (error) {
     next(error);
@@ -49,6 +70,7 @@ const removeFromWatchlist = async (req, res, next) => {
 
 module.exports = {
   getWatchlist,
+  getWatchlistIds,
   addToWatchlist,
   removeFromWatchlist,
 };

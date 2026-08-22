@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { X, Star, Play, Clock } from "lucide-react";
+
 export default function MovieCard({ movie, onRemove = null }) {
   return (
     <div>
@@ -15,7 +16,7 @@ export default function MovieCard({ movie, onRemove = null }) {
           {onRemove && (
             <button
               type="button"
-              onClick={(e) => onRemove(movie.id, e)}
+              onClick={(e) => onRemove(movie, e)}
               className="absolute top-2.5 right-2.5 p-1.5 rounded-full bg-black/70 hover:bg-red-600 text-gray-300 hover:text-white border border-white/10 hover:border-red-500 backdrop-blur-md transition-all duration-200 cursor-pointer shadow-lg hover:scale-110 z-10"
               title="Xóa khỏi danh sách"
             >
@@ -25,7 +26,7 @@ export default function MovieCard({ movie, onRemove = null }) {
           {/* Rating Badge */}
           <div className="absolute bottom-2.5 right-2.5 bg-black/85 backdrop-blur-md px-2 py-0.5 rounded-lg border border-amber-400/40 text-amber-400 text-[11px] font-black font-mono flex items-center gap-1 shadow-md">
             <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-            <span>{movie.rating || movie.vote_average || "8.5"}</span>
+            <span>{movie.vote_average || "N/A"}</span>
           </div>
           {/* Play Link Overlay */}
           <Link

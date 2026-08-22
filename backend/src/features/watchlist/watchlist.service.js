@@ -8,18 +8,33 @@ const formatUrl = (path, baseUrl) => {
   return `${baseUrl}${path.startsWith("/") ? "" : "/"}${path}`;
 };
 
-const getUserWatchlistService = async (userId) => {
+const getUserWatchlistService = async (userId, sortType, page, searchQuery = "") => {
+  const limit = 18;
+  const offset = (parseInt(page || 1) - 1) * limit;
   const cleanUserId = parseInt(userId);
-  const items = await watchlistModel.getWatchlistByUserId(cleanUserId);
+  const SORT_COLUMNS = {
+    recent: "w.created_at",
+    rating: "m.vote_average",
+    year: "m.release_date",
+  };
 
-  return (items || []).map((movie) => {
-    const fullPoster = formatUrl(movie.poster_path, IMAGE_BASE_W500);
+  const items = await watchlistModel.getWatchlistByUserId(
+    cleanUserId,
+    SORT_COLUMNS[sortType] || SORT_COLUMNS.recent,
+    offset,
+    limit,
+    searchQuery
+  );
 
-    return {
-      ...movie,
-      poster_path: fullPoster,
-    };
-  });
+  return (items || []).map((movie) => ({
+    ...movie,
+    poster_path: formatUrl(movie.poster_path, IMAGE_BASE_W500),
+  }));
+};
+
+const getUserWatchlistIdsService = async (userId) => {
+  const cleanUserId = parseInt(userId);
+  return watchlistModel.getWatchlistIdsByUserId(cleanUserId);
 };
 
 const addToWatchlistService = async (userId, movieId) => {
@@ -42,6 +57,7 @@ const removeFromWatchlistService = async (userId, movieId) => {
 
 module.exports = {
   getUserWatchlistService,
+  getUserWatchlistIdsService,
   addToWatchlistService,
   removeFromWatchlistService,
 };

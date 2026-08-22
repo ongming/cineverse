@@ -1,14 +1,14 @@
+import { memo, useRef } from "react";
 import { ChevronDown } from "lucide-react";
 import useClickOutside from "../../hooks/ui/HandleClickOutside.js";
-import { useRef } from "react";
 
-export default function SortBar({
+function SortBar({
   isSortOpen,
   setIsSortOpen,
   sortOptions,
   sortBy,
   setSortBy,
-  Icon=null,
+  Icon = null,
 }) {
   const sortRef = useRef(null);
 
@@ -16,7 +16,6 @@ export default function SortBar({
 
   return (
     <div className="relative w-full sm:w-60 shrink-0 " ref={sortRef}>
-      
       <button
         type="button"
         onClick={() => setIsSortOpen(!isSortOpen)}
@@ -58,3 +57,5 @@ export default function SortBar({
     </div>
   );
 }
+
+export default memo(SortBar);

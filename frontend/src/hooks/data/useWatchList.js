@@ -1,82 +1,65 @@
 import { useQuery } from "@tanstack/react-query";
+import { useState, useMemo } from "react";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { getWatchlist } from "../../service/watchlistService.js";
-import { useState, useEffect, useMemo } from "react";
-import { removeFromWatchlist } from "../../service/watchlistService.js";
 import { useHomeData } from "./useHomeData.js";
+import { useToggleWatchlist } from "./useToggleWatchlist.js";
 
 export const useWatchList = () => {
   const { user } = useAuth();
-  const [userWatchlist, setUserWatchlist] = useState([]);
-  const [isSortOpen, setIsSortOpen] = useState(false);
+  const [page, setPage] = useState(1);
   const [sortBy, setSortBy] = useState("recent");
   const [searchQuery, setSearchQuery] = useState("");
-  const { data } = useHomeData();
-  const { nowPlaying: suggestedMovies } = data || {};
+  const [isSortOpen, setIsSortOpen] = useState(false);
+
+  // ⚡ Debounce search input by 400ms before sending query to PostgreSQL
+  console.log("Search Query Updated:", searchQuery);
+
+  // Suggested movies from home data
+  const { data: homeData } = useHomeData();
+  const { nowPlaying: suggestedMovies } = homeData || {};
+
+  // Watchlist Toggle Hook for removing items
+  const { handleToggle } = useToggleWatchlist();
+
   const sortOptions = [
     { value: "recent", label: "Mới nhất" },
     { value: "rating", label: "Đánh giá cao" },
     { value: "year", label: "Năm phát hành" },
   ];
 
+  // 1. Fetch Paginated & Debounced Search Watchlist Data from Backend PostgreSQL
   const {
-    data: watchlistData,
+    data: watchlistData = [],
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["watchlist", user?.id],
-    queryFn: getWatchlist,
+    queryKey: ["watchlist", user?.id, sortBy, page, searchQuery],
+    queryFn: () => getWatchlist({ sortType: sortBy, page, q: searchQuery }),
     enabled: !!user?.id,
     staleTime: 1000 * 60 * 5, // 5 minutes fresh cache
   });
+  console.log("Fetched Watchlist Data:", watchlistData);
 
-  useEffect(() => {
-    if (watchlistData) {
-      setUserWatchlist(watchlistData);
-    }
+  // 2. Processed movies output directly
+  const processedMovies = useMemo(() => {
+    return [...watchlistData];
   }, [watchlistData]);
 
-  const handleRemoveMovie = async (movieId, e) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    setUserWatchlist((prev) => prev.filter((item) => item.id !== movieId));
-    try {
-      await removeFromWatchlist(movieId);
-    } catch (err) {
-      console.error("Lỗi khi xóa khỏi danh sách theo dõi:", err);
-    }
+  // 3. Remove Movie Action (Calls handleToggle from useToggleWatchlist)
+  const handleRemoveMovie = (movie, e) => {
+    handleToggle(movie, e);
   };
-  const processedMovies = useMemo(() => {
-    let result = [...userWatchlist];
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase().trim();
-      result = result.filter((m) =>
-        (m.name || m.title || "").toLowerCase().includes(q),
-      );
-    }
-    if (sortBy === "recent") {
-      result.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-    } else if (sortBy === "rating") {
-      result.sort(
-        (a, b) => (b.rating || b.vote_average) - (a.rating || a.vote_average),
-      );
-    } else if (sortBy === "year") {
-      result.sort((a, b) => (b.year || 2024) - (a.year || 2024));
-    }
-
-    return result;
-  }, [userWatchlist, searchQuery, sortBy]);
 
   return {
     watchlistData,
     processedMovies,
-    setUserWatchlist,
     searchQuery,
     setSearchQuery,
     sortBy,
     setSortBy,
+    page,
+    setPage,
     isSortOpen,
     setIsSortOpen,
     sortOptions,
