@@ -72,7 +72,7 @@ export default function StatsBar({ stats }) {
         />
         <CounterItem
           icon={Award}
-          label="ĐÁNH GIÁ TỪ USER"
+          label="SỐ GIÁ TỪ Tmdb"
           targetValue={parseInt(stats?.total_user_reviews) || "NA"}
         />
         <CounterItem

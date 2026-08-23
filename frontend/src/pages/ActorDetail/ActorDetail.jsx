@@ -1,17 +1,15 @@
 import { Link } from "react-router-dom";
 import { useActorDetail } from "../../hooks/data/useActorDetail.js";
 import MovieCard from "../../components/MovieCard/MovieCard.jsx";
+import ErrorState from "../../components/Common/ErrorState.jsx";
 import {
   ArrowLeft,
-  Star,
   ExternalLink,
   Film,
-  Play,
   Image as ImageIcon,
   ChevronLeft,
   ChevronRight,
   X,
-  Share2,
 } from "lucide-react";
 
 export default function ActorDetail() {
@@ -29,17 +27,12 @@ export default function ActorDetail() {
 
   if (!actorData) {
     return (
-      <div className="w-full min-h-screen bg-[#080808] text-white flex flex-col items-center justify-center gap-4 font-mono">
-        <h2 className="text-lg font-bold text-amber-400">
-          Không tìm thấy thông tin diễn viên!
-        </h2>
-        <Link
-          to="/"
-          className="px-4 py-2 bg-[#141722] border border-[#23283a] hover:border-amber-400 text-xs text-gray-300 hover:text-white rounded-xl transition-all"
-        >
-          QUAY LẠI TRANG CHỦ
-        </Link>
-      </div>
+      <ErrorState
+        title="Không tìm thấy thông tin diễn viên!"
+        message="Thông tin diễn viên này không tồn tại hoặc đã bị gỡ khỏi hệ thống."
+        backLink="/"
+        backText="QUAY LẠI TRANG CHỦ"
+      />
     );
   }
 
@@ -64,9 +57,9 @@ export default function ActorDetail() {
       </div>
 
       {/* SECTION 1: HERO PROFILE CARD */}
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 mb-12  ">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 mb-12">
         {/* Left Column: Actor Portrait Photo Frame (4 Cols) */}
-        <div className=" md:col-span-4 lg:col-span-3  p-10  sm:p-20 md:p-1">
+        <div className="md:col-span-4 lg:col-span-3 p-10 sm:p-20 md:p-1">
           <div className="relative w-full aspect-[2/3] bg-[#12141a] border border-[#222533] rounded-2xl overflow-hidden shadow-2xl p-2 group">
             <div className="w-full h-full rounded-xl overflow-hidden relative">
               <img
@@ -159,7 +152,7 @@ export default function ActorDetail() {
         </div>
       </div>
 
-      {/* SECTION 2: PHOTO GALLERY ALBUM (SINGLE ROW WITH +X PHOTOS CARD) */}
+      {/* SECTION 2: PHOTO GALLERY ALBUM */}
       {galleryList.length > 0 && (
         <div className="max-w-7xl mx-auto mb-12 p-5 sm:p-6 shadow-2xl">
           <div className="flex items-center justify-between mb-6">
@@ -174,7 +167,7 @@ export default function ActorDetail() {
             </span>
           </div>
 
-          {/* 1 Single Row Grid (5 Photos + 1 Count Card) */}
+          {/* 1 Single Row Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
             {visiblePhotos.map((photoUrl, idx) => (
               <div
@@ -195,7 +188,7 @@ export default function ActorDetail() {
               </div>
             ))}
 
-            {/* Remaining Count Card (+X HÌNH ẢNH) */}
+            {/* Remaining Count Card */}
             {remainingCount > 0 ? (
               <div
                 onClick={() => handleOpenPhoto(maxVisiblePhotos)}
@@ -226,7 +219,7 @@ export default function ActorDetail() {
         </div>
       )}
 
-      {/* SECTION 3: FILMOGRAPHY (CÁC BỘ PHIM ĐÃ THAM GIA) */}
+      {/* SECTION 3: FILMOGRAPHY */}
       <div className="max-w-7xl mx-auto mb-12">
         <div className="flex items-center gap-2 mb-6">
           <Film className="w-5 h-5 text-cyan-400" />
@@ -249,7 +242,6 @@ export default function ActorDetail() {
       {/* IMDb-STYLE FULLSCREEN LIGHTBOX MODAL */}
       {isLightboxOpen && galleryList.length > 0 && (
         <div className="fixed inset-0 z-[10000] bg-black/95 backdrop-blur-2xl flex flex-col justify-between p-4 sm:p-6 text-left font-mono">
-          {/* Top Header Bar: Close Button & Counter */}
           <div className="w-full flex items-center justify-between z-30 pb-4 border-b border-white/10">
             <button
               type="button"
@@ -263,20 +255,10 @@ export default function ActorDetail() {
               <span className="px-3 py-1 font-bold text-white">
                 {selectedPhotoIndex + 1} của {galleryList.length} Ảnh
               </span>
-              <button
-                type="button"
-                onClick={() => alert("Đã chia sẻ hình ảnh!")}
-                className="p-2 bg-white/10 hover:bg-white/20 rounded-xl transition-colors cursor-pointer text-white"
-                title="Chia sẻ ảnh"
-              >
-                <Share2 className="w-4 h-4" />
-              </button>
             </div>
           </div>
 
-          {/* Center Main Photo with Left & Right Arrow Buttons */}
           <div className="relative flex-1 flex items-center justify-center my-4 overflow-hidden">
-            {/* Left Arrow Button */}
             <button
               type="button"
               onClick={handlePrevPhoto}
@@ -286,14 +268,12 @@ export default function ActorDetail() {
               <ChevronLeft className="w-6 h-6" />
             </button>
 
-            {/* Main Center Image */}
             <img
               src={galleryList[selectedPhotoIndex]}
               alt={`photo-${selectedPhotoIndex}`}
               className="max-w-full max-h-[75vh] object-contain rounded-2xl shadow-2xl border border-white/10 transition-transform duration-300"
             />
 
-            {/* Right Arrow Button */}
             <button
               type="button"
               onClick={handleNextPhoto}
@@ -304,15 +284,13 @@ export default function ActorDetail() {
             </button>
           </div>
 
-          {/* Bottom Metadata Panel Bar (IMDb Style) */}
           <div className="w-full backdrop-blur-md p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 z-30">
             <div>
               <h4 className="text-sm font-bold text-amber-400 font-mono uppercase m-0">
                 {actorData.name}
               </h4>
               <p className="text-xs text-gray-300 font-mono m-0 mt-1 line-clamp-1">
-                Bộ ảnh thảm đỏ & hậu trường độc quyền trên CINEVERSE (
-                {selectedPhotoIndex + 1}/{galleryList.length})
+                Bộ ảnh lấy từ TMDb ({selectedPhotoIndex + 1}/{galleryList.length})
               </p>
             </div>
 

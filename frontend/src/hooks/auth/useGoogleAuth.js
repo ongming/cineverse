@@ -8,7 +8,7 @@ export default function useGoogleAuth() {
       localStorage.setItem("token", token);
       window.location.href = "/";
     },
-    onError: (error) => console.log("Đăng nhập với Google thất bại:", error),
+    onError: (error) => console.error("Đăng nhập với Google thất bại:", error),
   });
   return loginWithGoogle;
 }

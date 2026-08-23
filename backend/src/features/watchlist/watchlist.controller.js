@@ -5,7 +5,7 @@ const getWatchlist = async (req, res, next) => {
     const userId = req.user.id;
     const { sortType, page, q } = req.query;
 
-    const watchlist = await watchlistService.getUserWatchlistService(
+    const { watchlist, hasNextPage } = await watchlistService.getUserWatchlistService(
       userId,
       sortType,
       page,
@@ -14,7 +14,10 @@ const getWatchlist = async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      data: watchlist,
+      data: {
+        watchlist,
+        hasNextPage,
+      },
     });
   } catch (error) {
     next(error);

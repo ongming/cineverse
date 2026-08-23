@@ -12,6 +12,7 @@ function TrailerWatchList({
   suggestedMovies = [],
   page,
   setPage,
+  hasNextPage,
 }) {
   return (
     <div className="max-w-7xl mx-auto">
@@ -111,7 +112,7 @@ function TrailerWatchList({
       <PaginationControls
         page={page}
         setPage={setPage}
-        hasMore={processedMovies.length < 18}
+        hasMore={!hasNextPage}
         isPaged={processedMovies.length}
       />
     </div>

@@ -15,10 +15,13 @@ const getPopularMovies = async (req, res, next) => {
 const getNowPlayingMovies = async (req, res, next) => {
   try {
     const { page } = req.query;
-    const nowPlayingMovies = await movieService.getNowPlayingMovies(page);
+    const { movies, hasNextPage } = await movieService.getNowPlayingMovies(page);
     res.status(200).json({
       success: true,
-      data: nowPlayingMovies,
+      data: {
+        movies,
+        hasNextPage,
+      },
     });
   } catch (error) {
     next(error);
@@ -28,10 +31,13 @@ const getNowPlayingMovies = async (req, res, next) => {
 const getUpcomingMovies = async (req, res, next) => {
   try {
     const { page } = req.query;
-    const upcomingMovies = await movieService.getUpcomingMovies(page);
+    const { movies, hasNextPage } = await movieService.getUpcomingMovies(page);
     res.status(200).json({
       success: true,
-      data: upcomingMovies,
+      data: {
+        movies,
+        hasNextPage,
+      },
     });
   } catch (error) {
     next(error);
@@ -102,6 +108,22 @@ const getSimilarMovies = async (req, res, next) => {
   }
 };
 
+const getMoviesByGenre = async (req, res, next) => {
+  try {
+    const { genreName, genreId, page } = req.query;
+    const { movies, hasNextPage } = await movieService.getMoviesByGenre({ genreName, genreId, page });
+    res.status(200).json({
+      success: true,
+      data: {
+        movies,
+        hasNextPage,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getPopularMovies,
   getNowPlayingMovies,
@@ -111,4 +133,5 @@ module.exports = {
   getMovieOverviewStats,
   searchMovies,
   getSimilarMovies,
+  getMoviesByGenre,
 };

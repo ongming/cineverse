@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 
 export default function PinInput({
-  length = 4,
+  length = 6,
   value = [],
   onChange,
   onComplete,
@@ -60,7 +60,7 @@ export default function PinInput({
   };
 
   return (
-    <div className={`flex items-center gap-3 justify-center ${className}`}>
+    <div className={`flex items-center gap-2 sm:gap-3 justify-center ${className}`}>
       {Array.from({ length }).map((_, index) => {
         const digit = value[index] || "";
         const isFilled = Boolean(digit);
@@ -81,7 +81,7 @@ export default function PinInput({
             onKeyDown={(e) => handleKeyDown(e, index)}
             onPaste={handlePaste}
             className={`
-              w-12 h-14 text-center text-xl font-bold font-mono rounded-xl
+              w-10 h-12 sm:w-12 sm:h-14 text-center text-lg sm:text-xl font-bold font-mono rounded-xl
               outline-none transition-all duration-300 transform cursor-pointer
               ${
                 isFilled

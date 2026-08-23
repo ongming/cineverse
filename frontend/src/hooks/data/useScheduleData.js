@@ -7,7 +7,7 @@ export default function useScheduleData() {
   const [customDate, setCustomDate] = useState("");
   const { data, isLoading, isError, page, setPage } = useHomeData();
 
-  const { nowPlaying, upcoming } = data || { nowPlaying: [], upcoming: [] };
+  const { nowPlaying, upcoming, hasNextPage } = data || { nowPlaying: [], upcoming: [], hasNextPage: false };
 
   // Dynamic Date List (Hôm nay, Ngày mai, T6, T7, CN, T2, T3)
   const dateList = useMemo(() => {
@@ -47,7 +47,6 @@ export default function useScheduleData() {
       return result.filter(
         (m) => m.release_date === dateList[selectedDateIndex].fullFormatted,
       );
-      console.log("Filtered by date index:", selectedDateIndex, result);
     } else if (selectedDateIndex === "CUSTOM" && customDate) {
       return result.filter(
         (m) => formatReleaseDate(m.release_date) === customDate,
@@ -67,6 +66,7 @@ export default function useScheduleData() {
     isError,
     nowPlaying,
     upcoming,
+    hasNextPage,
     page,
     setPage,
   }

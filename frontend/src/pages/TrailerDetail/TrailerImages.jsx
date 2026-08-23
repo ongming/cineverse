@@ -89,7 +89,6 @@ export default function TrailerImages({ imageData = [] }) {
                 type="button"
                 onClick={() => {
                   setSelectedIndex(idx);
-                  console.log("Selected thumbnail index:", idx);
                 }}
                 className={`relative w-14 h-9 rounded-lg overflow-hidden border-2 transition-all cursor-pointer shrink-0 ${
                   selectedIndex === idx

@@ -20,7 +20,7 @@ export default function SideCategory() {
       </span>
 
       {isOpen && !isLoading && (
-        <ul className="grid grid-cols-1 gap-x-2.5 gap-y-2 p-3 my-2 list-none m-0 text-white text-xs">
+        <ul className="grid grid-cols-1 gap-x-2.5 gap-y-2 p-3 my-2 list-none m-0 text-white text-xs overflow-y-auto max-h-[160px] custom-category-scrollbar touch-pan-y overscroll-contain [-webkit-overflow-scrolling:touch]">
           {categories.map((category) => (
             <li key={category.id}>
               <Link

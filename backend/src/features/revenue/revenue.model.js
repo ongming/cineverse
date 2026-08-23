@@ -1,10 +1,6 @@
 const pool = require("../../config/database.js");
 
-const findTopRevenueMovies = async ({ genreId, year, page }) => {
-  const parsedPage = Math.max(parseInt(page, 10) || 1, 1);
-  const LIMIT = 20;
-  const OFFSET = (parsedPage - 1) * LIMIT;
-
+const findTopRevenueMovies = async ({ genreId, year, limit, offset }) => {
   let genreQuery = "";
   let yearQuery = "";
 
@@ -31,7 +27,7 @@ const findTopRevenueMovies = async ({ genreId, year, page }) => {
     ORDER BY revenue DESC 
     LIMIT $1 OFFSET $2;
   `;
-  const result = await pool.query(sql, [LIMIT, OFFSET]);
+  const result = await pool.query(sql, [limit, offset]);
   return result.rows;
 };
 

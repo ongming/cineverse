@@ -1,72 +1,43 @@
-import { useState, useRef, useEffect } from "react";
 import { X, User, Mail, Lock, Eye, EyeOff, CheckCircle } from "lucide-react";
-import useClickOutside from "../../hooks/ui/HandleClickOutside.js";
+import { useUserData } from "../../hooks/data/useUserData.js";
 
 export default function UserInfoModal({ isOpen, onClose, user }) {
-  const [username, setUsername] = useState(user?.username || "");
-  const [email, setEmail] = useState(user?.email || "");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  const [feedback, setFeedback] = useState({ type: "", message: "" });
-  const modalRef = useRef(null);
-
-  // Sync state when user loads or modal opens
-  useEffect(() => {
-    if (user) {
-      setUsername(user.username || "");
-      setEmail(user.email || "");
-    }
-  }, [user, isOpen]);
-
-  // Click outside to close modal
-  useClickOutside(modalRef, () => {
-    if (isOpen && onClose) onClose();
-  });
+  const {
+    username,
+    setUsername,
+    email,
+    newPassword,
+    setNewPassword,
+    confirmPassword,
+    setConfirmPassword,
+    showNewPassword,
+    setShowNewPassword,
+    showConfirmPassword,
+    setShowConfirmPassword,
+    previewUrl,
+    isSaving,
+    fileInputRef,
+    handleFileChange,
+    feedback,
+    modalRef,
+    handleSave,
+    initialLetter,
+    defaultAvatar,
+  } = useUserData({ isOpen, onClose, user });
 
   if (!isOpen) return null;
 
-  const handleSave = (e) => {
-    e.preventDefault();
-    setFeedback({ type: "", message: "" });
-
-    // Client-side Validation
-    if (newPassword && newPassword !== confirmPassword) {
-      setFeedback({
-        type: "error",
-        message: "Mật khẩu xác nhận không trùng khớp!",
-      });
-      return;
-    }
-
-    if (newPassword && newPassword.length < 6) {
-      setFeedback({
-        type: "error",
-        message: "Mật khẩu mới phải có ít nhất 6 ký tự!",
-      });
-      return;
-    }
-
-    // UI Feedback Simulation
-    setFeedback({
-      type: "success",
-      message: "Đã lưu thay đổi thành công!",
-    });
-
-    // Reset password fields after save
-    setNewPassword("");
-    setConfirmPassword("");
-  };
-
-  const initialLetter = (user?.username || user?.email || "U")
-    .charAt(0)
-    .toUpperCase();
-
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
+      {/* Hidden File Input for Image Selection */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        accept="image/*"
+        className="hidden"
+      />
+
       {/* Modal Card Box */}
       <div
         ref={modalRef}
@@ -76,7 +47,8 @@ export default function UserInfoModal({ isOpen, onClose, user }) {
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 text-gray-400 hover:text-white rounded-full bg-white/5 hover:bg-white/10 transition-all cursor-pointer"
+          disabled={isSaving}
+          className="absolute top-5 right-5 p-2 text-gray-400 hover:text-white rounded-full bg-white/5 hover:bg-white/10 transition-all cursor-pointer disabled:opacity-50"
         >
           <X className="w-5 h-5" />
         </button>
@@ -86,22 +58,28 @@ export default function UserInfoModal({ isOpen, onClose, user }) {
           {/* Avatar Container */}
           <div className="flex flex-col items-center gap-2.5 shrink-0">
             <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full border-2 border-white/20 overflow-hidden bg-[#161822] flex items-center justify-center shadow-lg">
-              {user?.avatar_url ? (
+              {previewUrl ? (
                 <img
-                  src={user.avatar_url}
-                  alt={user.username || "User Avatar"}
+                  src={previewUrl}
+                  alt={username || "User Avatar"}
+                  referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    e.currentTarget.src = defaultAvatar;
+                  }}
                   className="w-full h-full object-cover"
                 />
               ) : (
                 <span className="text-3xl sm:text-4xl font-extrabold text-amber-400 font-mono">
                   {initialLetter}
-                </span>
+                </span> 
               )}
             </div>
             {/* Secondary Change Avatar Text Action */}
             <button
               type="button"
-              className="text-xs text-gray-400 hover:text-amber-400 transition-colors font-mono cursor-pointer underline underline-offset-4"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isSaving}
+              className="text-xs text-gray-400 hover:text-amber-400 transition-colors font-mono cursor-pointer underline underline-offset-4 disabled:opacity-50"
             >
               Đổi ảnh đại diện
             </button>
@@ -113,8 +91,7 @@ export default function UserInfoModal({ isOpen, onClose, user }) {
               THÔNG TIN TÀI KHOẢN
             </h2>
             <p className="text-xs sm:text-sm text-gray-400 leading-relaxed font-sans font-normal">
-              Quản lý thông tin cá nhân và bảo mật tài khoản của bạn trên nền
-              tảng Cineverse.
+              Quản lý thông tin cá nhân
             </p>
           </div>
         </div>
@@ -212,7 +189,7 @@ export default function UserInfoModal({ isOpen, onClose, user }) {
           </div>
 
           {/* Feedback Messages */}
-          {feedback.message && (
+          {feedback?.message && (
             <div
               className={`text-xs font-mono font-bold ${
                 feedback.type === "success"
@@ -228,9 +205,13 @@ export default function UserInfoModal({ isOpen, onClose, user }) {
           <div className="pt-4">
             <button
               type="submit"
-              className="px-8 py-3 bg-[#fbbf24] hover:bg-[#f59e0b] text-black font-extrabold text-xs uppercase tracking-wider rounded-lg transition-all cursor-pointer active:scale-95 shadow-md"
+              disabled={isSaving}
+              className="px-8 py-3 bg-[#fbbf24] hover:bg-[#f59e0b] text-black font-extrabold text-xs uppercase tracking-wider rounded-lg transition-all cursor-pointer active:scale-95 shadow-md disabled:opacity-50 flex items-center gap-2"
             >
-              LƯU THAY ĐỔI
+              {isSaving && (
+                <div className="w-3.5 h-3.5 border-2 border-black border-t-transparent rounded-full animate-spin" />
+              )}
+              <span>{isSaving ? "ĐANG LƯU..." : "LƯU THAY ĐỔI"}</span>
             </button>
           </div>
         </form>

@@ -4,7 +4,7 @@ import {
   resetPasswordService,
 } from "../../service/authService.js";
 
-export default function useForgotPassword(onSwitchToLogin, pinLength = 4) {
+export default function useForgotPassword(onSwitchToLogin, pinLength = 6) {
   const [step, setStep] = useState(1); // 1: Email | 2: OTP | 3: New Password
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState(Array(pinLength).fill(""));

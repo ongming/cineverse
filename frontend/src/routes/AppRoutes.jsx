@@ -12,6 +12,7 @@ import Revenue from "../pages/Revenue/Revenue.jsx";
 import Schedule from "../pages/Schedule/Schedule.jsx";
 import Login from "../pages/Login/Login.jsx";
 import WatchList from "../pages/WatchList/WatchList.jsx";
+import MovieCastPage from "../pages/MovieCast/MovieCastPage.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 
 function AppRoutes() {
@@ -20,6 +21,7 @@ function AppRoutes() {
       <Route element={<MainLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/trailer/:id" element={<TrailerDetail />} />
+        <Route path="/trailer/:id/cast" element={<MovieCastPage />} />
         <Route path="/actors/:id" element={<ActorDetail />} />
         <Route path="/person/:id" element={<ActorDetail />} />
         <Route path="/search" element={<Search />} />

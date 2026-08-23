@@ -1,5 +1,6 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { Calendar, ChevronLeft, ChevronRight, X } from "lucide-react";
+import useClickOutside from "../../hooks/ui/HandleClickOutside.js";
 
 export default function CustomDatePicker({
   selectedDate,
@@ -30,16 +31,8 @@ export default function CustomDatePicker({
 
   const weekDays = ["T2", "T3", "T4", "T5", "T6", "T7", "CN"];
 
-  // Click outside listener to auto-close calendar
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (containerRef.current && !containerRef.current.contains(e.target)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  // 🟢 Use existing useClickOutside hook
+  useClickOutside(containerRef, () => setIsOpen(false));
 
   const handlePrevMonth = (e) => {
     e.stopPropagation();
@@ -101,7 +94,6 @@ export default function CustomDatePicker({
           {selectedDate ? selectedDate.slice(0, 5) : ""}
         </span>
       </button>
-      {console.log("CustomDatePicker selectedDate:", selectedDate)}
       {/* Cyberpunk Dark Theme Calendar Modal Dropdown */}
       {isOpen && (
         <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-3 w-[300px] bg-[#12141a]/95 backdrop-blur-md border border-[#2b3042] rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.8)] p-4 z-[1000] animate-in fade-in zoom-in-95 duration-200">

@@ -27,7 +27,7 @@ export default function ForgotPasswordPanel({ onSwitchToLogin }) {
     handleSendOTP,
     handleVerifyOTPStep,
     handleResetPassword,
-  } = useForgotPassword(onSwitchToLogin, 4);
+  } = useForgotPassword(onSwitchToLogin, 6);
 
   return (
     <div className="max-w-md w-full mx-auto space-y-6 pt-5 sm:pt-6 font-mono">
@@ -51,7 +51,7 @@ export default function ForgotPasswordPanel({ onSwitchToLogin }) {
         </h2>
         <p className="text-xs text-gray-400">
           {step === 1 && "Nhập email đăng ký của bạn để nhận mã OTP khôi phục."}
-          {step === 2 && `Mã xác thực 4 chữ số đã được gửi đến ${email}.`}
+          {step === 2 && `Mã xác thực 6 chữ số đã được gửi đến ${email}.`}
           {step === 3 && "Nhập mật khẩu mới cho tài khoản Cineverse của bạn."}
         </p>
       </div>
@@ -98,16 +98,16 @@ export default function ForgotPasswordPanel({ onSwitchToLogin }) {
         </form>
       )}
 
-      {/* STEP 2: 4 Single-Character Boxes with Spring Pop Animation */}
+      {/* STEP 2: 6 Single-Character Boxes with Spring Pop Animation */}
       {step === 2 && (
         <form onSubmit={handleVerifyOTPStep} className="space-y-6">
           <div>
             <label className="block text-[10px] font-bold text-white uppercase tracking-widest mb-4 text-center">
-              NHẬP MÃ PIN 4 CHỮ SỐ
+              NHẬP MÃ PIN 6 CHỮ SỐ
             </label>
             
             <PinInput
-              length={4}
+              length={6}
               value={otp}
               onChange={setOtp}
               onComplete={() => handleVerifyOTPStep()}

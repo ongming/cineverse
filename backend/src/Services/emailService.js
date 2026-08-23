@@ -10,14 +10,16 @@ const transporter = nodemailer.createTransport({
 
 const sendOTPEmail = async (email, otp) => {
   const mailOptions = {
-    from: `"Cineverse Cinema" <${process.env.EMAIL_USER}>`,
+    from: `"Cineverse App" <${process.env.EMAIL_USER}>`,
     to: email,
-    subject: "Mã OTP Đặt Lại Mật Khẩu - Cineverse",
+    replyTo: process.env.EMAIL_USER, // 🟢 Validates return path for Gmail spam filters
+    subject: `[Cineverse] Mã xác thực OTP của bạn là: ${otp}`,
     text: `Mã OTP đặt lại mật khẩu Cineverse của bạn là: ${otp}. Mã có hiệu lực trong 5 phút. Vui lòng không chia sẻ mã này cho bất kỳ ai.`,
     headers: {
-      "X-Priority": "1 (Highest)",
+      "X-Priority": "1",
       "X-MSMail-Priority": "High",
       Importance: "High",
+      "X-Auto-Response-Suppress": "OOF, AutoReply",
     },
     html: `
       <div style="background:#0b0c10; padding:32px; color:#ffffff; font-family:monospace; border-radius:12px; max-width:480px; margin:0 auto; border:1px solid #222;">
@@ -28,6 +30,8 @@ const sendOTPEmail = async (email, otp) => {
           <span style="font-size:36px; font-weight:bold; letter-spacing:8px; color:#fbbf24;">${otp}</span>
         </div>
         <p style="color:#888; font-size:12px;">Mã có hiệu lực trong <b>5 phút</b>. Vui lòng không chia sẻ mã này cho bất kỳ ai.</p>
+        <hr style="border:none; border-t:1px solid #222; margin:20px 0;" />
+        <p style="color:#555; font-size:10px; margin:0;">Email tự động từ hệ thống Cineverse. Vui lòng không phản hồi email này.</p>
       </div>
     `,
   };

@@ -2,6 +2,8 @@ import { useWatchList } from "../../hooks/data/useWatchList.js";
 import ComponentSearchBar from "../../components/SearchBar/ComponentSearchBar.jsx";
 import SortBar from "../../components/SortBar/SortBar.jsx";
 import TrailerWatchList from "./TrailerWatchList.jsx";
+import LoadingState from "../../components/Common/LoadingState.jsx";
+import ErrorState from "../../components/Common/ErrorState.jsx";
 import { useCallback } from "react";
 
 export default function WatchListGridContainer() {
@@ -20,6 +22,8 @@ export default function WatchListGridContainer() {
     suggestedMovies,
     page,
     setPage,
+    hasNextPage,
+    refetch,
   } = useWatchList();
 
   const handleSearch = useCallback((query) => {
@@ -45,16 +49,14 @@ export default function WatchListGridContainer() {
 
       {/* Main Content Area */}
       {isLoading ? (
-        <div className="w-full min-h-[400px] bg-[#080808] text-white flex items-center justify-center font-mono text-base">
-          <div className="flex items-center gap-3">
-            <div className="w-5 h-5 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin" />
-            <span>Loading Watchlist...</span>
-          </div>
-        </div>
+        <LoadingState message="ĐANG TẢI DANH SÁCH THEO DÕI..." fullScreen={false} />
       ) : isError ? (
-        <div className="w-full min-h-[400px] bg-[#080808] text-white flex items-center justify-center font-mono text-base text-red-400">
-          Failed to load watchlist data.
-        </div>
+        <ErrorState
+          title="Lỗi tải Danh Sách Theo Dõi!"
+          message="Không thể nạp dữ liệu danh sách theo dõi của bạn."
+          onRetry={refetch}
+          fullScreen={false}
+        />
       ) : (
         /* Main Watchlist Container (ONLY THIS updates when search data arrives) */
         <TrailerWatchList
@@ -65,6 +67,7 @@ export default function WatchListGridContainer() {
           suggestedMovies={suggestedMovies}
           page={page}
           setPage={setPage}
+          hasNextPage={hasNextPage}
         />
       )}
     </div>

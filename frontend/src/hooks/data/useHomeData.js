@@ -13,7 +13,7 @@ import { getTopActors } from "../../service/actor.js";
 
 const fetchHomeData = async (page) => {
   // 1. Parallel fetch 5 endpoints concurrently
-  const [heroMovies, nowPlaying, upcoming, overviewStats, topActors] =
+  const [heroMovies, nowPlayingRes, upcomingRes, overviewStats, topActors] =
     await Promise.all([
       getPopularMovies(),
       getNowPlayingMovies({
@@ -26,6 +26,10 @@ const fetchHomeData = async (page) => {
       getTopActors(),
     ]);
 
+  const nowPlaying = nowPlayingRes?.movies || [];
+  const upcoming = upcomingRes?.movies || [];
+  const hasNextPage = nowPlayingRes?.hasNextPage || upcomingRes?.hasNextPage || false;
+
   // 3. Featured Single Movie of the Week
   const featuredMovie = heroMovies ? heroMovies[0] : null;
 
@@ -36,6 +40,7 @@ const fetchHomeData = async (page) => {
     heroMovies,
     nowPlaying,
     upcoming,
+    hasNextPage,
     featuredMovie,
     popularActors,
     overviewStats,

@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTrailerDetail } from "../../hooks/data/useTrailerDetail.js";
-import CastModal from "../../components/CastModal/CastModal.jsx";
+import LoadingState from "../../components/Common/LoadingState.jsx";
+import ErrorState from "../../components/Common/ErrorState.jsx";
 import TrailerVideo from "./trailerVideo.jsx";
 import YouMightAlsoLike from "./YouMightAlsoLike.jsx";
 import TrailerImages from "./TrailerImages.jsx";
@@ -38,31 +39,19 @@ export default function TrailerDetail() {
   const [isTrailerVideoOpen, setIsTrailerVideoOpen] = useState(false);
 
   // 1. Loading State
-  if (isLoading || !movie) {
-    return (
-      <div className="w-full min-h-screen bg-[#080808] text-white flex flex-col items-center justify-center gap-4 font-mono">
-        <div className="w-12 h-12 border-4 border-amber-400/30 border-t-amber-400 rounded-full animate-spin" />
-        <p className="text-xs text-gray-400 uppercase tracking-widest animate-pulse">
-          ĐANG TẢI DỮ LIỆU BỘ PHIM...
-        </p>
-      </div>
-    );
+  if (isLoading) {
+    return <LoadingState message="ĐANG TẢI DỮ LIỆU BỘ PHIM..." />;
   }
 
   // 2. Error or Not Found State
   if (isError || !movie) {
     return (
-      <div className="w-full min-h-screen bg-[#080808] text-white flex flex-col items-center justify-center gap-4 font-mono">
-        <h2 className="text-lg font-bold text-amber-400">
-          Không tìm thấy dữ liệu bộ phim!
-        </h2>
-        <Link
-          to="/"
-          className="px-4 py-2 bg-[#141722] border border-[#23283a] hover:border-amber-400 text-xs text-gray-300 hover:text-white rounded-xl transition-all"
-        >
-          QUAY LẠI TRANG CHỦ
-        </Link>
-      </div>
+      <ErrorState
+        title="Không tìm thấy dữ liệu bộ phim!"
+        message="Bộ phim này không tồn tại hoặc đã bị gỡ khỏi hệ thống."
+        backLink="/"
+        backText="QUAY LẠI TRANG CHỦ"
+      />
     );
   }
   return (
@@ -154,14 +143,19 @@ export default function TrailerDetail() {
             </button>
 
             {/* Share Button */}
-            <button
-              type="button"
-              onClick={() => alert("Đã sao chép liên kết bộ phim!")}
-              className="p-3.5 bg-[#141722] border border-[#23283a] hover:border-amber-400 text-gray-300 hover:text-white rounded-xl transition-all cursor-pointer active:scale-95"
-              title="Chia sẻ bộ phim"
+            <a
+              href={
+                movie.imdb_id
+                  ? `https://www.imdb.com/title/${movie.imdb_id}`
+                  : `https://www.imdb.com/find/?q=${encodeURIComponent(movie.title)}`
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-3.5 bg-amber-400 text-black border border-[#23283a] hover:border-amber-400 font-black rounded-xl transition-all cursor-pointer no-underline inline-flex items-center justify-center font-mono"
+              title="Xem trên IMDb"
             >
-              <Share2 className="w-5 h-5" />
-            </button>
+              IMDb
+            </a>
           </div>
         </div>
       </div>
@@ -177,13 +171,12 @@ export default function TrailerDetail() {
             <h2 className="text-base sm:text-lg font-bold text-white font-mono uppercase tracking-wide">
               DÀN DIỄN VIÊN & ĐẠO DIỄN
             </h2>
-            <button
-              type="button"
-              onClick={() => setIsCastModalOpen(true)}
-              className="text-xs font-mono text-gray-400 hover:text-white transition-colors cursor-pointer uppercase font-bold"
+            <Link
+              to={`/trailer/${movie.id}/cast`}
+              className="text-xs font-mono text-gray-400 hover:text-white transition-colors cursor-pointer uppercase font-bold no-underline"
             >
               XEM TẤT CẢ
-            </button>
+            </Link>
           </div>
 
           {/* (Fix #2: Compact row layout for 1 or many people, left-aligned) */}
@@ -303,13 +296,7 @@ export default function TrailerDetail() {
       <TrailerComments movieId={movie?.id} />
       {/* FULLSCREEN LIGHTBOX MODAL */}
 
-      {/* FULL CAST & CREW POPUP MODAL */}
-      <CastModal
-        isOpen={isCastModalOpen}
-        onClose={() => setIsCastModalOpen(false)}
-        movieCastNames={movie?.cast_members}
-        movieTitle={movie?.name}
-      />
+
 
       {/* CYAN-NEON YOUTUBE-INSPIRED POPUP PLAYER */}
       <TrailerVideo

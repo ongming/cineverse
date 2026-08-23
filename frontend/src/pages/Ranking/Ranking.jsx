@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { useRankingData } from "../../hooks/data/useRankingData.js";
 import { Star } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import LoadingState from "../../components/Common/LoadingState.jsx";
+import ErrorState from "../../components/Common/ErrorState.jsx";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -34,23 +36,15 @@ export default function Ranking() {
   } = useRankingData();
 
   if (isLoading) {
-    return (
-      <div className="w-full min-h-screen bg-[#080808] text-white flex flex-col items-center justify-center gap-4 font-mono">
-        <div className="w-12 h-12 border-4 border-amber-400/30 border-t-amber-400 rounded-full animate-spin" />
-        <p className="text-xs text-gray-400 uppercase tracking-widest animate-pulse">
-          LOADING CINEMATIC INDEX...
-        </p>
-      </div>
-    );
+    return <LoadingState message="ĐANG TẢI BẢNG XẾP HẠNG PHIM..." />;
   }
 
   if (isError) {
     return (
-      <div className="w-full min-h-screen bg-[#080808] text-white flex flex-col items-center justify-center gap-4 font-mono">
-        <p className="text-xs text-gray-400 uppercase tracking-widest">
-          ERROR LOADING CINEMATIC INDEX. PLEASE TRY AGAIN LATER.
-        </p>
-      </div>
+      <ErrorState
+        title="Lỗi tải Bảng Xếp Hạng!"
+        message="Không thể nạp dữ liệu xếp hạng phim. Vui lòng thử lại sau."
+      />
     );
   }
 

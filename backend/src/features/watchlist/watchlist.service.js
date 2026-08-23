@@ -9,8 +9,9 @@ const formatUrl = (path, baseUrl) => {
 };
 
 const getUserWatchlistService = async (userId, sortType, page, searchQuery = "") => {
-  const limit = 18;
-  const offset = (parseInt(page || 1) - 1) * limit;
+  const PAGE_SIZE = 18;
+  const FETCH_LIMIT = PAGE_SIZE + 1;
+  const offset = (parseInt(page || 1) - 1) * PAGE_SIZE;
   const cleanUserId = parseInt(userId);
   const SORT_COLUMNS = {
     recent: "w.created_at",
@@ -18,18 +19,23 @@ const getUserWatchlistService = async (userId, sortType, page, searchQuery = "")
     year: "m.release_date",
   };
 
-  const items = await watchlistModel.getWatchlistByUserId(
+  const rawRows = await watchlistModel.getWatchlistByUserId(
     cleanUserId,
     SORT_COLUMNS[sortType] || SORT_COLUMNS.recent,
     offset,
-    limit,
+    FETCH_LIMIT,
     searchQuery
   );
 
-  return (items || []).map((movie) => ({
+  const hasNextPage = (rawRows || []).length > PAGE_SIZE;
+  const slicedMovies = hasNextPage ? rawRows.slice(0, PAGE_SIZE) : rawRows;
+
+  const movies = (slicedMovies || []).map((movie) => ({
     ...movie,
     poster_path: formatUrl(movie.poster_path, IMAGE_BASE_W500),
   }));
+
+  return { watchlist: movies, hasNextPage };
 };
 
 const getUserWatchlistIdsService = async (userId) => {

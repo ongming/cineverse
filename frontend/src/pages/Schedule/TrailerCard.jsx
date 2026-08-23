@@ -17,7 +17,7 @@ export default function TrailerCard({
       <div className="relative  lg:w-[200px] xl:w-[220px] shrink-0 overflow-hidden bg-[#0a0b0e]">
         <img
           src={movie.poster_path}
-          alt={movie.name}
+          alt={movie.title}
           className="w-full h-full min-h-[280px] sm:min-h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
         />
 
@@ -42,8 +42,8 @@ export default function TrailerCard({
       <div className="p-5 sm:p-6 flex flex-col justify-between flex-1">
         <div>
           {/* Title & Metadata */}
-          <h3 className="text-xl font-black text-white group-hover:text-cyan-neon transition-colors duration-300 mb-2 tracking-wide uppercase font-mono">
-            {movie.name}
+          <h3 className="text-sm md:text-md lg:text-xl font-black text-white group-hover:text-cyan-neon transition-colors duration-300 mb-2 tracking-wide uppercase font-mono">
+            {movie.title}
           </h3>
 
           <div className="flex flex-wrap items-center gap-3 text-xs text-gray-400 mb-4 font-mono">
@@ -52,7 +52,7 @@ export default function TrailerCard({
               {movie.runtime ? `${movie.runtime} phút` : "N/A"}
             </span>
             <span>•</span>
-            <span className="flex items-center gap-1">
+            <span className="hidden lg:block flex items-center gap-1">
               <Globe className="w-3.5 h-3.5 text-gray-500" />
               {movie.country}
             </span>
@@ -92,7 +92,7 @@ export default function TrailerCard({
           </div>
 
           {/* Description */}
-          <p className="text-xs text-gray-400 line-clamp-2 mb-1 lg:mb-4 leading-relaxed font-mono">
+          <p className="hidden lg:block text-xs text-gray-400 line-clamp-2 mb-1 lg:mb-4 leading-relaxed font-mono">
             {movie.overview || "Chưa có mô tả cho phim này."}
           </p>
         </div>
@@ -104,7 +104,7 @@ export default function TrailerCard({
             className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-neon/10 hover:bg-cyan-neon text-cyan-neon hover:text-black font-bold text-xs rounded-md border border-cyan-neon/40 hover:border-cyan-neon transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:scale-105 shadow-md"
           >
             <Play className="w-3.5 h-3.5 fill-current" />
-            <span className="text-[8px] md:text-xs font-medium">Xem Chi Tiết & Trailer</span>
+            <span className="text-[8px] md:text-xs font-medium">Xem Chi Tiết</span>
           </Link>
         </div>
       </div>

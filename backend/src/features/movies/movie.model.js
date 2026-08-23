@@ -29,10 +29,7 @@ const findPopularMovies = async () => {
   return result.rows;
 };
 
-const findUpcomingMovies = async ({ page }) => {
-  const currentPage = Math.max(1, parseInt(page, 10) || 1);
-  const LIMIT = 18;
-  const OFFSET = (currentPage - 1) * LIMIT;
+const findUpcomingMovies = async ({ limit, offset }) => {
   const result = await pool.query(
     `
     SELECT * FROM movies
@@ -40,15 +37,12 @@ const findUpcomingMovies = async ({ page }) => {
     ORDER BY release_date ASC
     LIMIT $1 OFFSET $2;
   `,
-    [LIMIT, OFFSET],
+    [limit, offset],
   );
   return result.rows;
 };
 
-const findNowPlayingMovies = async ({ page = 1 } = {}) => {
-  const currentPage = Math.max(1, parseInt(page, 10) || 1);
-  const LIMIT = 18;
-  const OFFSET = (currentPage - 1) * LIMIT;
+const findNowPlayingMovies = async ({ limit, offset }) => {
   const result = await pool.query(
     `
     SELECT * FROM movies
@@ -57,7 +51,7 @@ const findNowPlayingMovies = async ({ page = 1 } = {}) => {
     ORDER BY release_date DESC
     LIMIT $1 OFFSET $2;
   `,
-    [LIMIT, OFFSET],
+    [limit, offset],
   );
   return result.rows;
 };
@@ -144,7 +138,34 @@ const findSimilarMovies = async (movieId) => {
     [movieId],
   );
   return result.rows;
-}
+};
+
+const findMoviesByGenre = async ({ genreName, genreId, limit, offset }) => {
+  let queryWhere = "";
+  let params = [limit, offset];
+
+  if (genreId) {
+    queryWhere = "WHERE $3 = ANY(genre_ids)";
+    params.push(parseInt(genreId, 10));
+  } else if (genreName) {
+    queryWhere = `WHERE EXISTS (
+      SELECT 1 FROM genres g 
+      WHERE (LOWER(g.name) = LOWER($3) OR LOWER('Phim ' || g.name) = LOWER($3) OR LOWER(g.name) = LOWER(REPLACE($3, 'Phim ', ''))) 
+      AND g.id = ANY(movies.genre_ids)
+    )`;
+    params.push(genreName.trim());
+  }
+
+  const sql = `
+    SELECT * FROM movies
+    ${queryWhere}
+    ORDER BY popularity DESC, release_date DESC
+    LIMIT $1 OFFSET $2;
+  `;
+
+  const result = await pool.query(sql, params);
+  return result.rows;
+};
 
 module.exports = {
   findPopularMovies,
@@ -155,4 +176,5 @@ module.exports = {
   findMovieOverviewStats,
   findMoviesBySearch,
   findSimilarMovies,
+  findMoviesByGenre,
 };

@@ -38,7 +38,7 @@ export default function MovieRow({ title, movies = [], viewAllLink = null }) {
       </div>
 
       {/* Swiper Horizontal Carousel */}
-      <div className="relative">
+      <div className="relative  w-full overflow-visible ">
         <Swiper
           modules={[Navigation, Autoplay]}
           slidesPerView={2.2}
@@ -49,11 +49,12 @@ export default function MovieRow({ title, movies = [], viewAllLink = null }) {
             pauseOnMouseEnter: true, // 🟢 Pauses sliding when mouse hovers over a movie card!
           }}
           loop={true}
-          speed={3000}                    // 🟢 6000ms = 6-second ultra-slow gliding speed!
+          speed={3000} // 🟢 6000ms = 6-second ultra-slow gliding speed!
           breakpoints={{
             640: { slidesPerView: 3.2, spaceBetween: 20 },
             1024: { slidesPerView: 5.2, spaceBetween: 24 },
             1280: { slidesPerView: 6.2, spaceBetween: 24 },
+            1600: { slidesPerView: 10.2, spaceBetween: 24 },
           }}
           className="pb-4 !overflow-visible"
         >

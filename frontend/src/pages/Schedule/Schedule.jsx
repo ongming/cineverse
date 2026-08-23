@@ -5,6 +5,8 @@ import { handleSelectCustomDate } from "../../utils/revenueUtils.js";
 import useScheduleData from "../../hooks/data/useScheduleData.js";
 import { motion } from "framer-motion";
 import PaginationControls from "../../components/PaginationControls/PaginationControls.jsx";
+import LoadingState from "../../components/Common/LoadingState.jsx";
+import ErrorState from "../../components/Common/ErrorState.jsx";
 
 export default function Schedule() {
   const {
@@ -21,26 +23,15 @@ export default function Schedule() {
   } = useScheduleData();
 
   if (isLoading) {
-    return (
-      <div className="w-full min-h-screen bg-[#080808] text-white flex flex-col items-center justify-center gap-4 font-mono">
-        <div className="w-12 h-12 border-4 border-amber-400/30 border-t-amber-400 rounded-full animate-spin" />
-        <p className="text-xs text-gray-400 uppercase tracking-widest animate-pulse">
-          ĐANG TẢI GIAO DIỆN LỊCH KHỞI CHIẾU CINEVERSE...
-        </p>
-      </div>
-    );
+    return <LoadingState message="ĐANG TẢI GIAO DIỆN LỊCH KHỞI CHIẾU CINEVERSE..." />;
   }
 
   if (isError) {
     return (
-      <div className="w-full min-h-screen bg-[#080808] text-white flex flex-col items-center justify-center gap-4 font-mono">
-        <h2 className="text-lg font-bold text-amber-400">
-          Không thể tải dữ liệu Lịch chiếu!
-        </h2>
-        <p className="text-xs text-gray-400">
-          Vui lòng kiểm tra kết nối và thử lại sau.
-        </p>
-      </div>
+      <ErrorState
+        title="Không thể tải dữ liệu Lịch chiếu!"
+        message="Vui lòng kiểm tra kết nối mạng và thử lại sau."
+      />
     );
   }
 

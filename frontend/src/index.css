@@ -42,4 +42,40 @@
   ::-webkit-scrollbar-thumb:hover {
     background: #00e5e5;
   }
+
+  /* Custom category visible scrollbar for mobile */
+  .custom-category-scrollbar::-webkit-scrollbar {
+    width: 6px !important;
+    display: block !important;
+  }
+  .custom-category-scrollbar::-webkit-scrollbar-track {
+    background: #181a24 !important;
+    border-radius: 4px;
+  }
+  .custom-category-scrollbar::-webkit-scrollbar-thumb {
+    background: #fbbf24 !important;
+    border-radius: 4px;
+  }
+  .custom-category-scrollbar {
+    scrollbar-width: thin !important;
+    scrollbar-color: #fbbf24 #181a24 !important;
+  }
+
+  /* Custom horizontal table visible scrollbar */
+  .custom-horizontal-scrollbar::-webkit-scrollbar {
+    height: 6px !important;
+    display: block !important;
+  }
+  .custom-horizontal-scrollbar::-webkit-scrollbar-track {
+    background: #181a24 !important;
+    border-radius: 4px;
+  }
+  .custom-horizontal-scrollbar::-webkit-scrollbar-thumb {
+    background: #00e5e5 !important;
+    border-radius: 4px;
+  }
+  .custom-horizontal-scrollbar {
+    scrollbar-width: thin !important;
+    scrollbar-color: #00e5e5 #181a24 !important;
+  }
 }

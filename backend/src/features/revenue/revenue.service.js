@@ -11,11 +11,27 @@ const formatUrl = (path, baseUrl) => {
 };
 
 const getTopRevenueMovies = async ({ genreId, year, page }) => {
-  const movies = await revenueModel.findTopRevenueMovies({ genreId, year, page });
-  return movies.map((m) => ({
+  const currentPage = Math.max(1, parseInt(page, 10) || 1);
+  const PAGE_SIZE = 20;
+  const FETCH_LIMIT = PAGE_SIZE + 1;
+  const offset = (currentPage - 1) * PAGE_SIZE;
+
+  const rawRows = await revenueModel.findTopRevenueMovies({
+    genreId,
+    year,
+    limit: FETCH_LIMIT,
+    offset,
+  });
+
+  const hasNextPage = rawRows.length > PAGE_SIZE;
+  const slicedMovies = hasNextPage ? rawRows.slice(0, PAGE_SIZE) : rawRows;
+
+  const movies = slicedMovies.map((m) => ({
     ...m,
     poster_path: formatUrl(m.poster_path, IMAGE_BASE_W500),
   }));
+
+  return { movies, hasNextPage };
 };
 
 const getRevenueStats = async ({ genreId, year }) => {

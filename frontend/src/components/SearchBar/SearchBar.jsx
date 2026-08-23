@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, X } from "lucide-react";
+import useClickOutside from "../../hooks/ui/HandleClickOutside.js";
 
 export default function SearchBar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,6 +16,9 @@ export default function SearchBar() {
       inputRef.current.focus();
     }
   }, [isOpen]);
+
+  // 🟢 Use your existing useClickOutside hook
+  useClickOutside(searchContainerRef, () => setIsOpen(false));
 
   const handleSubmit = (e) => {
     e.preventDefault();

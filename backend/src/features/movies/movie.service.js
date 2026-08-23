@@ -32,41 +32,55 @@ const getPopularMovies = async () => {
 };
 
 const getNowPlayingMovies = async (page) => {
-  const nowPlayingMovies = await movieModel.findNowPlayingMovies({ page });
-  if (!nowPlayingMovies) {
+  const currentPage = Math.max(1, parseInt(page, 10) || 1);
+  const PAGE_SIZE = 18;
+  const FETCH_LIMIT = PAGE_SIZE + 1;
+  const offset = (currentPage - 1) * PAGE_SIZE;
+
+  const rawRows = await movieModel.findNowPlayingMovies({ limit: FETCH_LIMIT, offset });
+  if (!rawRows) {
     throw new NotFoundError("No now playing movies found");
   }
-  return nowPlayingMovies.map((movie) => {
-    const fullPoster = formatUrl(movie.poster_path, IMAGE_BASE_W500);
 
-    return {
-      ...movie,
-      name: movie.title,
-      poster_path: fullPoster,
-      trailerKey: movie.youtube_key
-        ? movie.youtube_key.replace(YOUTUBE_WATCH_BASE, "")
-        : null,
-    };
-  });
+  const hasNextPage = rawRows.length > PAGE_SIZE;
+  const slicedMovies = hasNextPage ? rawRows.slice(0, PAGE_SIZE) : rawRows;
+
+  const movies = slicedMovies.map((movie) => ({
+    ...movie,
+    name: movie.title,
+    poster_path: formatUrl(movie.poster_path, IMAGE_BASE_W500),
+    trailerKey: movie.youtube_key
+      ? movie.youtube_key.replace(YOUTUBE_WATCH_BASE, "")
+      : null,
+  }));
+
+  return { movies, hasNextPage };
 };
 
 const getUpcomingMovies = async (page) => {
-  const upcomingMovies = await movieModel.findUpcomingMovies({ page });
-  if (!upcomingMovies) {
+  const currentPage = Math.max(1, parseInt(page, 10) || 1);
+  const PAGE_SIZE = 18;
+  const FETCH_LIMIT = PAGE_SIZE + 1;
+  const offset = (currentPage - 1) * PAGE_SIZE;
+
+  const rawRows = await movieModel.findUpcomingMovies({ limit: FETCH_LIMIT, offset });
+  if (!rawRows) {
     throw new NotFoundError(`No upcoming movies found`);
   }
 
-  return upcomingMovies.map((movie) => {
-    const fullPoster = formatUrl(movie.poster_path, IMAGE_BASE_W500);
-    return {
-      ...movie,
-      name: movie.title,
-      poster_path: fullPoster,
-      trailerKey: movie.youtube_key
-        ? movie.youtube_key.replace(YOUTUBE_WATCH_BASE, "")
-        : null,
-    };
-  });
+  const hasNextPage = rawRows.length > PAGE_SIZE;
+  const slicedMovies = hasNextPage ? rawRows.slice(0, PAGE_SIZE) : rawRows;
+
+  const movies = slicedMovies.map((movie) => ({
+    ...movie,
+    name: movie.title,
+    poster_path: formatUrl(movie.poster_path, IMAGE_BASE_W500),
+    trailerKey: movie.youtube_key
+      ? movie.youtube_key.replace(YOUTUBE_WATCH_BASE, "")
+      : null,
+  }));
+
+  return { movies, hasNextPage };
 };
 
 const getTopRatedMovies = async (genreId) => {
@@ -143,7 +157,32 @@ const getSimilarMovies = async (movieId) => {
       poster_path: fullPoster,
     };
   });
-}
+};
+
+const getMoviesByGenre = async ({ genreName, genreId, page }) => {
+  const currentPage = Math.max(1, parseInt(page, 10) || 1);
+  const PAGE_SIZE = 18;
+  const FETCH_LIMIT = PAGE_SIZE + 1;
+  const offset = (currentPage - 1) * PAGE_SIZE;
+
+  const rawRows = await movieModel.findMoviesByGenre({
+    genreName,
+    genreId,
+    limit: FETCH_LIMIT,
+    offset,
+  });
+
+  const hasNextPage = rawRows.length > PAGE_SIZE;
+  const slicedMovies = hasNextPage ? rawRows.slice(0, PAGE_SIZE) : rawRows;
+
+  const movies = slicedMovies.map((movie) => ({
+    ...movie,
+    name: movie.title,
+    poster_path: formatUrl(movie.poster_path, IMAGE_BASE_W500),
+  }));
+
+  return { movies, hasNextPage };
+};
 
 module.exports = {
   getPopularMovies,
@@ -154,4 +193,5 @@ module.exports = {
   getMovieOverviewStats,
   searchMovies,
   getSimilarMovies,
+  getMoviesByGenre,
 };

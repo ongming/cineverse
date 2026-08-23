@@ -3,10 +3,13 @@ const revenueService = require("./revenue.service");
 const getTopRevenueMovies = async (req, res, next) => {
   try {
     const { genreId, year, page } = req.query;
-    const topRevenueMovies = await revenueService.getTopRevenueMovies({ genreId, year, page });
+    const { movies, hasNextPage } = await revenueService.getTopRevenueMovies({ genreId, year, page });
     res.status(200).json({
       success: true,
-      data: topRevenueMovies,
+      data: {
+        movies,
+        hasNextPage,
+      },
     });
   } catch (error) {
     next(error);

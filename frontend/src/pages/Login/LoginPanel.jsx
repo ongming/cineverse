@@ -156,7 +156,7 @@ export default function LoginPanel({ onSwitchToRegister, onSwitchToForgot }) {
             d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.4-6.4-5.2L1.9 16C3.7 19.7 7.5 23 12 23z"
           />
         </svg>
-        ĐĂNG KÝ BẰNG GOOGLE
+        TIẾP TỤC VỚI GOOGLE
       </button>
 
       {/* Registration Mirror Footer Link */}

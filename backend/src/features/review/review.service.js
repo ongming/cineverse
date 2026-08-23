@@ -4,13 +4,17 @@ const getMovieReviewsService = async (movieId, page = 1, limit = 10) => {
   const cleanMovieId = parseInt(movieId);
   const cleanPage = Math.max(1, parseInt(page));
   const cleanLimit = Math.max(1, Math.min(50, parseInt(limit)));
+  const fetchLimit = cleanLimit + 1;
   const offset = (cleanPage - 1) * cleanLimit;
 
   // Fetch summary stats & review list in parallel
-  const [summary, reviews] = await Promise.all([
+  const [summary, rawReviews] = await Promise.all([
     reviewModel.getMovieRatingSummary(cleanMovieId),
-    reviewModel.getReviewsByMovieId(cleanMovieId, cleanLimit, offset),
+    reviewModel.getReviewsByMovieId(cleanMovieId, fetchLimit, offset),
   ]);
+
+  const hasMore = (rawReviews || []).length > cleanLimit;
+  const reviews = hasMore ? rawReviews.slice(0, cleanLimit) : rawReviews;
 
   const total = parseInt(summary.totalReviews) || 0;
   const star5Count = parseInt(summary.star5) || 0;
@@ -50,7 +54,7 @@ const getMovieReviewsService = async (movieId, page = 1, limit = 10) => {
     pagination: {
       currentPage: cleanPage,
       limit: cleanLimit,
-      hasMore: reviews.length === cleanLimit,
+      hasMore,
     },
   };
 };

@@ -25,7 +25,7 @@ export default function HeroBanner({ movies = [] }) {
     <div
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="relative w-full h-[80vh] sm:h-[85vh] bg-[#080808] overflow-hidden select-none group"
+      className="relative w-full mx-auto h-[40vh] sm:h-[45vh] lg:h-[85vh] bg-[#080808] overflow-hidden select-none group"
     >
       <AnimatePresence mode="wait">
         <motion.div
@@ -62,7 +62,7 @@ export default function HeroBanner({ movies = [] }) {
           <div className="absolute inset-0 bg-gradient-to-r from-[#080808] via-[#080808]/20 to-transparent w-full sm:w-2/3 pointer-events-none z-5" />
 
           {/* Content Details Container */}
-          <div className="absolute inset-0 max-w-7xl mx-auto px-4 sm:px-8 flex flex-col justify-center items-start z-10 text-left pointer-events-auto">
+          <div className="absolute inset-0 max-w-7xl mx-auto px-4 sm:px-8 flex flex-col justify-end pb-15 sm:pb-20 items-start z-10 text-left pointer-events-auto">
             {/* Top Rating & Status Pill */}
             <div className="flex items-center gap-2 mb-4 font-mono text-xs">
               <span className="px-3 py-1 bg-amber-400 text-black font-extrabold rounded-full flex items-center gap-1 shadow-lg shadow-amber-400/20">
@@ -73,36 +73,36 @@ export default function HeroBanner({ movies = [] }) {
                 TMDb
               </span>
 
-              <span className="px-3 py-1 text-cyan-400 font-bold rounded-full uppercase">
+              <span className="px-3 py-1  hidden sm:block text-cyan-400 font-bold rounded-full uppercase">
                 BOM TẤT HOT NHẤT TUẦN
               </span>
             </div>
 
             {/* Title */}
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white font-mono uppercase tracking-tight mb-3 line-clamp-2 max-w-3xl drop-shadow-2xl">
+            <h1 className="text-md sm:text-4xl lg:text-6xl font-black text-white font-mono uppercase tracking-tight mb-3 line-clamp-2 max-w-3xl drop-shadow-2xl">
               {currentMovie.title}
             </h1>
 
             {/* Description */}
-            <p className="text-xs sm:text-sm text-gray-300 font-mono leading-relaxed line-clamp-3 max-w-2xl mb-6 text-shadow">
+            <p className="text-[10px] hidden lg:block sm:text-sm text-gray-300 font-mono leading-relaxed line-clamp-3 max-w-2xl mb-6 text-shadow">
               {currentMovie.overview ||
                 "Không có mô tả chi tiết cho bộ phim này. Hãy xem trailer để biết thêm thông tin!"}
             </p>
 
             {/* Action CTA Buttons Bar */}
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex p-3 sm:p-0 flex-wrap items-center gap-3">
               <Link
                 to={`/trailer/${currentMovie.id}`}
-                className="py-3.5 px-6 bg-cyan-400 hover:bg-cyan-300 text-black font-extrabold text-xs sm:text-sm font-mono uppercase tracking-wider rounded-xl flex items-center gap-2 transition-all shadow-lg shadow-cyan-400/30 active:scale-95 no-underline"
+                className="py-3.5 px-3.5 bg-cyan-400 hover:bg-cyan-300 text-black font-extrabold text-[10px] sm:text-sm font-mono uppercase tracking-wider rounded-xl flex items-center gap-2 transition-all shadow-lg shadow-cyan-400/30 active:scale-95 no-underline"
               >
                 <Play className="w-4.5 h-4.5 fill-black" />
-                <span>XEM TRAILER ĐẦY ĐỦ</span>
+                <span className="hidden sm:inline">XEM TRAILER ĐẦY ĐỦ</span>
               </Link>
 
               <button
                 type="button"
                 onClick={(e) => handleToggle(currentMovie, e)}
-                className={`py-3.5 px-5 border text-xs sm:text-sm font-mono font-bold rounded-xl flex items-center gap-2 transition-all cursor-pointer ${
+                className={`py-3.5 px-3.5 border text-[10px] sm:text-sm font-mono font-bold rounded-xl flex items-center gap-2 transition-all cursor-pointer ${
                   isBookmarked(currentMovie.id)
                     ? "bg-amber-400 border-amber-400 text-black shadow-lg shadow-amber-400/20"
                     : "bg-black/60 hover:bg-black/80 border-white/20 hover:border-amber-400 text-white hover:text-amber-400"
@@ -137,7 +137,7 @@ export default function HeroBanner({ movies = [] }) {
       <button
         type="button"
         onClick={() => setIsMuted(!isMuted)}
-        className={`absolute bottom-6 right-6 z-10 py-4 px-4 bg-black/60 hover:bg-black/80 border text-xs sm:text-sm font-mono font-bold rounded-full flex items-center gap-2 transition-all cursor-pointer active:scale-95 ${
+        className={`absolute bottom-12 right-6 flex items-center justify-center w-10 h-10 z-10 py-1 px-1 bg-black/60 hover:bg-black/80 border text-xs sm:text-sm font-mono font-bold rounded-full flex items-center gap-2 transition-all cursor-pointer active:scale-95 ${
           !isMuted
             ? "border-cyan-400 text-cyan-400 shadow-lg border-2"
             : "border-white/20 text-gray-400 hover:text-white"

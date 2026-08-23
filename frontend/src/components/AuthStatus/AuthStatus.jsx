@@ -18,17 +18,7 @@ export default function AuthStatus() {
     logout();
   };
 
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+
 
   return (
     <div className="flex items-center shrink-0">
@@ -43,6 +33,7 @@ export default function AuthStatus() {
               <img
                 className="w-full h-full object-cover block"
                 src={user.avatar_url || defaultAvatar}
+                referrerPolicy="no-referrer"
                 onError={(e) => {
                   e.currentTarget.src = defaultAvatar;
                 }}
@@ -74,12 +65,14 @@ export default function AuthStatus() {
             </div>
           </div>
 
-          {/* User Info Popup Modal */}
-          <UserInfoModal
-            isOpen={isUserInfoModalOpen}
-            onClose={() => setIsUserInfoModalOpen(false)}
-            user={user}
-          />
+          {/* 🟢 User Info Popup Modal (Unmounts on close to reset state completely!) */}
+          {isUserInfoModalOpen && (
+            <UserInfoModal
+              isOpen={isUserInfoModalOpen}
+              onClose={() => setIsUserInfoModalOpen(false)}
+              user={user}
+            />
+          )}
         </>
       ) : (
         <Link

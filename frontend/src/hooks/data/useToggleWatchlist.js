@@ -38,12 +38,16 @@ export function useToggleWatchlist() {
       // ⚡ 2. Update main Watchlist Page grid cache directly (0ms!)
       queryClient.setQueriesData(
         { queryKey: ["watchlist"] },
-        (oldList = []) => {
-          if (isBookmarked) {
-            return oldList.filter((item) => item.id !== movie.id);
-          } else {
-            return [movie, ...oldList].slice(0, 18);
-          }
+        (oldData) => {
+          if (!oldData) return { watchlist: [], hasNextPage: false };
+          const currentList = Array.isArray(oldData) ? oldData : (oldData.watchlist || []);
+          const updatedList = isBookmarked
+            ? currentList.filter((item) => item.id !== movie.id)
+            : [movie, ...currentList].slice(0, 18);
+
+          return Array.isArray(oldData)
+            ? updatedList
+            : { ...oldData, watchlist: updatedList };
         }
       );
 

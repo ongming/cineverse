@@ -11,15 +11,18 @@ export default function useRevenueAnalytics() {
 
   const { data: categories = [] } = useCategory();
 
+  // 🟢 Destructure movies and hasNextPage from backend revenue response
   const {
-    data: revenueMovies = [],
+    data: revenueResponse = {},
     isLoading: isMoviesLoading,
     isError: isMoviesError,
   } = useRevenueData({
     year: selectedYear === "ALL" ? undefined : selectedYear,
-    genre: selectedGenre === "ALL" ? undefined : selectedGenre,
+    genreId: selectedGenre === "ALL" ? undefined : selectedGenre,
     page: page,
   });
+
+  const { movies: revenueMovies = [], hasNextPage = false } = revenueResponse || {};
 
   const {
     data: revenueStats = {},
@@ -27,7 +30,7 @@ export default function useRevenueAnalytics() {
     isError: isStatsError,
   } = useRevenueStats({
     year: selectedYear === "ALL" ? undefined : selectedYear,
-    genre: selectedGenre === "ALL" ? undefined : selectedGenre,
+    genreId: selectedGenre === "ALL" ? undefined : selectedGenre,
   });
 
   const {
@@ -36,7 +39,7 @@ export default function useRevenueAnalytics() {
     total_movies = 0,
     avg_profit = 0,
     avg_roi = 0,
-    top_genre = "Phim Phiêu Lưu",
+    top_genre = selectedGenre === "ALL" ? "N/A" : categories.find((c) => c.id === selectedGenre)?.name || "N/A",
     available_years = [],
     top_5_movies = [],
     profit_kings = [],
@@ -77,31 +80,6 @@ export default function useRevenueAnalytics() {
     return Math.max(...top_5_movies.map((m) => Number(m.revenue) || 0));
   }, [top_5_movies]);
 
-  const handleExportCSV = () => {
-    if (!revenueMovies.length) return;
-    const headers = [
-      "Xếp hạng,Tên Phim,Năm,Kinh Phí (Budget),Doanh Thu (Revenue)",
-    ];
-    const rows = revenueMovies.map((m, index) => {
-      return `"${index + 1}","${m.title}",${m.release_date ? m.release_date.slice(0, 4) : ""},"${m.budget}","${m.revenue}"`;
-    });
-
-    const csvString = "\uFEFF" + [headers, ...rows].join("\n");
-    const blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-
-    const link = document.createElement("a");
-    link.setAttribute("href", url);
-    link.setAttribute(
-      "download",
-      `cineverse_revenue_report_${new Date().toISOString().slice(0, 10)}.csv`,
-    );
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
-
   return {
     selectedYear,
     handleYearChange,
@@ -112,6 +90,7 @@ export default function useRevenueAnalytics() {
     uniqueYears,
     uniqueGenres,
     revenueMovies,
+    hasNextPage,
     maxRevenue,
     total_revenue,
     total_budget,
@@ -124,6 +103,5 @@ export default function useRevenueAnalytics() {
     box_office_flops,
     page,
     setPage,
-    handleExportCSV,
   };
 }

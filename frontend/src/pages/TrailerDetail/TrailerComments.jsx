@@ -180,7 +180,11 @@ export default function TrailerComments({ movieId }) {
                     <img
                       src={avatar}
                       alt={author}
+                      referrerPolicy="no-referrer"
                       className="w-10 h-10 rounded-full object-cover border border-white/10 shrink-0"
+                      onError={(e) => {
+                        e.currentTarget.src = defaultAvatar;
+                      }}
                     />
                     <div>
                       <div className="flex items-center gap-2">

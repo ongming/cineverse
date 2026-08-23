@@ -53,7 +53,7 @@ export function useRegister() {
     try {
       setIsLoading(true);
       await register(username, email, password);
-      navigate("/login");
+      navigate("/");
     } catch (err) {
       setErrorMessage(err.message || "Đăng ký thất bại.");
     } finally {

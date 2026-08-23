@@ -26,7 +26,6 @@ export default function useLogin() {
     } finally {
       setIsLoading(false);
     }
-    console.log("Login submitted:", { email, password });
   };
 
   return {
