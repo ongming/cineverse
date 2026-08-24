@@ -61,21 +61,21 @@ export default function TrailerVideo({
         onClick={(e) => e.stopPropagation()}
         className="relative w-full max-w-5xl bg-black border-0 rounded-none sm:rounded-lg overflow-hidden shadow-[0_0_60px_rgba(0,0,0,0.95)] flex flex-col group"
       >
-        {/* 1. OVERLAID MODAL HEADER BAR (Fix #3: Transparent gradient overlay, no cyan accent dash) */}
-        <div className="absolute top-0 left-0 right-0 p-4 sm:p-6 bg-gradient-to-b from-black/90 via-black/40 to-transparent z-30 flex items-center justify-between pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <h3 className="text-xs sm:text-sm font-bold text-white font-mono uppercase tracking-wider m-0 pointer-events-auto drop-shadow-md">
+        {/* 1. OVERLAID MODAL HEADER BAR (Fix: Always visible on mobile, hover-fade on desktop) */}
+        <div className="absolute top-0 left-0 right-0 p-4 sm:p-6 bg-gradient-to-b from-black/90 via-black/40 to-transparent z-30 flex items-center justify-between opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300">
+          <h3 className="text-xs sm:text-sm font-bold text-white font-mono uppercase tracking-wider m-0 drop-shadow-md">
             TRAILER: {movieTitle || "CINEVERSE PREVIEW"}
           </h3>
 
-          <div className="flex items-center gap-2 pointer-events-auto">
+          <div className="flex items-center gap-2">
             {/* Close Button */}
             <button
               type="button"
               onClick={onClose}
-              className="p-2 bg-black/50 backdrop-blur-md border border-white/20 hover:bg-red-500 hover:border-red-500 text-white rounded-full transition-all cursor-pointer"
+              className="p-2 bg-black/60 backdrop-blur-md border border-white/30 hover:bg-red-500 hover:border-red-500 text-white rounded-full transition-all cursor-pointer shadow-lg active:scale-95"
               title="Đóng video"
             >
-              <X className="w-4 h-4" />
+              <X className="w-5 h-5 sm:w-4 sm:h-4" />
             </button>
           </div>
         </div>
@@ -95,8 +95,8 @@ export default function TrailerVideo({
           )}
         </div>
 
-        {/* 3. OVERLAID BOTTOM CONTROL BAR & SCRUBBER (Fix #4 & #6: Hover fade overlay with clear control hierarchy) */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 bg-gradient-to-t from-black/95 via-black/75 to-transparent z-30 flex flex-col gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        {/* 3. OVERLAID BOTTOM CONTROL BAR & SCRUBBER (Fix: Always visible on mobile, hover-fade on desktop) */}
+        <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 bg-gradient-to-t from-black/95 via-black/75 to-transparent z-30 flex flex-col gap-3 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300">
           
           {/* Progress Bar Track (Fix #5: Primary control - thicker track with glowing cyan highlight) */}
           <div
