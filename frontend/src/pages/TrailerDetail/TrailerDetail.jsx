@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useTrailerDetail } from "../../hooks/data/useTrailerDetail.js";
 import LoadingState from "../../components/Common/LoadingState.jsx";
 import ErrorState from "../../components/Common/ErrorState.jsx";
-import TrailerVideo from "./trailerVideo.jsx";
+import TrailerVideo from "./TrailerVideo.jsx";
 import YouMightAlsoLike from "./YouMightAlsoLike.jsx";
 import TrailerImages from "./TrailerImages.jsx";
 import TrailerComments from "./TrailerComments.jsx";
@@ -12,7 +12,6 @@ import {
   Star,
   Play,
   Bookmark,
-  Share2,
   ChevronRight,
   TrendingUp,
   ArrowLeft,
@@ -27,14 +26,7 @@ export default function TrailerDetail() {
   } = useTrailerDetail();
 
   // Extract state & business logic from custom hooks
-  const {
-    isSaved,
-    isCastModalOpen,
-    setIsCastModalOpen,
-    navigate,
-    handleToggle,
-    isBookmarked,
-  } = trailerfeatures;
+  const { navigate, handleToggle, isBookmarked } = trailerfeatures;
 
   const [isTrailerVideoOpen, setIsTrailerVideoOpen] = useState(false);
 
@@ -119,14 +111,26 @@ export default function TrailerDetail() {
           {/* Primary Action Buttons Bar (Fix #4: Cyan reserved ONLY for primary CTA) */}
           <div className="flex items-center gap-3 pt-4 border-t border-white/10">
             {/* WATCH NOW / TRAILER Button */}
-            <button
-              type="button"
-              onClick={() => setIsTrailerVideoOpen(true)}
-              className="flex-1 py-3.5 px-6 bg-cyan-400 hover:bg-cyan-300 text-black font-extrabold text-xs sm:text-sm uppercase tracking-wider rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-all shadow-lg shadow-cyan-400/20 active:scale-95"
-            >
-              <Play className="w-4 h-4 fill-black" />
-              <span>XEM TRAILER NGAY</span>
-            </button>
+            {(() => {
+              const hasTrailer = Boolean(
+                movie.trailerKey ||
+                  movie.trailerUrl ||
+                  (movie.trailers && movie.trailers.length > 0)
+              );
+              return (
+                <button
+                  type="button"
+                  disabled={!hasTrailer}
+                  onClick={() => hasTrailer && setIsTrailerVideoOpen(true)}
+                  className="flex-1 py-3.5 px-6 bg-cyan-400 hover:bg-cyan-300 text-black font-extrabold text-xs sm:text-sm uppercase tracking-wider rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-all shadow-lg shadow-cyan-400/20 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-cyan-400 disabled:shadow-none"
+                >
+                  <Play className="w-4 h-4 fill-black" />
+                  <span>
+                    {hasTrailer ? "XEM TRAILER NGAY" : "CHƯA CÓ TRAILER"}
+                  </span>
+                </button>
+              );
+            })()}
 
             {/* Watchlist Bookmark Button */}
             <button
@@ -296,13 +300,11 @@ export default function TrailerDetail() {
       <TrailerComments movieId={movie?.id} />
       {/* FULLSCREEN LIGHTBOX MODAL */}
 
-
-
       {/* CYAN-NEON YOUTUBE-INSPIRED POPUP PLAYER */}
       <TrailerVideo
         isOpen={isTrailerVideoOpen}
         onClose={() => setIsTrailerVideoOpen(false)}
-        videoKey={movie?.trailerKey || movie?.trailerUrl || "d9MyW72ELq0"}
+        videoKey={movie?.trailerKey || movie?.trailerUrl}
         movieTitle={movie?.name}
       />
     </div>

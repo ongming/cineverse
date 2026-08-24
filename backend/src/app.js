@@ -1,12 +1,14 @@
 // app.js - Cấu hình Express Application (Middlewares, Router, Error Handlers)
 require("dotenv").config();
 const express = require("express");
+const cors = require("cors");
 const apiRoutes = require("./routes");
 const { errorHandler } = require("./middlewares/errorHandler");
 
 const app = express();
 
 // Built-in Middlewares
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

@@ -7,6 +7,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import App from "./App.jsx";
 import "./index.css";
 
+axios.defaults.baseURL = import.meta.env.VITE_API_URL || "";
+
 axios.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
@@ -16,7 +18,9 @@ axios.interceptors.request.use((config) => {
 });
 
 const queryClient = new QueryClient();
-const GOOGLE_CLIENT_ID = "843570612609-g1ilhl61o3vuk6lahn2ujmqsthsluack.apps.googleusercontent.com";
+const GOOGLE_CLIENT_ID =
+  import.meta.env.VITE_GOOGLE_CLIENT_ID ||
+  "960329031361-pbovelgc2lpreue75l8gf89q4ebhku6b.apps.googleusercontent.com";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

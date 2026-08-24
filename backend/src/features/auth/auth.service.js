@@ -1,11 +1,11 @@
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const axios = require("axios");
 const userModel = require("./auth.model");
 const { OAuth2Client } = require("google-auth-library");
 const ConflictError = require("../../errors/ConflictError");
 const UnauthorizedError = require("../../errors/UnauthorizedError");
-const { sendOTPEmail } = require("../../services/emailService");
+const { sendOTPEmail } = require("../../services/emailService.js");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES_IN = "7d"; // Token expiration time (7 days)

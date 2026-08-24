@@ -1,0 +1,29 @@
+name: Daily TMDb Sync Job
+
+on:
+  schedule:
+    # Runs every day at 00:00 UTC (07:00 AM Vietnam Time)
+    - cron: "0 0 * * *"
+  workflow_dispatch: # Allows manual one-click trigger from GitHub UI
+
+jobs:
+  sync-tmdb:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run TMDb Sync Engine
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+        run: node sync-local.js
