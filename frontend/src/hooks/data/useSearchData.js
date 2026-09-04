@@ -1,4 +1,4 @@
-// hooks/data/useSearchData.js
+import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { searchMovies } from "../../service/movie.js";
@@ -6,14 +6,15 @@ import { searchMovies } from "../../service/movie.js";
 export function useSearchData() {
   const [searchParams, setSearchParams] = useSearchParams();
   const searchTerm = searchParams.get("q") || "";
+  const [page, setPage] = useState(1);
 
   const {
-    data: movies = [],
+    data = { movies: [], hasNextPage: false },
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["search-movies", searchTerm],
-    queryFn: () => searchMovies(searchTerm),
+    queryKey: ["search-movies", searchTerm, page],
+    queryFn: () => searchMovies(searchTerm, page),
     enabled: searchTerm.trim().length > 0,
     staleTime: 5 * 60 * 1000,
   });
@@ -28,9 +29,12 @@ export function useSearchData() {
 
   return {
     searchTerm,
-    movies,
+    movies: data?.movies || [],
+    hasNextPage: data?.hasNextPage || false,
     isLoading,
     isError,
     handleSearchChange,
+    page,
+    setPage,
   };
 }

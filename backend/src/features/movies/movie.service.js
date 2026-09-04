@@ -132,16 +132,42 @@ const getMovieOverviewStats = async () => {
   return await movieModel.findMovieOverviewStats();
 };
 
-const searchMovies = async (query) => {
-  const movies = await movieModel.findMoviesBySearch(query);
-  return movies.map((movie) => {
+const searchMovies = async (query, page) => {
+  if (!query || typeof query !== "string" || !query.trim()) {
+    return { movies: [], hasNextPage: false };
+  }
+
+  const currentPage = Math.max(1, parseInt(page, 10) || 1);
+  const PAGE_SIZE = 18;
+  const FETCH_LIMIT = PAGE_SIZE + 1;
+  const offset = (currentPage - 1) * PAGE_SIZE;
+
+  const rawRows = await movieModel.findMoviesBySearch({
+    query: query.trim(),
+    limit: FETCH_LIMIT,
+    offset,
+  });
+
+  if (!rawRows) {
+    return { movies: [], hasNextPage: false };
+  }
+
+  const hasNextPage = rawRows.length > PAGE_SIZE;
+  const slicedMovies = hasNextPage ? rawRows.slice(0, PAGE_SIZE) : rawRows;
+
+  const movies = slicedMovies.map((movie) => {
     const fullPoster = formatUrl(movie.poster_path, IMAGE_BASE_W500);
     return {
       ...movie,
       name: movie.title,
       poster_path: fullPoster,
+      trailerKey: movie.youtube_key
+        ? movie.youtube_key.replace(YOUTUBE_WATCH_BASE, "")
+        : null,
     };
   });
+
+  return { movies, hasNextPage };
 };
 
 const getSimilarMovies = async (movieId) => {

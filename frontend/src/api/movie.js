@@ -26,8 +26,8 @@ export function fetchMovieOverviewStats() {
   return axios.get("/api/movies/overview-stats");
 }
 
-export function fetchSearchMovies(query) {
-  return axios.get("/api/movies/search", { params: { q: query } });
+export function fetchSearchMovies(query, page) {
+  return axios.get("/api/movies/search", { params: { q: query, page } });
 }
 
 export function fetchSimilarMovies(id) {

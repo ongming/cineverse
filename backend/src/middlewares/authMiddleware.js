@@ -15,6 +15,6 @@ const authMiddleware = (req, res, next) => {
   } catch (error) {
     return next(new UnauthorizedError("token không hợp lệ"));
   }
-};
+};  
 
 module.exports = authMiddleware;

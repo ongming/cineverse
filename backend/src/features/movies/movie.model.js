@@ -106,10 +106,8 @@ const findMovieOverviewStats = async () => {
   return result.rows[0];
 };
 
-const findMoviesBySearch = async (query) => {
-  if (!query || typeof query !== "string" || !query.trim()) return [];
-
-  const searchPattern = `%${query.trim()}%`;
+const findMoviesBySearch = async ({ query, limit = 19, offset = 0 }) => {
+  const searchPattern = `%${query}%`;
   const result = await pool.query(
     `
     SELECT * FROM movies
@@ -117,9 +115,9 @@ const findMoviesBySearch = async (query) => {
        OR overview ILIKE $1
        OR director_name ILIKE $1
     ORDER BY popularity DESC
-    LIMIT 20;
+    LIMIT $2 OFFSET $3;
   `,
-    [searchPattern],
+    [searchPattern, limit, offset]
   );
   return result.rows;
 };

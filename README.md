@@ -13,7 +13,7 @@
 * 🌐 **Live Website**: [https://cineverse-frontend-seven.vercel.app](https://cineverse-frontend-seven.vercel.app)
 * 🐙 **Frontend Repository**: [cineverse-frontend](https://github.com/ongming/cineverse-frontend)
 * 🐙 **Backend Repository**: [cineverse-backend](https://github.com/ongming/cineverse-backend)
-
+ 
 ---
 
 ## ✨ Key Features

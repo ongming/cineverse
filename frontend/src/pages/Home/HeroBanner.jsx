@@ -21,20 +21,33 @@ export default function HeroBanner({ movies = [] }) {
 
   if (!movies || movies.length === 0 || !currentMovie) return null;
 
+  const handleDragEnd = (event, info) => {
+    const swipeThreshold = 40;
+    if (info.offset.x < -swipeThreshold || info.velocity.x < -400) {
+      setCurrentIndex((prev) => (prev + 1) % movies.length);
+    } else if (info.offset.x > swipeThreshold || info.velocity.x > 400) {
+      setCurrentIndex((prev) => (prev - 1 + movies.length) % movies.length);
+    }
+  };
+
   return (
     <div
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="relative w-full mx-auto h-[40vh] sm:h-[45vh] lg:h-[85vh] bg-[#080808] overflow-hidden select-none group"
+      className="relative w-full mx-auto h-[40vh] sm:h-[45vh] lg:h-[85vh] bg-[#080808] overflow-hidden select-none group touch-pan-y"
     >
       <AnimatePresence mode="wait">
         <motion.div
           key={currentMovie.id}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.8 }}
-          className="absolute inset-0 w-full h-full"
+          drag="x"
+          dragConstraints={{ left: 0, right: 0 }}
+          dragElastic={0.15}
+          onDragEnd={handleDragEnd}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -20 }}
+          transition={{ duration: 0.5 }}
+          className="absolute inset-0 w-full h-full cursor-grab active:cursor-grabbing"
         >
           {/* Background YouTube Video Trailer or Static Backdrop Image */}
           {isPlayingTrailer && currentMovie.trailerKey ? (

@@ -5,8 +5,11 @@ function Search() {
   const {
     searchTerm,
     movies: searchMovies,
+    hasNextPage,
     isLoading,
     isError,
+    page,
+    setPage,
   } = useSearchData();
 
   if (isLoading) {
@@ -38,7 +41,12 @@ function Search() {
       <h2 className="mb-5 mt-0 text-[30px] font-bold">
         Kết quả tìm kiếm cho: {searchTerm}
       </h2>
-      <MovieList movies={searchMovies} />
+      <MovieList
+        movies={searchMovies}
+        page={page}
+        setPage={setPage}
+        hasNextPage={hasNextPage}
+      />
     </div>
   );
 }

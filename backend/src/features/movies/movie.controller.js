@@ -84,11 +84,14 @@ const getMovieOverviewStats = async (req, res, next) => {
 
 const searchMovies = async (req, res, next) => {
   try {
-    const { q } = req.query;
-    const movies = await movieService.searchMovies(q);
+    const { q, page } = req.query;
+    const { movies, hasNextPage } = await movieService.searchMovies(q, page);
     res.status(200).json({
       success: true,
-      data: movies,
+      data: {
+        movies,
+        hasNextPage,
+      },
     });
   } catch (error) {
     next(error);

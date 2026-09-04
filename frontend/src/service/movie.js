@@ -28,8 +28,8 @@ export const getMovieDetailsById = async (id) => {
 export const getMovieOverviewStats = async () => {
   return handleFetch(fetchMovieOverviewStats);
 };
-export const searchMovies = async (query) => {
-  return handleFetch(() => fetchSearchMovies(query));
+export const searchMovies = async (query, page) => {
+  return handleFetch(() => fetchSearchMovies(query, page));
 };
 export const getSimilarMovies = async (id) => {
   return handleFetch(() => fetchSimilarMovies(id));
