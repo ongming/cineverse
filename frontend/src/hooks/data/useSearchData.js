@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { searchMovies } from "../../service/movie.js";
@@ -7,6 +7,11 @@ export function useSearchData() {
   const [searchParams, setSearchParams] = useSearchParams();
   const searchTerm = searchParams.get("q") || "";
   const [page, setPage] = useState(1);
+
+  // Reset pagination to Page 1 whenever search query changes
+  useEffect(() => {
+    setPage(1);
+  }, [searchTerm]);
 
   const {
     data = { movies: [], hasNextPage: false },
@@ -20,6 +25,7 @@ export function useSearchData() {
   });
 
   const handleSearchChange = (newTerm) => {
+    setPage(1);
     if (newTerm) {
       setSearchParams({ q: newTerm });
     } else {
