@@ -1,8 +1,7 @@
 // hooks/data/useHomeData.js
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { movies } from "../../data/movies.js";
-import { actors } from "../../data/actors.js";
+
 import {
   getPopularMovies,
   getNowPlayingMovies,
@@ -34,7 +33,7 @@ const fetchHomeData = async (page) => {
   const featuredMovie = heroMovies ? heroMovies[0] : null;
 
   // 4. Popular Actors List
-  const popularActors = actors ? actors.slice(0, 10) : [];
+  const popularActors = topActors ? topActors.slice(0, 10) : [];
 
   return {
     heroMovies,

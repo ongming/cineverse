@@ -1,35 +1,35 @@
-import axios from "axios";
+import axiosClient from "./axiosClient";
 
 export function fetchPopularMovies() {
-  return axios.get("/api/movies/popular");
+  return axiosClient.get("/api/movies/popular");
 }
 
 export function fetchUpcomingMovies(params) {
-  return axios.get(`/api/movies/upcoming`, { params: params });
+  return axiosClient.get(`/api/movies/upcoming`, { params: params });
 }
 
 export function fetchNowPlayingMovies(params) {
-  return axios.get(`/api/movies/now-playing`, {
+  return axiosClient.get(`/api/movies/now-playing`, {
     params: params,
   });
 }
 
 export function fetchTopRatedMovies(genreId) {
-  return axios.get("/api/movies/top-rated", { params: { genreId } });
+  return axiosClient.get("/api/movies/top-rated", { params: { genreId } });
 }
 
 export function fetchMovieDetailsById(id) {
-  return axios.get(`/api/movies/details/${id}`);
+  return axiosClient.get(`/api/movies/details/${id}`);
 }
 
 export function fetchMovieOverviewStats() {
-  return axios.get("/api/movies/overview-stats");
+  return axiosClient.get("/api/movies/overview-stats");
 }
 
 export function fetchSearchMovies(query, page) {
-  return axios.get("/api/movies/search", { params: { q: query, page } });
+  return axiosClient.get("/api/movies/search", { params: { q: query, page } });
 }
 
 export function fetchSimilarMovies(id) {
-  return axios.get(`/api/movies/similar/${id}`);
+  return axiosClient.get(`/api/movies/similar/${id}`);
 }

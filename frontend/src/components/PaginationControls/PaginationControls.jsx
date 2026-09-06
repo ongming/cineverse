@@ -4,7 +4,7 @@ export default function PaginationControls({
   scrollRef = null,
   page,
   setPage,
-  hasMore,
+  hasNextPage = false,
   isPaged = 1,
 }) {
   if (isPaged === 0) {
@@ -41,7 +41,7 @@ export default function PaginationControls({
       {/* ➡️ NEXT PAGE BUTTON */}
       <button
         type="button"
-        disabled={hasMore} // 🟢 Disable if last page has less than 20 items
+        disabled={!hasNextPage} // 🟢 Disable Next button when hasNextPage is false
         onClick={() => handlePageChange(page + 1)}
         className="px-2.5 py-2.5 bg-[#141722] border border-[#23283a] text-gray-300 hover:border-amber-400 hover:text-white rounded-xl disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer"
       >

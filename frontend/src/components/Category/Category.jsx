@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
-import { categories } from "../../data/category.js";
+
 import { useCategory } from "../../hooks/data/useCategory.js";
 
 export default function Category() {

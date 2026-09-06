@@ -5,6 +5,8 @@ import {
   fetchSendOTP,
   fetchResetPassword,
   fetchGoogleLogin,
+  fetchRefreshToken,
+  fetchLogout,
 } from "../api/auth.js";
 import { handleFetch } from "../utils/serviceUtils.js";
 
@@ -30,4 +32,12 @@ export const resetPasswordService = async (data) => {
 
 export const googleLoginService = async (credential) => {
   return handleFetch(() => fetchGoogleLogin(credential));
+};
+
+export const refreshTokenService = async () => {
+  return handleFetch(() => fetchRefreshToken());
+};
+
+export const logoutUserService = async () => {
+  return handleFetch(() => fetchLogout());
 };

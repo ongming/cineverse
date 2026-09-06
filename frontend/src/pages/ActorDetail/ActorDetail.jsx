@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useActorDetail } from "../../hooks/data/useActorDetail.js";
 import MovieCard from "../../components/MovieCard/MovieCard.jsx";
 import ErrorState from "../../components/Common/ErrorState.jsx";
+import LoadingState from "../../components/Common/LoadingState.jsx";
 import {
   ArrowLeft,
   ExternalLink,
@@ -15,6 +16,7 @@ import {
 export default function ActorDetail() {
   const {
     actorData,
+    isLoading,
     age,
     isLightboxOpen,
     setIsLightboxOpen,
@@ -24,6 +26,10 @@ export default function ActorDetail() {
     handlePrevPhoto,
     navigate,
   } = useActorDetail();
+
+  if (isLoading) {
+    return <LoadingState message="ĐANG TẢI THÔNG TIN DIỄN VIÊN..." />;
+  }
 
   if (!actorData) {
     return (

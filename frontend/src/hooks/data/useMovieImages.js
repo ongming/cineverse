@@ -1,6 +1,6 @@
 // hooks/data/useMovieImages.js
 import { useState, useMemo, useRef } from "react";
-import { movieImages } from "../../data/movieImages.js";
+
 
 export const useMovieImages = (images) => {
   const [selectedIndex, setSelectedIndex] = useState(0);

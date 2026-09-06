@@ -1,6 +1,6 @@
 // hooks/data/useRankingData.js
 import { useState, useMemo } from "react";
-import { movies as mockMovies } from "../../data/movies.js";
+
 import { useTopRateMovies } from "../../hooks/data/useTopRateMovies.js";
 import { useCategory } from "../../hooks/data/useCategory.js";
 

@@ -7,7 +7,7 @@ import {
   fetchMovieOverviewStats,
   fetchSearchMovies,
   fetchSimilarMovies,
-} from "../api/movie";
+} from "../api/movie.js";
 import { handleFetch } from "../utils/serviceUtils.js";
 
 export const getPopularMovies = async () => {

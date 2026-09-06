@@ -3,6 +3,12 @@ const authService = require("./auth.service");
 const register = async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
+    if (!username || !email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Thiếu thông tin đăng ký",
+      });
+    }
     const { user, token } = await authService.registerUser({
       username,
       email,
@@ -20,7 +26,24 @@ const register = async (req, res, next) => {
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    const { user, token } = await authService.LoginUser({ email, password });
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Không có mật khẩu hoặc email",
+      });
+    }
+    const { user, token, refreshToken } = await authService.LoginUser({
+      email,
+      password,
+    });
+    const isProduction = process.env.NODE_ENV === "production";
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: isProduction, // false on localhost, true on Render
+      sameSite: isProduction ? "none" : "lax", 
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
     res.status(200).json({
       success: true,
       data: { user, token },
@@ -72,10 +95,61 @@ const resetPassword = async (req, res, next) => {
 const loginWithGoogle = async (req, res, next) => {
   try {
     const { credential } = req.body;
-    const { user, token } = await authService.loginWithGoogle(credential);
+    const { user, token, refreshToken } = await authService.loginWithGoogle(credential);
+    const isProduction = process.env.NODE_ENV === "production";
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: isProduction, // false on localhost, true on Render
+      sameSite: isProduction ? "none" : "lax", 
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
     res.status(200).json({
       success: true,
       data: { user, token },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const refreshToken = async (req, res, next) => {
+  try {
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) {
+      return res.status(401).json({
+        success: false,
+        message: "Không có refresh token",
+      }); 
+    }   
+    const {token } = await authService.refreshAccessToken(refreshToken);
+    res.status(200).json({
+      success: true,
+      data: { token },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const logout = async (req, res, next) => {
+  try {
+    const refreshToken = req.cookies?.refreshToken;
+    
+    if (refreshToken) {
+      await authService.logout(refreshToken);
+    }
+
+    const isProduction = process.env.NODE_ENV === "production";
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Đăng xuất thành công",
     });
   } catch (error) {
     next(error);
@@ -89,4 +163,6 @@ module.exports = {
   sendOTP,
   resetPassword,
   loginWithGoogle,
+  refreshToken,
+  logout
 };

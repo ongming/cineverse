@@ -19,6 +19,7 @@
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-router-dom": "^7.18.1",
+    "react-toastify": "^11.1.0",
     "sharp": "^0.35.3",
     "swiper": "^14.1.0",
     "tailwindcss": "^4.3.3"

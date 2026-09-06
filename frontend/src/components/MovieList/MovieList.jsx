@@ -14,7 +14,7 @@ export default function MovieList({ movies, scrollRef, page, setPage, hasNextPag
         scrollRef={scrollRef}
         page={page}
         setPage={setPage}
-        hasMore={hasNextPage !== undefined ? !hasNextPage : movies.length < 20}
+        hasNextPage={hasNextPage}
       />
     </section>
   );

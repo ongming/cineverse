@@ -1,13 +1,13 @@
-import axios from "axios";
+import axiosClient from "./axiosClient";
 
 export function fetchTopActors() {
-  return axios.get("/api/actors/top");
+  return axiosClient.get("/api/actors/top");
 }
 
 export function fetchActorById(id) {
-  return axios.get(`/api/actors/${id}`);
+  return axiosClient.get(`/api/actors/${id}`);
 }
 
 export function fetchActorTrailerById(trailerId) {
-  return axios.get(`/api/actors/trailer/${trailerId}`);
+  return axiosClient.get(`/api/actors/trailer/${trailerId}`);
 }

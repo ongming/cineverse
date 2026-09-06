@@ -10,5 +10,7 @@ router.get("/me", authMiddleware, authController.getCurrentUser);
 router.post("/send-otp", authController.sendOTP);
 router.post("/reset-password", authController.resetPassword);
 router.post("/google", authController.loginWithGoogle);
+router.post("/refresh", authController.refreshToken);
+router.post("/logout", authController.logout);
 
 module.exports = router;

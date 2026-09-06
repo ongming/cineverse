@@ -1,12 +1,13 @@
 // utils/movieRelationUtils.js
 // Decoupled relation utility module for performing joins across relational mock tables
 
-import { movies } from "../data/movies.js";
-import { actors } from "../data/actors.js";
-import { movie_cast } from "../data/movieCast.js";
-import { movie_images } from "../data/movieImages.js";
-import { trailers } from "../data/trailers.js";
-import { genres, movie_genres } from "../data/genres.js";
+const movies = [];
+const actors = [];
+const movie_cast = [];
+const movie_images = [];
+const trailers = [];
+const genres = [];
+const movie_genres = [];
 
 /**
  * Join movie_cast table with actors table for a given movie ID

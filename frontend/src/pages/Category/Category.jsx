@@ -70,10 +70,13 @@ export default function Category() {
         </div>
       ) : (
         <>
-          <MovieList movies={movies} scrollRef={TopRef}
+          <MovieList
+            movies={movies}
+            scrollRef={TopRef}
             page={page}
             setPage={setPage}
-            hasMore={!hasNextPage} />
+            hasNextPage={hasNextPage}
+          />
           {/* 🟢 Pagination Controls for Category Page */}
           
         </>

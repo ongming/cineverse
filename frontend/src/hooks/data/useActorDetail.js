@@ -1,7 +1,7 @@
 // hooks/data/useActorDetail.js
 import { useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { actors } from "../../data/actors.js";
+
 import { getActorFilmography } from "../../utils/movieRelationUtils.js";
 import { useActorData } from "../../hooks/data/useActorData.js";
 
@@ -48,6 +48,7 @@ export const useActorDetail = () => {
 
   return {
     actorData,
+    isLoading,
     age,
     isLightboxOpen,
     setIsLightboxOpen,

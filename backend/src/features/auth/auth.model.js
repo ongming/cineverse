@@ -70,6 +70,46 @@ const updatePassword = async (email, passwordHash) => {
   return result.rows[0];
 };
 
+const session = async (userId, refreshToken, expiresAt) => {
+  const result = await pool.query(
+    `INSERT INTO sessions (user_id, refresh_token, expires_at) VALUES ($1, $2, $3) RETURNING *;`,
+    [userId, refreshToken, expiresAt]
+  );
+  return result.rows[0];
+};
+
+const findSession = async (refreshToken) => {
+  const result = await pool.query(
+    `SELECT * FROM sessions WHERE refresh_token = $1 AND expires_at > NOW();`,
+    [refreshToken]
+  );
+  return result.rows[0];
+}
+
+const deleteSession = async (refreshToken) => {
+  await pool.query(`DELETE FROM sessions WHERE refresh_token = $1;`, [refreshToken]);
+}
+
+const cleanupOldSessions = async (userId, maxSessions = 5) => {
+  // 1. Purge all expired sessions across the database
+  await pool.query(`DELETE FROM sessions WHERE expires_at <= NOW();`);
+
+  // 2. Keep only the 5 newest active sessions for this user
+  await pool.query(
+    `
+    DELETE FROM sessions 
+    WHERE user_id = $1 
+    AND id NOT IN (
+      SELECT id FROM sessions 
+      WHERE user_id = $1 
+      ORDER BY created_at DESC 
+      LIMIT $2
+    );
+    `,
+    [userId, maxSessions]
+  );
+};
+
 module.exports = {
   findUserByEmail,
   findUserById,
@@ -78,4 +118,8 @@ module.exports = {
   findValidOTP,
   deleteOTP,
   updatePassword,
+  session,
+  findSession,
+  deleteSession,
+  cleanupOldSessions,
 };

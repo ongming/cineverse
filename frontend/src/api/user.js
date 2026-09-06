@@ -1,8 +1,8 @@
-import axios from "axios";
+import axiosClient from "./axiosClient";
 
 // 1. Upload Avatar API Call
 export const fetchUploadAvatar = async (formData) => {
-  return axios.post("/api/users/avatar", formData, {
+  return axiosClient.post("/api/users/avatar", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -11,10 +11,10 @@ export const fetchUploadAvatar = async (formData) => {
 
 // 2. Update Username API Call
 export const fetchUpdateUsername = async (username) => {
-  return axios.put("/api/users/username", { username });
+  return axiosClient.put("/api/users/username", { username });
 };
 
 // 3. Update Password API Call
 export const fetchUpdatePassword = async (newPassword) => {
-  return axios.put("/api/users/password", { newPassword });
+  return axiosClient.put("/api/users/password", { newPassword });
 };

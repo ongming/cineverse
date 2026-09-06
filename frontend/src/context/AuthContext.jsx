@@ -3,55 +3,73 @@ import {
   loginUser,
   registerUser,
   getCurrentUser,
+  refreshTokenService,
+  logoutUserService,
 } from "../service/authService.js";
+import { setUpdateAccessTokenHandler } from "../api/axiosClient.js";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const updateAccessToken = (newToken) => {
+    setToken(newToken);
+  };
+
+  // 1. Connect updateAccessToken to axiosClient when mounted
+  useEffect(() => {
+    setUpdateAccessTokenHandler(updateAccessToken);
+  }, []);
+
+  // 2. Initial Auth Load & Silent Refresh on startup (handles F5 reload)
   useEffect(() => {
     async function loadUser() {
-      if (!token) {
-        setLoading(false);
-        return;
-      }
       try {
-        const { user } = await getCurrentUser();
-        setUser(user);
+        // Retrieve fresh Access Token using httpOnly cookie
+        const res = await refreshTokenService();
+        const refreshedToken = res?.data?.token || res?.token;
+
+        if (refreshedToken) {
+          updateAccessToken(refreshedToken);
+          const resUser = await getCurrentUser();
+          setUser(resUser?.user || resUser);
+        }
       } catch (error) {
-        localStorage.removeItem("token");
-        setToken(null);
+        updateAccessToken(null);
         setUser(null);
       } finally {
         setLoading(false);
       }
     }
     loadUser();
-  }, [token]);
+  }, []);
 
   const login = async (email, password) => {
     const { user, token } = await loginUser({ email, password });
-    localStorage.setItem("token", token);
     setUser(user);
-    setToken(token);
+    updateAccessToken(token);
     return { user, token };
   };
 
   const register = async (username, email, password) => {
     const { user, token } = await registerUser({ username, email, password });
-    localStorage.setItem("token", token);
     setUser(user);
-    setToken(token);
+    updateAccessToken(token);
     return { user, token };
   };
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    setUser(null);
-    setToken(null);
+  const logout = async () => {
+    try {
+      await logoutUserService();
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      updateAccessToken(null);
+      setUser(null);
+    }
   };
 
   return (
@@ -64,6 +82,7 @@ export function AuthProvider({ children }) {
         login,
         register,
         logout,
+        updateAccessToken,
       }}
     >
       {children}

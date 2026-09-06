@@ -1,13 +1,13 @@
-import axios from "axios";
+import axiosClient from "./axiosClient";
 
 export function fetchTopRevenueMovies(params) {
-  return axios.get("/api/revenue", {
+  return axiosClient.get("/api/revenue", {
     params: params,
   });
 }
 
 export function fetchRevenueStats(params) {
-  return axios.get("/api/revenue/stats", {
+  return axiosClient.get("/api/revenue/stats", {
     params: params,
   });
 }
