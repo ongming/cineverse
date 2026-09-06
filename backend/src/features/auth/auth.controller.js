@@ -109,6 +109,7 @@ const loginWithGoogle = async (req, res, next) => {
       data: { user, token },
     });
   } catch (error) {
+    console.error("Lỗi Google Auth Backend:", error.response?.data || error.message || error);
     next(error);
   }
 };

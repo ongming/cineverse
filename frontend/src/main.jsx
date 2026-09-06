@@ -8,8 +8,7 @@ import "./index.css";
 
 const queryClient = new QueryClient();
 const GOOGLE_CLIENT_ID =
-  import.meta.env.VITE_GOOGLE_CLIENT_ID ||
-  "960329031361-pbovelgc2lpreue75l8gf89q4ebhku6b.apps.googleusercontent.com";
+  import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

@@ -11,7 +11,10 @@ const { sendOTPEmail } = require("../../services/emailService.js");
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES_IN = "30s"; // Token expiration time (15 minutes)
 const SALT_ROUNDS = 10; // Number of salt rounds for bcrypt
-const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const googleClient = new OAuth2Client(
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET
+);
 
 const generateAccessToken = (user) => {
   const payload = {
@@ -98,27 +101,63 @@ const loginWithGoogle = async (credential) => {
   let email, name, picture;
 
   try {
-    // 1. Try verifying as ID Token (JWT eyJ...)
-    const ticket = await googleClient.verifyIdToken({
-      idToken: credential,
-      audience: process.env.GOOGLE_CLIENT_ID,
+    // 1. Try exchanging authorization code (from flow: "auth-code") for Google tokens
+    const { tokens } = await googleClient.getToken({
+      code: credential,
+      redirect_uri: "postmessage",
     });
-    const payload = ticket.getPayload();
-    email = payload.email;
-    name = payload.name;
-    picture = payload.picture;
-  } catch (err) {
-    // 2. Fallback: If it's an Access Token (ya29... from custom useGoogleLogin button),
-    // fetch user profile directly from Google UserInfo API!
-    const response = await axios.get(
-      "https://www.googleapis.com/oauth2/v3/userinfo",
-      {
-        headers: { Authorization: `Bearer ${credential}` },
-      },
-    );
-    email = response.data.email;
-    name = response.data.name;
-    picture = response.data.picture;
+
+    if (tokens.id_token) {
+      const ticket = await googleClient.verifyIdToken({
+        idToken: tokens.id_token,
+        audience: process.env.GOOGLE_CLIENT_ID,
+      });
+      const payload = ticket.getPayload();
+      email = payload.email;
+      name = payload.name;
+      picture = payload.picture;
+    } else if (tokens.access_token) {
+      const response = await axios.get(
+        "https://www.googleapis.com/oauth2/v3/userinfo",
+        { headers: { Authorization: `Bearer ${tokens.access_token}` } }
+      );
+      email = response.data.email;
+      name = response.data.name;
+      picture = response.data.picture;
+    }
+  } catch (codeError) {
+    try {
+      // 2. Fallback: Try verifying credential directly as ID Token (JWT eyJ...)
+      const ticket = await googleClient.verifyIdToken({
+        idToken: credential,
+        audience: process.env.GOOGLE_CLIENT_ID,
+      });
+      const payload = ticket.getPayload();
+      email = payload.email;
+      name = payload.name;
+      picture = payload.picture;
+    } catch (idTokenError) {
+      try {
+        // 3. Fallback: Access Token (ya29...)
+        const response = await axios.get(
+          "https://www.googleapis.com/oauth2/v3/userinfo",
+          { headers: { Authorization: `Bearer ${credential}` } }
+        );
+        email = response.data.email;
+        name = response.data.name;
+        picture = response.data.picture;
+      } catch (userInfoError) {
+        console.error(
+          "Lỗi Google Auth Exchange/UserInfo:",
+          userInfoError.response?.data || userInfoError.message
+        );
+        throw new UnauthorizedError("Xác thực token/mã Google thất bại");
+      }
+    }
+  }
+
+  if (!email) {
+    throw new UnauthorizedError("Không tìm thấy thông tin email từ tài khoản Google");
   }
 
   const cleanEmail = email.trim().toLowerCase();
