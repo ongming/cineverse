@@ -101,107 +101,44 @@ const loginWithGoogle = async (credential) => {
   let email, name, picture;
 
   try {
-    // 1. Try exchanging authorization code for Google tokens
-    let tokens;
-    try {
-      const res = await googleClient.getToken({
-        code: credential,
-        redirect_uri: "postmessage",
-      });
-      tokens = res.tokens;
-    } catch (e1) {
-      try {
-        const redirectUri = process.env.FRONTEND_URL || "https://cineverse-frontend-seven.vercel.app";
-        const res = await googleClient.getToken({
-          code: credential,
-          redirect_uri: redirectUri,
-        });
-        tokens = res.tokens;
-      } catch (e2) {
-        const res = await googleClient.getToken(credential);
-        tokens = res.tokens;
-      }
-    }
-
-    if (tokens?.id_token) {
-      const ticket = await googleClient.verifyIdToken({
-        idToken: tokens.id_token,
-        audience: process.env.GOOGLE_CLIENT_ID,
-      });
-      const payload = ticket.getPayload();
-      email = payload.email;
-      name = payload.name;
-      picture = payload.picture;
-    } else if (tokens?.access_token) {
-      const response = await axios.get(
-        "https://www.googleapis.com/oauth2/v3/userinfo",
-        { headers: { Authorization: `Bearer ${tokens.access_token}` } }
-      );
-      email = response.data.email;
-      name = response.data.name;
-      picture = response.data.picture;
-    }
-  } catch (codeError) {
-    console.error("Lỗi Google getToken (code exchange):", codeError.response?.data || codeError.message || codeError);
-    try {
-      // 2. Fallback: Try verifying credential directly as ID Token (JWT eyJ...)
-      const ticket = await googleClient.verifyIdToken({
-        idToken: credential,
-        audience: process.env.GOOGLE_CLIENT_ID,
-      });
-      const payload = ticket.getPayload();
-      email = payload.email;
-      name = payload.name;
-      picture = payload.picture;
-    } catch (idTokenError) {
-      try {
-        // 3. Fallback: Access Token (ya29...)
-        const response = await axios.get(
-          "https://www.googleapis.com/oauth2/v3/userinfo",
-          { headers: { Authorization: `Bearer ${credential}` } }
-        );
-        email = response.data.email;
-        name = response.data.name;
-        picture = response.data.picture;
-      } catch (userInfoError) {
-        console.error(
-          "Lỗi Google Auth Exchange/UserInfo:",
-          userInfoError.response?.data || userInfoError.message
-        );
-        throw new UnauthorizedError("Xác thực token/mã Google thất bại");
-      }
-    }
+    // 1. Direct ID Token verification (Google <GoogleLogin /> always sends "eyJ...")
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    
+    const payload = ticket.getPayload();
+    email = payload.email;
+    name = payload.name;
+    picture = payload.picture;
+  } catch (err) {
+    console.error("Lỗi Google Auth Backend:", err.message);
+    throw new UnauthorizedError("Lỗi Google: " + (err.message || err));
   }
 
   if (!email) {
-    throw new UnauthorizedError("Không tìm thấy thông tin email từ tài khoản Google");
+    throw new UnauthorizedError("Không tìm thấy thông tin email từ Google");
   }
 
   const cleanEmail = email.trim().toLowerCase();
 
-  // 3. Find user or auto-create account
+  // 2. Find or Create User in PostgreSQL
   let user = await userModel.findUserByEmail(cleanEmail);
   if (!user) {
     const randomPassword = await bcrypt.hash(Math.random().toString(36), 10);
     user = await userModel.createUser({
-      username: name || email.split("@")[0],
+      username: name || cleanEmail.split("@")[0],
       email: cleanEmail,
       passwordHash: randomPassword,
       avatarUrl: picture,
     });
   }
 
-  // 4. Return JWT token
-  const refreshToken = crypto.randomBytes(64).toString("hex");
-  await userModel.session(
-    user.id,
-    refreshToken,
-    new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-  );
-  await userModel.cleanupOldSessions(user.id, 5);
+  // 3. Return App JWT Token & User Profile
   const token = generateAccessToken(user);
   const { password_hash, ...safeUser } = user;
-  return { user: safeUser, token, refreshToken };
+
+  return { user: safeUser, token };
 };
 
 const refreshAccessToken = async (refreshToken) => {
