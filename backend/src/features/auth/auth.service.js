@@ -101,13 +101,29 @@ const loginWithGoogle = async (credential) => {
   let email, name, picture;
 
   try {
-    // 1. Try exchanging authorization code (from flow: "auth-code") for Google tokens
-    const { tokens } = await googleClient.getToken({
-      code: credential,
-      redirect_uri: "postmessage",
-    });
+    // 1. Try exchanging authorization code for Google tokens
+    let tokens;
+    try {
+      const res = await googleClient.getToken({
+        code: credential,
+        redirect_uri: "postmessage",
+      });
+      tokens = res.tokens;
+    } catch (e1) {
+      try {
+        const redirectUri = process.env.FRONTEND_URL || "https://cineverse-frontend-seven.vercel.app";
+        const res = await googleClient.getToken({
+          code: credential,
+          redirect_uri: redirectUri,
+        });
+        tokens = res.tokens;
+      } catch (e2) {
+        const res = await googleClient.getToken(credential);
+        tokens = res.tokens;
+      }
+    }
 
-    if (tokens.id_token) {
+    if (tokens?.id_token) {
       const ticket = await googleClient.verifyIdToken({
         idToken: tokens.id_token,
         audience: process.env.GOOGLE_CLIENT_ID,
@@ -116,7 +132,7 @@ const loginWithGoogle = async (credential) => {
       email = payload.email;
       name = payload.name;
       picture = payload.picture;
-    } else if (tokens.access_token) {
+    } else if (tokens?.access_token) {
       const response = await axios.get(
         "https://www.googleapis.com/oauth2/v3/userinfo",
         { headers: { Authorization: `Bearer ${tokens.access_token}` } }
@@ -126,6 +142,7 @@ const loginWithGoogle = async (credential) => {
       picture = response.data.picture;
     }
   } catch (codeError) {
+    console.error("Lỗi Google getToken (code exchange):", codeError.response?.data || codeError.message || codeError);
     try {
       // 2. Fallback: Try verifying credential directly as ID Token (JWT eyJ...)
       const ticket = await googleClient.verifyIdToken({
