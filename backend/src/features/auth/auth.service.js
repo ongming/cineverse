@@ -112,8 +112,9 @@ const loginWithGoogle = async (credential) => {
     name = payload.name;
     picture = payload.picture;
   } catch (err) {
-    console.error("Lỗi Google Auth Backend:", err.message);
-    throw new UnauthorizedError("Lỗi Google: " + (err.message || err));
+    const unverifiedPayload = jwt.decode(credential);
+    console.error("Token aud:", unverifiedPayload?.aud, "Backend GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID);
+    throw new UnauthorizedError(`Lỗi Google: ${err.message} (Token aud: ${unverifiedPayload?.aud} vs Backend env: ${process.env.GOOGLE_CLIENT_ID})`);
   }
 
   if (!email) {
