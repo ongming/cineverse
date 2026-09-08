@@ -20,25 +20,19 @@ function AppRoutes() {
     <Routes>
       <Route element={<MainLayout />}>
         <Route path="/" element={<Home />} />
-        <Route path="/trailer/:id" element={<TrailerDetail />} />
         <Route path="/trailer/:id/cast" element={<MovieCastPage />} />
-        <Route path="/actors/:id" element={<ActorDetail />} />
         <Route path="/person/:id" element={<ActorDetail />} />
         <Route path="/search" element={<Search />} />
         <Route path="/category/:name" element={<Category />} />
         <Route path="/movie-list/:type" element={<MovieListCategoryPage />} />
-        <Route path="/ranking" element={<Ranking />} />
-        <Route path="/revenue" element={<Revenue />} />
-        <Route path="/schedule" element={<Schedule />} />
-
-        <Route
-          path="/watchlist"
-          element={
-            <ProtectedRoute>
-              <WatchList />
-            </ProtectedRoute>
-          }
-        />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/ranking" element={<Ranking />} />
+          <Route path="/revenue" element={<Revenue />} />
+          <Route path="/schedule" element={<Schedule />} />
+          <Route path="/trailer/:id" element={<TrailerDetail />} />
+          <Route path="/actors/:id" element={<ActorDetail />} />
+          <Route path="/watchlist" element={<WatchList />} />
+        </Route>
       </Route>
       <Route element={<AuthLayout />}>
         <Route path="/login" element={<Login />} />

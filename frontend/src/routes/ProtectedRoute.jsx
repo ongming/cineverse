@@ -1,11 +1,10 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 
 // Route Guard Component: Bảo vệ các trang yêu cầu đăng nhập
 export default function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
 
-  // 🟢 1. Wait for AuthContext to finish verifying token/localStorage on F5 refresh
   if (loading) {
     return (
       <div className="w-full min-h-screen bg-[#080808] flex items-center justify-center font-mono text-base text-white">
@@ -17,10 +16,9 @@ export default function ProtectedRoute({ children }) {
     );
   }
 
-  // 🟢 2. Redirect to /login ONLY IF auth loading is done AND user is null
   if (!user) {
     return <Navigate to="/login" replace />;
   }
 
-  return children;
+  return children ? children : <Outlet />;
 }

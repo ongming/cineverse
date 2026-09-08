@@ -1,4 +1,4 @@
-import { Calendar, History, ChevronRight } from "lucide-react";
+import { History } from "lucide-react";
 import CustomDatePicker from "../../components/DatePicker/CustomDatePicker.jsx";
 import TrailerCard from "./TrailerCard.jsx";
 import { handleSelectCustomDate } from "../../utils/revenueUtils.js";
@@ -20,6 +20,7 @@ export default function Schedule() {
     isError,
     page,
     setPage,
+    hasNextPage,
   } = useScheduleData();
 
   if (isLoading) {
@@ -178,7 +179,7 @@ export default function Schedule() {
           <PaginationControls
             page={page}
             setPage={setPage}
-            hasMore={filteredMovies.length < 18}
+            hasNextPage={hasNextPage}
             isPaged={filteredMovies.length}
           />
         </motion.main>

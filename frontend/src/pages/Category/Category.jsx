@@ -2,7 +2,6 @@ import { useParams } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { useCategoryMovies } from "../../hooks/data/useCategory.js";
 import MovieList from "../../components/MovieList/MovieList.jsx";
-import PaginationControls from "../../components/PaginationControls/PaginationControls.jsx";
 import LoadingState from "../../components/Common/LoadingState.jsx";
 import ErrorState from "../../components/Common/ErrorState.jsx";
 

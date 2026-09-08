@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
-import useGoogleAuth from "./useGoogleAuth.js";
 
 export function useRegister() {
   const { register } = useAuth();
@@ -14,7 +13,6 @@ export function useRegister() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const registerWithGoogle = useGoogleAuth();
   // 4-Tier Password Strength Calculation (0-4)
   const calculateScore = (pass) => {
     if (!pass) return 0;
@@ -79,6 +77,5 @@ export function useRegister() {
     handleSubmit,
     isLoading,
     errorMessage,
-    registerWithGoogle,
   };
 }

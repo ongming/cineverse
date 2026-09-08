@@ -1,5 +1,15 @@
 const authService = require("./auth.service");
 
+const setRefreshTokenCookie = (res, refreshToken) => {
+  const isProduction = process.env.NODE_ENV === "production";
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
+};
+
 const register = async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
@@ -36,14 +46,7 @@ const login = async (req, res, next) => {
       email,
       password,
     });
-    const isProduction = process.env.NODE_ENV === "production";
-
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: isProduction, // false on localhost, true on Render
-      sameSite: isProduction ? "none" : "lax", 
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    setRefreshTokenCookie(res, refreshToken);
     res.status(200).json({
       success: true,
       data: { user, token },
@@ -96,14 +99,8 @@ const loginWithGoogle = async (req, res, next) => {
   try {
     const { credential } = req.body;
     const { user, token, refreshToken } = await authService.loginWithGoogle(credential);
-    const isProduction = process.env.NODE_ENV === "production";
 
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: isProduction, // false on localhost, true on Render
-      sameSite: isProduction ? "none" : "lax", 
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    setRefreshTokenCookie(res, refreshToken);
     res.status(200).json({
       success: true,
       data: { user, token },

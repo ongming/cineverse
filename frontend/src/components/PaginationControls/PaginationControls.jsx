@@ -8,7 +8,7 @@ export default function PaginationControls({
   isPaged = 1,
 }) {
   if (isPaged === 0) {
-    return null; // Hide pagination controls if there are no more items
+    return null;
   }
 
   const handlePageChange = (newPage) => {

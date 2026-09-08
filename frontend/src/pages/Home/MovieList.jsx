@@ -2,9 +2,8 @@
 import { useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useHomeData } from "../../hooks/data/useHomeData.js";
-import MovieGrid from "../../components/MovieList/MovieList.jsx";
+import MovieList from "../../components/MovieList/MovieList.jsx";
 import { ArrowLeft, Film } from "lucide-react";
-import PaginationControls from "../../components/PaginationControls/PaginationControls.jsx";
 
 export default function MovieListCategoryPage() {
   const { type } = useParams();
@@ -101,11 +100,11 @@ export default function MovieListCategoryPage() {
       </div>
 
       {/* Render full grid catalog using MovieList component */}
-      <MovieGrid movies={displayMovies} />
-      <PaginationControls
+      <MovieList
+        movies={displayMovies}
         page={page}
         setPage={setPage}
-        hasMore={displayMovies.length < 18}
+        hasNextPage={displayMovies.length >= 18}
       />
     </div>
   );
