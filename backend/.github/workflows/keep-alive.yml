@@ -1,0 +1,16 @@
+name: Keep Alive Render Backend
+
+on:
+  schedule:
+    # Runs every 14 minutes
+    - cron: '*/14 * * * *'
+  # Allows manual triggering from the GitHub Actions UI
+  workflow_dispatch:
+
+jobs:
+  ping-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Ping Request to Render Backend
+        run: |
+          curl -s -o /dev/null -w "%{http_code}" https://cineverse-backend-nm51.onrender.com/   
