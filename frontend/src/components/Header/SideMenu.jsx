@@ -3,8 +3,11 @@ import CineverseLogo from "./CineverseLogo.jsx";
 import SideCategory from "../Category/SideCategory.jsx";
 import { X } from "lucide-react";
 import LoginButton from "../Button/LoginButton.jsx";
+import { useAuth } from "../../context/AuthContext.jsx";
 
 export default function SideMenu({ isMobileMenuOpen, setIsMobileMenuOpen }) {
+  const { user } = useAuth();
+
   return (
     <div
       className={`fixed top-0 right-0 w-[280px] sm:w-[320px] h-full bg-[#121212] border-l border-[#262626] z-[10000] p-6 shadow-2xl flex flex-col justify-between transform transition-transform duration-300 ease-in-out lg:hidden ${
@@ -69,7 +72,7 @@ export default function SideMenu({ isMobileMenuOpen, setIsMobileMenuOpen }) {
           </Link>
         </div>
       </div>
-      <LoginButton />
+      {user ? null : <LoginButton />}
 
       {/* Chân Side Menu */}
       <div className="border-t border-[#222222] pt-4 text-xs text-gray-500 text-center font-mono">
