@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import CineverseLogo from "./CineverseLogo.jsx";
 import SideCategory from "../Category/SideCategory.jsx";
 import { X } from "lucide-react";
+import LoginButton from "../Button/LoginButton.jsx";
 
 export default function SideMenu({ isMobileMenuOpen, setIsMobileMenuOpen }) {
   return (
@@ -68,6 +69,7 @@ export default function SideMenu({ isMobileMenuOpen, setIsMobileMenuOpen }) {
           </Link>
         </div>
       </div>
+      <LoginButton />
 
       {/* Chân Side Menu */}
       <div className="border-t border-[#222222] pt-4 text-xs text-gray-500 text-center font-mono">

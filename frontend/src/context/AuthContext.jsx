@@ -55,10 +55,7 @@ export function AuthProvider({ children }) {
   };
 
   const register = async (username, email, password) => {
-    const { user, token } = await registerUser({ username, email, password });
-    setUser(user);
-    updateAccessToken(token);
-    return { user, token };
+    await registerUser({ username, email, password });
   };
 
   const logout = async () => {

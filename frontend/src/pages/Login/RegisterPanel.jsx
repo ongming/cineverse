@@ -23,7 +23,7 @@ export default function RegisterPanel({ onSwitchToLogin }) {
     handleSubmit,
     isLoading,
     errorMessage,
-  } = useRegister();
+  } = useRegister(onSwitchToLogin);
 
   return (
     <div className="max-w-md w-full mx-auto space-y-5 pt-5 sm:pt-4 font-mono">

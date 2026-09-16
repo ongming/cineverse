@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext.jsx";
-import { useNavigate } from "react-router-dom";
-
-export function useRegister() {
+import {toast} from "react-toastify";
+export function useRegister(onSwitchToLogin) {
   const { register } = useAuth();
-  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [username, setUsername] = useState("");
@@ -40,6 +38,14 @@ export function useRegister() {
 
   const currentConfig = STRENGTH_CONFIG[score];
 
+  const resetForm = () => {
+    setUsername("");
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+    setErrorMessage("");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
@@ -51,7 +57,11 @@ export function useRegister() {
     try {
       setIsLoading(true);
       await register(username, email, password);
-      navigate("/");
+      resetForm();
+      toast.success("Đăng ký thành công! Vui lòng đăng nhập.");
+      if (onSwitchToLogin) {
+        onSwitchToLogin();
+      }
     } catch (err) {
       setErrorMessage(err.message || "Đăng ký thất bại.");
     } finally {

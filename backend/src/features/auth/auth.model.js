@@ -23,15 +23,14 @@ const findUserById = async (id) => {
 };
 
 const createUser = async ({ username, email, passwordHash, avatarUrl }) => {
-  const result = await pool.query(
+  await pool.query(
     `
     INSERT INTO users (username, email, password_hash, avatar_url)
     VALUES ($1, $2, $3, $4)
-    RETURNING id, username, email, avatar_url, created_at, updated_at;
     `,
     [username, email, passwordHash, avatarUrl || null],
   );
-  return result.rows[0];
+  return true;
 };
 
 const saveOTP = async (email, otp, expiresAt) => {
@@ -73,7 +72,7 @@ const updatePassword = async (email, passwordHash) => {
 const session = async (userId, refreshToken, expiresAt) => {
   const result = await pool.query(
     `INSERT INTO sessions (user_id, refresh_token, expires_at) VALUES ($1, $2, $3) RETURNING *;`,
-    [userId, refreshToken, expiresAt]
+    [userId, refreshToken, expiresAt],
   );
   return result.rows[0];
 };
@@ -81,14 +80,16 @@ const session = async (userId, refreshToken, expiresAt) => {
 const findSession = async (refreshToken) => {
   const result = await pool.query(
     `SELECT * FROM sessions WHERE refresh_token = $1 AND expires_at > NOW();`,
-    [refreshToken]
+    [refreshToken],
   );
   return result.rows[0];
-}
+};
 
 const deleteSession = async (refreshToken) => {
-  await pool.query(`DELETE FROM sessions WHERE refresh_token = $1;`, [refreshToken]);
-}
+  await pool.query(`DELETE FROM sessions WHERE refresh_token = $1;`, [
+    refreshToken,
+  ]);
+};
 
 const cleanupOldSessions = async (userId, maxSessions = 5) => {
   // 1. Purge all expired sessions across the database
@@ -106,7 +107,7 @@ const cleanupOldSessions = async (userId, maxSessions = 5) => {
       LIMIT $2
     );
     `,
-    [userId, maxSessions]
+    [userId, maxSessions],
   );
 };
 

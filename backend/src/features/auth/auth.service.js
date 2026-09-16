@@ -38,8 +38,10 @@ const registerUser = async ({ username, email, password }) => {
     passwordHash,
     avatarUrl: null,
   });
-  const token = generateAccessToken(newUser);
-  return { user: newUser, token };
+  if (!newUser) {
+    throw new Error("Đăng ký thất bại");
+  }
+  return { success: true };
 };
 
 const LoginUser = async ({ email, password }) => {
