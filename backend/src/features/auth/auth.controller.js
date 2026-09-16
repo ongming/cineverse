@@ -75,8 +75,10 @@ const sendOTP = async (req, res, next) => {
     const result = await authService.sendOTP(email);
     res.status(200).json({
       success: true,
-      message: result.message,
-      expiresAt: result.expiresAt,
+      data: {
+        message: result.message,
+        expiresAt: result.expiresAt,
+      },
     });
   } catch (error) {
     next(error);
@@ -89,7 +91,9 @@ const resetPassword = async (req, res, next) => {
     const result = await authService.resetPassword(email, otp, newPassword);
     res.status(200).json({
       success: true,
-      message: result.message,
+      data: {
+        message: result.message,
+      },
     });
   } catch (error) {
     next(error);
