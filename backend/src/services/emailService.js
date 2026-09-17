@@ -1,31 +1,20 @@
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-  connectionTimeout: 10000,
-  greetingTimeout: 10000,
-  socketTimeout: 15000,
-});
+const getResendClient = () => {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    throw new Error("Missing RESEND_API_KEY in environment variables");
+  }
+  return new Resend(apiKey);
+};
 
 const sendOTPEmail = async (email, otp) => {
-  const mailOptions = {
-    from: `"Cineverse App" <${process.env.EMAIL_USER}>`,
+  const resend = getResendClient();
+  const { data, error } = await resend.emails.send({
+    from: "Cineverse <onboarding@resend.dev>",
     to: email,
-    replyTo: process.env.EMAIL_USER, // 🟢 Validates return path for Gmail spam filters
     subject: `[Cineverse] Mã xác thực OTP của bạn là: ${otp}`,
     text: `Mã OTP đặt lại mật khẩu Cineverse của bạn là: ${otp}. Mã có hiệu lực trong 5 phút. Vui lòng không chia sẻ mã này cho bất kỳ ai.`,
-    headers: {
-      "X-Priority": "1",
-      "X-MSMail-Priority": "High",
-      Importance: "High",
-      "X-Auto-Response-Suppress": "OOF, AutoReply",
-    },
     html: `
       <div style="background:#0b0c10; padding:32px; color:#ffffff; font-family:monospace; border-radius:12px; max-width:480px; margin:0 auto; border:1px solid #222;">
         <h2 style="color:#fbbf24; font-size:24px; margin-top:0; letter-spacing:2px;">CINE<span style="color:#fff;">VERSE</span></h2>
@@ -35,13 +24,18 @@ const sendOTPEmail = async (email, otp) => {
           <span style="font-size:36px; font-weight:bold; letter-spacing:8px; color:#fbbf24;">${otp}</span>
         </div>
         <p style="color:#888; font-size:12px;">Mã có hiệu lực trong <b>5 phút</b>. Vui lòng không chia sẻ mã này cho bất kỳ ai.</p>
-        <hr style="border:none; border-t:1px solid #222; margin:20px 0;" />
+        <hr style="border:none; border-top:1px solid #222; margin:20px 0;" />
         <p style="color:#555; font-size:10px; margin:0;">Email tự động từ hệ thống Cineverse. Vui lòng không phản hồi email này.</p>
       </div>
     `,
-  };
+  });
 
-  return transporter.sendMail(mailOptions);
+  if (error) {
+    console.error("🔥 [Resend Error]:", error);
+    throw new Error(error.message || "Không thể gửi email OTP qua Resend");
+  }
+
+  return data;
 };
 
 module.exports = {
