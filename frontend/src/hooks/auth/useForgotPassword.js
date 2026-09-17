@@ -54,11 +54,6 @@ export default function useForgotPassword(onSwitchToLogin, pinLength = 6) {
 
   const handleVerifyOTPStep = (e) => {
     if (e && e.preventDefault) e.preventDefault();
-    const fullOtp = otp.join("");
-    if (fullOtp.length < pinLength) {
-      setErrorMessage(`Vui lòng nhập đủ ${pinLength} chữ số OTP!`);
-      return;
-    }
     setErrorMessage("");
     setSuccessMessage("Mã OTP hợp lệ! Vui lòng nhập mật khẩu mới.");
     setStep(3);
