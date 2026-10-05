@@ -135,7 +135,7 @@ export default function FinancialDataTable({
           scrollRef={TopRef}
           page={page}
           setPage={setPage}
-          hasMore={!hasNextPage}
+          hasNextPage={hasNextPage}
         />
       </div>
     </div>
