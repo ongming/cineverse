@@ -6,9 +6,10 @@ const errorHandler = (err, req, res, next) => {
       message: err.message,
     });
   }
+  const isProduction = process.env.NODE_ENV === "production";
   return res.status(500).json({
     success: false,
-    message: err.message || "Internal Server Error",
+    message: isProduction ? "Đã xảy ra lỗi hệ thống, vui lòng thử lại sau" : (err.message || "Internal Server Error"),
   }); 
 };
 

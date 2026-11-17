@@ -80,7 +80,7 @@ const sendOTP = async (email) => {
   if (!user) {
     throw new UnauthorizedError("Email không tồn tại");
   }
-  const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+  const otpCode = crypto.randomInt(100000, 1000000).toString();
   const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
   await userModel.saveOTP(cleanEmail, otpCode, expiresAt);
   await sendOTPEmail(cleanEmail, otpCode);

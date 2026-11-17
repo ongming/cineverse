@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 
 let currentAccessToken = null;
 let updateAccessTokenCallback = null;
+let refreshPromise = null;
 
 export const setUpdateAccessTokenHandler = (fn) => {
   updateAccessTokenCallback = (newToken) => {
@@ -40,28 +41,42 @@ axiosClient.interceptors.response.use(
 
     const currentRetryCount = originalRequest._retryCount || 0;
 
-    if (error.response?.status === 401 && currentRetryCount < 4) {
+    if (error.response?.status === 401 && currentRetryCount < 1) {
       originalRequest._retryCount = currentRetryCount + 1;
 
+      if (!refreshPromise) {
+        refreshPromise = axiosClient
+          .post("/api/auth/refresh")
+          .then((res) => {
+            const newToken = res.data?.data?.token || res.data?.token;
+            if (newToken) {
+              currentAccessToken = newToken;
+              if (updateAccessTokenCallback) {
+                updateAccessTokenCallback(newToken);
+              }
+            }
+            return newToken;
+          })
+          .catch((refreshErr) => {
+            currentAccessToken = null;
+            if (updateAccessTokenCallback) {
+              updateAccessTokenCallback(null);
+            }
+            toast.error("Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại.");
+            throw refreshErr;
+          })
+          .finally(() => {
+            refreshPromise = null;
+          });
+      }
+
       try {
-        const res = await axiosClient.post("/api/auth/refresh");
-        const newToken = res.data?.data?.token || res.data?.token;
-
+        const newToken = await refreshPromise;
         if (newToken) {
-          currentAccessToken = newToken;
-          if (updateAccessTokenCallback) {
-            updateAccessTokenCallback(newToken);
-          }
-
           originalRequest.headers.Authorization = `Bearer ${newToken}`;
           return axiosClient(originalRequest);
         }
       } catch (refreshErr) {
-        currentAccessToken = null;
-        if (updateAccessTokenCallback) {
-          updateAccessTokenCallback(null);
-        } 
-        toast.error("Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại.");
         return Promise.reject(refreshErr);
       }
     }

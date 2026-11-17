@@ -6,12 +6,16 @@ const findTopRevenueMovies = async ({ genreId, year, limit, offset }) => {
 
   if (genreId && genreId !== "ALL") {
     const parsedGenreId = parseInt(genreId, 10);
-    genreQuery = ` AND ${parsedGenreId} = ANY (m.genre_ids)`;
+    if (!isNaN(parsedGenreId)) {
+      genreQuery = ` AND ${parsedGenreId} = ANY (m.genre_ids)`;
+    }
   }
 
   if (year && year !== "ALL") {
     const parsedYear = parseInt(year, 10);
-    yearQuery = ` AND EXTRACT(YEAR FROM release_date) = ${parsedYear}`;
+    if (!isNaN(parsedYear)) {
+      yearQuery = ` AND EXTRACT(YEAR FROM release_date) = ${parsedYear}`;
+    }
   }
 
   const sql = `

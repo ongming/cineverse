@@ -23,8 +23,6 @@
     "google-auth-library": "^11.0.2",
     "jsonwebtoken": "^9.0.2",
     "multer": "^2.2.0",
-    "nodemailer": "^9.0.5",
-    "pg": "^8.23.0",
-    "resend": "^6.28.1"
+    "pg": "^8.23.0"
   }
 }
